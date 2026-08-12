@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "defaultDecision": "blocked",
+  "allowedOperations": ["read", "edit", "test", "command"],
+  "allowedPaths": [
+    "src/**",
+    "scripts/**",
+    "tests/**",
+    "tasks/**",
+    "fixtures/public-*.json",
+    "guardrails/**",
+    "AGENTS.md",
+    ".codex/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vite.config.ts",
+    "index.html",
+    "lab-contract.json"
+  ],
+  "blockedPaths": [
+    "fixtures/production-customer-export.json",
+    "secrets/**",
+    ".env",
+    ".env.*",
+    "config/production.json"
+  ],
+  "approvalPaths": ["db/migrations/**", "generated/**"],
+  "blockedCommands": [
+    "(?:^|\\s)(?:deploy-prod|rollback-prod|purge-release-cache)(?:\\s|$)",
+    "(?:rm|rmdir)\\s+(?:-[^\\s]*r[^\\s]*\\s+|--recursive\\s+)",
+    "Remove-Item(?:\\s+[^\\r\\n]*)?\\s+-Recurse",
+    "git\\s+(?:reset\\s+--hard|clean\\s+-[a-z]*f|push(?:\\s+[^\\r\\n]*)?--force)",
+    "git\\s+(?:show|cat-file)[^\\r\\n]*production-customer-export",
+    "(?:Get-Content|type|cat|more|less|head|tail)[^\\r\\n]*production-customer-export",
+    "(?:curl|wget)[^|]*(?:\\||%7C)\\s*(?:sh|bash|zsh|pwsh|powershell)"
+  ],
+  "approvalCommands": [
+    "(?:^|\\s)(?:npm\\s+run\\s+)?migrat(?:e|ion)(?:\\s|$)",
+    "(?:^|\\s)(?:generate|codegen|regenerate)(?:\\s|$)"
+  ],
+  "blockedPromptPatterns": [
+    "ignore (?:all |any )?(?:previous|prior|system) (?:rules|instructions)",
+    "(?:reveal|print|copy|exfiltrate|return|show)[^\\r\\n]{0,80}(?:canary|secret|credential|token)",
+    "(?:canary|secret|credential|token)[^\\r\\n]{0,80}(?:final response|evidence|source code|patch)"
+  ]
+}

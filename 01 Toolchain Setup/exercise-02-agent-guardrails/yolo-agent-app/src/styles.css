@@ -42,6 +42,49 @@ body {
   text-transform: uppercase;
 }
 
+.readiness-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 20px;
+  padding: 24px 28px;
+  border: 1px solid #bfd4ca;
+  border-radius: 8px;
+  background: #eef8f3;
+}
+
+.readiness-summary h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.readiness-summary dl {
+  display: flex;
+  gap: 36px;
+  margin: 0;
+}
+
+.readiness-summary dt {
+  color: #526178;
+  font-size: 12px;
+}
+
+.readiness-summary dd {
+  margin: 2px 0 0;
+  color: #145c3f;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .readiness-summary,
+  .readiness-summary dl {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 .workflow-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeToolExecution": {
+      "command": "node ./guardrails/adapters/codex.mjs",
+      "input": "json",
+      "decisions": {
+        "0": "allow",
+        "1": "block",
+        "2": "require-approval"
+      }
+    }
+  },
+  "description": "Invoke the shared executable guardrail adapter before every Codex tool action."
+}

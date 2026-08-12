@@ -1,0 +1,46 @@
+diff --git a/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/App.tsx b/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/App.tsx
+--- a/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/App.tsx
++++ b/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/App.tsx
+@@ -2,6 +2,10 @@
+ import { classifyWorkflow, summarizeGuardrailGap } from "./services/approvalEngine";
+ 
+ export default function App() {
++  const classifications = workflows.map(classifyWorkflow);
++  const editableCount = classifications.filter((item) => item.agentEditable).length;
++  const approvalCount = classifications.filter((item) => item.requiresApproval).length;
++
+   return (
+@@ -10,6 +14,23 @@
+       </section>
+ 
++      <section className="readiness-summary" aria-labelledby="readiness-title">
++        <div>
++          <p className="eyebrow">Guardrail status</p>
++          <h2 id="readiness-title">Release Readiness Summary</h2>
++        </div>
++        <dl>
++          <div>
++            <dt>Editable by the agent</dt>
++            <dd>{editableCount}</dd>
++          </div>
++          <div>
++            <dt>Require human approval</dt>
++            <dd>{approvalCount}</dd>
++          </div>
++        </dl>
++      </section>
++
+       <section className="workflow-list">
+diff --git a/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/styles.css b/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/styles.css
+--- a/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/styles.css
++++ b/01 Toolchain Setup/exercise-02-agent-guardrails/yolo-agent-app/src/styles.css
+@@ -42,6 +42,10 @@
+   text-transform: uppercase;
+ }
+ 
++.readiness-summary {
++  display: flex;
++  margin-top: 20px;
++}
++
+ .workflow-list {
