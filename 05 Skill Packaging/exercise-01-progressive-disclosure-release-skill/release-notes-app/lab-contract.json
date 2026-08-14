@@ -4,7 +4,7 @@
   "skillPattern": "Agent Skills progressive disclosure",
   "domain": "Evidence-backed customer release notes from arbitrary Git ranges",
   "mission": "Replace a broad monolithic prompt with a focused, portable release-notes skill that loads resources conditionally.",
-  "outcome": "The packaged skill improves release-note accuracy while using only the policy and deterministic tooling needed by each request.",
+  "outcome": "The packaged skill improves release-note accuracy while measurably reducing the context loaded for each request.",
   "entities": [
     "SKILL.md metadata",
     "conditional reference",
@@ -25,7 +25,7 @@
     "Agent Skills structure validation",
     "fixture-independent extractor test",
     "Git-derived release-note score",
-    "comparison and resource evidence verifier",
+    "exact context-byte and resource evidence verifier",
     "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
@@ -43,7 +43,7 @@
     "range-agnostic Git extractor",
     "quality and trigger eval sets",
     "comparable release outputs",
-    "resource-use and evaluation evidence",
+    "byte-measured resource-use and evaluation evidence",
     "evidence/before.md and evidence/before.patch",
     "evidence/after.md and evidence/after.patch",
     "evidence/comparison.md"
@@ -51,7 +51,7 @@
   "masterySignals": [
     "valid cross-agent metadata",
     "precise positive and negative routing",
-    "resources load only when relevant",
+    "exact context bytes prove resources load only when relevant",
     "extractor survives an unrelated repository",
     "customer output is traced and evidence-safe"
   ]

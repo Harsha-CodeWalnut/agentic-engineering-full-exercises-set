@@ -14,6 +14,7 @@
     "test:acceptance": "vitest run src/App.acceptance.test.tsx --pool=forks --maxWorkers=1",
     "test:network": "node ./scripts/run-network-stability.mjs",
     "test:tdd": "node ./scripts/verify-tdd-submission.mjs",
+    "evidence:capture": "node ./scripts/capture-command.mjs",
     "test:submission": "npm run test:tdd",
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "lint": "node ./scripts/lint-check.mjs",

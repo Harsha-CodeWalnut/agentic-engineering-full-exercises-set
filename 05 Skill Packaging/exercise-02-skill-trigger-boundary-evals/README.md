@@ -26,7 +26,7 @@ The allowed implementation change is only the `description` field in `skills/cha
 
 4. In the second branch, change only the `change-review` description. Keep the skill instructions, neighboring skills, scoring code, and protected requests unchanged.
 
-5. Rerun every request three times with the same agent, model, runtime, settings, repository state, and first-attempt conditions. Save all 60 decisions in `evidence/after-results.json`.
+5. Rerun every request three times with the same provider, agent, model, runtime, settings, repository state, and first-attempt conditions. For every run, save the timestamp, selected skills, raw routing response, and its SHA-256. Save all 60 decisions in `evidence/after-results.json`.
 
 6. Select or reject the new description using held-out accuracy, recall, specificity, stability, and improvement. Do not tune again after reading held-out failures.
 
@@ -51,7 +51,7 @@ For the required before and after files, follow the [evidence instructions and t
 
 The challenge is complete when:
 
-- Before and after results contain three real decisions for every protected request under matching conditions.
+- Before and after results contain three real, traceable decisions for every protected request under matching conditions.
 - Only the `change-review` description changes, and it states clear use and non-use boundaries without held-out wording.
 - Training accuracy is at least 10 of 12 and held-out accuracy at least 7 of 8.
 - Held-out recall and specificity are each at least 75 percent, decisions are stable, and the held-out score improves.

@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -32,8 +33,25 @@ else if (expectedBenchmark) {
 }
 if (!fs.existsSync(benchmarkMdPath)) failures.push("missing evidence/benchmark.md");
 else if (expectedBenchmark && fs.readFileSync(benchmarkMdPath, "utf8") !== benchmarkMarkdown(expectedBenchmark)) failures.push("evidence/benchmark.md does not match the recomputed benchmark");
-if (expectedBenchmark && !expectedBenchmark.gate.passed) {
-  for (const check of expectedBenchmark.gate.checks.filter((item) => !item.passed)) failures.push(`benchmark gate failed: ${check.id}`);
+const decisionPath = path.join(evidenceRoot, "decision.json");
+let decision;
+if (!fs.existsSync(decisionPath)) failures.push("missing evidence/decision.json");
+else {
+  try {
+    decision = JSON.parse(fs.readFileSync(decisionPath, "utf8"));
+    if (decision.schema_version !== 1) failures.push("evidence/decision.json schema_version must be 1");
+    if (!expectedBenchmark) failures.push("decision cannot be checked until the benchmark is complete");
+    else {
+      const expectedDecision = expectedBenchmark.gate.passed ? "package" : "reject";
+      if (decision.decision !== expectedDecision) failures.push(`evidence/decision.json must record ${expectedDecision} for the generated benchmark`);
+      if (!expectedBenchmark.gate.passed && !expectedBenchmark.gate.common_passed) failures.push("the candidate fails common quality, safety, variance, or cost checks and must be revised before submission");
+    }
+    const expectedHash = fs.existsSync(benchmarkPath) ? crypto.createHash("sha256").update(fs.readFileSync(benchmarkPath)).digest("hex") : "";
+    if (decision.benchmark_sha256 !== expectedHash) failures.push("evidence/decision.json benchmark_sha256 does not match evidence/benchmark.json");
+    if (typeof decision.reason !== "string" || decision.reason.trim().length < 60) failures.push("evidence/decision.json needs a measured decision reason");
+  } catch {
+    failures.push("evidence/decision.json is invalid JSON");
+  }
 }
 
 function requireReport(name, terms) {
@@ -58,11 +76,20 @@ requireReport("analysis.md", ["training", "held-out", "critical", "variance", "t
 
 const skillCheck = spawnSync(process.execPath, [path.join(appRoot, "scripts", "validate-benchmark-skill.mjs")], { cwd: appRoot, encoding: "utf8" });
 if (skillCheck.status !== 0) failures.push(`skill validation failed: ${(skillCheck.stderr || skillCheck.stdout).trim()}`);
-const packageCheck = spawnSync("python", [path.join(appRoot, "scripts", "verify-skill-package.py")], { cwd: appRoot, encoding: "utf8" });
-if (packageCheck.status !== 0) failures.push(`package verification failed: ${(packageCheck.stderr || packageCheck.stdout).trim()}`);
+const archivePath = path.join(exerciseRoot, "dist", "incident-summary.skill");
+const manifestPath = path.join(evidenceRoot, "package-manifest.json");
+if (expectedBenchmark?.gate.passed) {
+  const packageCheck = spawnSync("python", [path.join(appRoot, "scripts", "verify-skill-package.py")], { cwd: appRoot, encoding: "utf8" });
+  if (packageCheck.status !== 0) failures.push(`package verification failed: ${(packageCheck.stderr || packageCheck.stdout).trim()}`);
+} else {
+  if (fs.existsSync(archivePath)) failures.push("a rejected candidate must not include dist/incident-summary.skill");
+  if (fs.existsSync(manifestPath)) failures.push("a rejected candidate must not include evidence/package-manifest.json");
+}
 
 if (failures.length) {
   console.error("Benchmark submission verification failed:\n" + [...new Set(failures)].map((failure) => `- ${failure}`).join("\n"));
   process.exit(1);
 }
-console.log("All 36 runs were regraded, the benchmark gate passed, and the archive exactly matches the evaluated skill.");
+console.log(expectedBenchmark.gate.passed
+  ? "All 36 runs were regraded, the gate passed, and the archive exactly matches the evaluated skill."
+  : "All 36 runs were regraded, the gate failed, and the unproven candidate was correctly rejected without an archive.");

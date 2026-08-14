@@ -1,7 +1,7 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "93c471e38822e15c10c3b4c8d8244b381fdae031d0931c7054245825a67084e1",
+    "../README.md": "22f65e1ead4a935f5ea4fde13a4c2e41d58b6930ba2802468fce9056bc80a872",
     "../docs/evidence-template.md": "1030640b6783d67fe918600902ddd499701dba48b6a93710f9de382292e5796f",
     "docs/support-notes.md": "36895297d46a5095f90f5ee3926996384eae46596518ba3afc544d9c256dbba4",
     "index.html": "3e48958cdd517883addd6dd4296923a53cb49dd1f19526bf662b1ad958594747",

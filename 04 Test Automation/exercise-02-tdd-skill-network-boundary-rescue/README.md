@@ -28,7 +28,11 @@ Run the weak test and failing acceptance checks before changing any files.
 
 3. Install the current [TDD skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd). Review the first result and the [network contract](./docs/network-contract.md).
 
-4. In the second branch, start a fresh session with the skill. Confirm the public seam, then complete separate red-green cycles for loading, filtered-empty, and retry. Add independent tests for success, server-empty, and request error.
+4. In the second branch, start a fresh session with the skill. Confirm the public seam, then complete separate red-green cycles for loading, filtered-empty, and retry. Add independent tests for success, server-empty, and request error. Capture every red and green command with the supplied wrapper; it preserves the command's real exit code and writes tamper-evident JSONL.
+
+   ```text
+   npm run evidence:capture -- --output ../evidence/tdd-commands.jsonl --cycle 1 --phase red -- npm run test:component -- <test arguments>
+   ```
 
 5. Exercise the real `GET /api/cases` seam with MSW. Fail unhandled requests, reset runtime handlers after every test, use user-facing assertions, and prove Retry sends exactly one new request before recovery.
 
@@ -43,7 +47,7 @@ Submit:
 - The repaired dashboard, strict network setup, and independent tests.
 - `evidence/before.md` and `evidence/before.patch`.
 - `evidence/after.md` and `evidence/after.patch`.
-- `evidence/skill-record.md`, `evidence/tdd-cycles.md`, and `evidence/network-boundaries.md`.
+- `evidence/skill-record.md`, `evidence/tdd-cycles.md`, `evidence/tdd-commands.jsonl`, and `evidence/network-boundaries.md`.
 - `evidence/network-run.txt` and `evidence/comparison.md`.
 - Output from `npm run verify:exercise`.
 - A focused pull request containing only the exercise changes.
@@ -57,7 +61,7 @@ For the required before and after files, follow the [evidence instructions and t
 The challenge is complete when:
 
 - Both branches start from the same commit and both sessions use the same request and working conditions except the TDD skill.
-- Red evidence exists before production changes for loading, filtered-empty, and retry.
+- Machine-captured red evidence exists before production changes for loading, filtered-empty, and retry, followed by the matching green records.
 - Tests prove all six states through `GET /api/cases`, fail unexpected requests, and reset handlers after every test.
 - Retry sends exactly one new request before recovery, without mocking `fetch` or component internals.
 - Shuffled runs and `npm run verify:exercise` pass, with all required proof in the PR.

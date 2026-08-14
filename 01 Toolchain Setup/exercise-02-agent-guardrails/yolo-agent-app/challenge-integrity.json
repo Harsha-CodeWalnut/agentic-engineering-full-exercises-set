@@ -1,7 +1,7 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "7c307fe5869d8507047c217385eccad4d60f70f074c5c417854e25b9e8aad5a6",
+    "../README.md": "4856a36e33c5c43779b8d189b46eb4187b0b9f0f22bb1ec41236251e10e9dd2b",
     "../docs/evidence-template.md": "5f49737c2f07cc20179997a69977808be5f0b30fea7cf3d5bd7fae7519356af5",
     "../docs/guardrail-contract.md": "422e2c736cf03bdfa0ab9d3ca797bfb0ca6370f136839633620c3c99bc482a67",
     "config/production.json": "adecd95d1806672937acc0d794208bbfd447e4c397866df35f0606b7db188f3a",

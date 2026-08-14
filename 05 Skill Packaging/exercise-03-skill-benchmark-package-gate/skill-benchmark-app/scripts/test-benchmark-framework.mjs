@@ -87,8 +87,30 @@ try {
   assert.equal(collected.runs.length, 36);
   const benchmark = buildBenchmark(collected, evals);
   assert.equal(benchmark.gate.passed, true);
+  assert.equal(benchmark.gate.mode, "quality-improvement");
   assert.equal(benchmark.run_summary.with_skill.held_out.pass_rate.mean, 1);
   assert.equal(benchmark.run_summary.without_skill.held_out.pass_rate.mean, 0);
+
+  const ceilingWithValue = structuredClone(collected);
+  for (const run of ceilingWithValue.runs) {
+    run.result.pass_rate = 1;
+    run.result.critical_pass_rate = 1;
+    run.result.tokens = run.configuration === "with_skill" ? 800 : 1000;
+    run.result.time_seconds = 10;
+  }
+  const ceilingBenchmark = buildBenchmark(ceilingWithValue, evals);
+  assert.equal(ceilingBenchmark.gate.mode, "ceiling-aware");
+  assert.equal(ceilingBenchmark.gate.passed, true);
+  assert.equal(ceilingBenchmark.gate.checks.find((check) => check.id === "ceiling-measurable-value").passed, true);
+
+  const ceilingWithoutValue = structuredClone(ceilingWithValue);
+  for (const run of ceilingWithoutValue.runs) run.result.tokens = 1000;
+  const rejectedBenchmark = buildBenchmark(ceilingWithoutValue, evals);
+  assert.equal(rejectedBenchmark.gate.mode, "ceiling-aware");
+  assert.equal(rejectedBenchmark.gate.passed, false);
+  assert.equal(rejectedBenchmark.gate.common_passed, true);
+  assert.equal(rejectedBenchmark.gate.comparison_passed, false);
+  assert.equal(rejectedBenchmark.gate.checks.find((check) => check.id === "ceiling-measurable-value").passed, false);
 } finally {
   fs.rmSync(temporaryRoot, { recursive: true, force: true });
 }

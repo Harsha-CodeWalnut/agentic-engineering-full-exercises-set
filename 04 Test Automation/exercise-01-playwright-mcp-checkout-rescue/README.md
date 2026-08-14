@@ -8,11 +8,13 @@ The checkout has delayed tax, generated CSS classes, server-side payment state, 
 
 Use Playwright MCP to investigate the live flow, then prove whether that evidence improves the same agent's first test implementation.
 
-The duration for this challenge is 45 min or less.
+The duration for this challenge is 45 min or less after the browser and MCP setup checks pass.
 
 ## Project
 
 [checkout-e2e-app](./checkout-e2e-app) contains the checkout flow, API fixture, smoke test, and unreliable browser coverage.
+
+Before timing the challenge, run `npm ci`, `npm run setup:browser`, and `npm run setup:check` from the application folder. The last command confirms that Node.js, Chromium, the application, and the starter browser flow work. Configure Playwright MCP separately in your agent and confirm it can open the local application.
 
 Use this production request in both agent sessions:
 

@@ -38,7 +38,7 @@ function field(text, name) {
 
 const before = values["evidence/before.md"];
 const after = values["evidence/after.md"];
-for (const label of ["Agent", "Model", "Other tools", "Permissions", "Time limit", "Prompt", "Repository commit", "Attempt", "Release-notes skill", "Input context", "Output"]) {
+for (const label of ["Agent", "Model", "Other tools", "Permissions", "Time limit", "Prompt", "Repository commit", "Attempt", "Release-notes skill", "Input context", "Context bytes", "Output"]) {
   if (!field(before, label)) failures.push(`before.md is missing ${label}`);
   if (!field(after, label)) failures.push(`after.md is missing ${label}`);
 }
@@ -51,6 +51,8 @@ if (!/^enabled$/i.test(field(after, "Release-notes skill"))) failures.push("afte
 if (!/monolithic-skill-draft\.md/i.test(field(before, "Input context"))) failures.push("before.md must identify the monolithic draft input");
 if (!/\.agents[\\/]skills[\\/]release-notes[\\/]skill\.md/i.test(field(after, "Input context"))) failures.push("after.md must identify the packaged SKILL.md input");
 if (!/^[a-f0-9]{40}$/i.test(field(before, "Repository commit"))) failures.push("both runs need one matching 40-character repository commit");
+const monolithicBytes = Buffer.byteLength(fs.readFileSync(path.join(exerciseRoot, "docs", "monolithic-skill-draft.md"), "utf8"), "utf8");
+if (Number(field(before, "Context bytes")) !== monolithicBytes) failures.push(`before.md Context bytes must equal the monolithic draft size (${monolithicBytes})`);
 for (const text of [before, after]) {
   for (const term of ["files read", "commands executed", "verification", "exit code"]) {
     if (!text.toLowerCase().includes(term)) failures.push(`before.md and after.md must both record ${term}`);
@@ -70,8 +72,10 @@ if (!/source commit:\s*[a-f0-9]{40}\b/i.test(skillRecord)) failures.push("skill-
 if (!/skill\.md sha-256:\s*[a-f0-9]{64}\b/i.test(skillRecord)) failures.push("skill-record.md needs a 64-character SKILL.md hash");
 if (!/installed path:.*skill-creator[\\/]skill\.md/i.test(skillRecord)) failures.push("skill-record.md needs the installed skill-creator/SKILL.md path");
 
+let resourceUsage;
 try {
   const usage = JSON.parse(values["evidence/resource-usage.json"] || "null");
+  resourceUsage = usage;
   const scenarios = usage?.scenarios;
   if (!Array.isArray(scenarios) || scenarios.length !== 3) {
     failures.push("resource-usage.json needs exactly three scenarios");
@@ -89,6 +93,12 @@ try {
       }
       const actualResources = Array.isArray(scenario.resources_read) ? [...new Set(scenario.resources_read)].sort() : [];
       if (JSON.stringify(actualResources) !== JSON.stringify([...resources].sort())) failures.push(`${id} must record only its expected references`);
+      const expectedContextFiles = ["SKILL.md", ...resources];
+      if (JSON.stringify(scenario.context_files) !== JSON.stringify(expectedContextFiles)) failures.push(`${id} context_files must contain SKILL.md and only the references actually read`);
+      const expectedBytes = Object.fromEntries(expectedContextFiles.map((file) => [file, Buffer.byteLength(fs.readFileSync(path.join(appRoot, ".agents", "skills", "release-notes", ...file.split("/")), "utf8"), "utf8")]));
+      if (JSON.stringify(scenario.context_bytes) !== JSON.stringify(expectedBytes)) failures.push(`${id} context_bytes do not match the current skill files`);
+      const expectedTotal = Object.values(expectedBytes).reduce((sum, bytes) => sum + bytes, 0);
+      if (scenario.total_context_bytes !== expectedTotal) failures.push(`${id} total_context_bytes must equal ${expectedTotal}`);
       if (JSON.stringify(scenario.scripts_run) !== JSON.stringify(["scripts/extract-release.mjs"])) failures.push(`${id} must run the shared extractor once`);
       if (typeof scenario.prompt !== "string" || scenario.prompt.length < 60) failures.push(`${id} needs the exact substantive prompt`);
       if (typeof scenario.reason !== "string" || scenario.reason.length < 40) failures.push(`${id} needs a resource-selection reason`);
@@ -98,6 +108,9 @@ try {
 } catch {
   failures.push("resource-usage.json is invalid JSON");
 }
+const fullReleaseUsage = resourceUsage?.scenarios?.find((item) => item.id === "full-release");
+if (fullReleaseUsage && Number(field(after, "Context bytes")) !== fullReleaseUsage.total_context_bytes) failures.push("after.md Context bytes must match the full-release measured total");
+if (fullReleaseUsage && fullReleaseUsage.total_context_bytes >= monolithicBytes) failures.push("the packaged skill must reduce full-release context bytes compared with the monolithic draft");
 
 try {
   const results = JSON.parse(values["evidence/eval-results.json"] || "null");
@@ -160,6 +173,7 @@ for (const term of [
   "script",
   "verification",
   "context",
+  "bytes",
 ]) {
   if (!comparison.includes(term)) failures.push(`comparison.md is missing ${term}`);
 }

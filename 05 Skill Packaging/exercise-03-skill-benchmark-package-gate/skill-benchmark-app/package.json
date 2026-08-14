@@ -20,7 +20,7 @@
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
     "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
-    "verify:implementation": "npm run skill:validate && npm run benchmark:aggregate && npm run package:verify",
+    "verify:implementation": "npm run skill:validate && npm run benchmark:aggregate",
     "verify:submission": "npm run test:submission",
     "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
   },

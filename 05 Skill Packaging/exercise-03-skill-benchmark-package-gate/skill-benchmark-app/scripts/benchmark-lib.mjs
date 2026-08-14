@@ -206,18 +206,36 @@ export function buildBenchmark(collected, evals) {
   const candidate = runSummary.with_skill;
   const noSkill = runSummary.without_skill;
   const starter = runSummary.starter_skill;
+  const strongestBaseline = [
+    { id: "without_skill", summary: noSkill },
+    { id: "starter_skill", summary: starter },
+  ].sort((left, right) => right.summary.held_out.pass_rate.mean - left.summary.held_out.pass_rate.mean || right.summary.held_out.critical_pass_rate.mean - left.summary.held_out.critical_pass_rate.mean)[0];
+  const ceilingMode = strongestBaseline.summary.held_out.pass_rate.mean >= 0.95;
+  const tokenRatio = candidate.overall.tokens.mean / strongestBaseline.summary.overall.tokens.mean;
+  const elapsedRatio = candidate.overall.time_seconds.mean / strongestBaseline.summary.overall.time_seconds.mean;
+  const varianceImprovement = strongestBaseline.summary.held_out.pass_rate.stddev - candidate.held_out.pass_rate.stddev;
+  const comparisonChecks = ceilingMode
+    ? [
+        { id: "ceiling-quality-no-regression", passed: candidate.held_out.pass_rate.mean >= strongestBaseline.summary.held_out.pass_rate.mean, actual: candidate.held_out.pass_rate.mean - strongestBaseline.summary.held_out.pass_rate.mean, required: ">= 0.00 vs strongest baseline" },
+        { id: "ceiling-critical-no-regression", passed: candidate.held_out.critical_pass_rate.mean >= strongestBaseline.summary.held_out.critical_pass_rate.mean, actual: candidate.held_out.critical_pass_rate.mean - strongestBaseline.summary.held_out.critical_pass_rate.mean, required: ">= 0.00 vs strongest baseline" },
+        { id: "ceiling-measurable-value", passed: tokenRatio <= 0.85 || elapsedRatio <= 0.85 || varianceImprovement >= 0.02, actual: `tokens ${tokenRatio.toFixed(3)}x, elapsed ${elapsedRatio.toFixed(3)}x, variance improvement ${varianceImprovement.toFixed(3)}`, required: "tokens <= 0.85x OR elapsed <= 0.85x OR variance improvement >= 0.02" },
+      ]
+    : [
+        { id: "improve-over-no-skill", passed: candidate.held_out.pass_rate.mean - noSkill.held_out.pass_rate.mean >= 0.1, actual: candidate.held_out.pass_rate.mean - noSkill.held_out.pass_rate.mean, required: ">= 0.10" },
+        { id: "improve-over-starter", passed: candidate.held_out.pass_rate.mean - starter.held_out.pass_rate.mean >= 0.1, actual: candidate.held_out.pass_rate.mean - starter.held_out.pass_rate.mean, required: ">= 0.10" },
+      ];
   const checks = [
     { id: "train-quality", passed: candidate.train.pass_rate.mean >= 0.875, actual: candidate.train.pass_rate.mean, required: ">= 0.875" },
     { id: "held-out-quality", passed: candidate.held_out.pass_rate.mean >= 0.875, actual: candidate.held_out.pass_rate.mean, required: ">= 0.875" },
     { id: "held-out-critical", passed: candidate.held_out.critical_pass_rate.mean === 1, actual: candidate.held_out.critical_pass_rate.mean, required: "= 1.0" },
-    { id: "improve-over-no-skill", passed: candidate.held_out.pass_rate.mean - noSkill.held_out.pass_rate.mean >= 0.1, actual: candidate.held_out.pass_rate.mean - noSkill.held_out.pass_rate.mean, required: ">= 0.10" },
-    { id: "improve-over-starter", passed: candidate.held_out.pass_rate.mean - starter.held_out.pass_rate.mean >= 0.1, actual: candidate.held_out.pass_rate.mean - starter.held_out.pass_rate.mean, required: ">= 0.10" },
+    ...comparisonChecks,
     { id: "held-out-variance", passed: candidate.held_out.pass_rate.stddev <= 0.16, actual: candidate.held_out.pass_rate.stddev, required: "<= 0.16" },
     { id: "token-cost", passed: candidate.overall.tokens.mean <= noSkill.overall.tokens.mean * 1.5, actual: candidate.overall.tokens.mean / noSkill.overall.tokens.mean, required: "<= 1.50x no-skill" },
     { id: "elapsed-cost", passed: candidate.overall.time_seconds.mean <= noSkill.overall.time_seconds.mean * 2, actual: candidate.overall.time_seconds.mean / noSkill.overall.time_seconds.mean, required: "<= 2.00x no-skill" },
   ];
+  const commonChecks = checks.filter((check) => !comparisonChecks.some((comparison) => comparison.id === check.id));
   return {
-    schema_version: 1,
+    schema_version: 2,
     metadata: {
       skill_name: "incident-summary",
       candidate_skill_sha256: collected.hashes.with_skill,
@@ -228,7 +246,14 @@ export function buildBenchmark(collected, evals) {
     },
     runs: collected.runs,
     run_summary: runSummary,
-    gate: { passed: checks.every((check) => check.passed), checks },
+    gate: {
+      passed: checks.every((check) => check.passed),
+      mode: ceilingMode ? "ceiling-aware" : "quality-improvement",
+      comparison_baseline: strongestBaseline.id,
+      common_passed: commonChecks.every((check) => check.passed),
+      comparison_passed: comparisonChecks.every((check) => check.passed),
+      checks,
+    },
   };
 }
 
@@ -252,6 +277,8 @@ export function benchmarkMarkdown(benchmark) {
     ...rows,
     "",
     `## Package gate: ${benchmark.gate.passed ? "PASS" : "FAIL"}`,
+    "",
+    `Mode: ${benchmark.gate.mode}; comparison baseline: ${benchmark.gate.comparison_baseline}`,
     "",
     ...gates,
     "",

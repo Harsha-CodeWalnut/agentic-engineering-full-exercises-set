@@ -3,8 +3,8 @@
   "competency": "05. Skill Packaging",
   "skillPattern": "skill-creator quality evaluation and packaging",
   "domain": "Evidence-backed incident summaries with conflicting sources, unverified claims, and incomplete follow-ups",
-  "mission": "Prove that an improved skill beats both no-skill and starter-skill behavior before packaging it.",
-  "outcome": "Only the exact skill version that passes quality, critical, variance, cost, and archive-integrity gates is distributed.",
+  "mission": "Prove whether an improved skill adds measurable value over no-skill and starter-skill behavior before deciding to package or reject it.",
+  "outcome": "Only the exact skill version that passes quality, critical, variance, cost, and archive-integrity gates is distributed; an unproven candidate is rejected.",
   "entities": [
     "protected eval task",
     "without-skill run",
@@ -38,7 +38,7 @@
     "improve the reusable skill",
     "run the held-out comparison",
     "aggregate quality and cost",
-    "package only the passing tree hash",
+    "package only the passing tree hash or reject the candidate",
     "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
@@ -47,7 +47,8 @@
     "generated benchmark",
     "evidence-based analysis",
     "skill-creator provenance",
-    "verified installable archive",
+    "benchmark-bound package or reject decision",
+    "verified installable archive when the gate passes",
     "evidence/before.md and evidence/before.patch",
     "evidence/after.md and evidence/after.patch",
     "evidence/comparison.md"

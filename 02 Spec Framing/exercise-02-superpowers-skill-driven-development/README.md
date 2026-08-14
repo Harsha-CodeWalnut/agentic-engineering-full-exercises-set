@@ -4,7 +4,7 @@
 
 Your team is implementing features too quickly from incomplete plans, causing permission bugs and repeated rework. Your mission is to use a skill-driven development workflow to design, test, implement, review, and verify a complete team-invitation lifecycle.
 
-The repository has team roles and workspace policies but no safe invitation workflow. The change crosses authorization, duplicate prevention, guest policy, expiry, acceptance, revocation, state mutation, UI, and tests.
+The repository has team roles and workspace policies but no safe invitation workflow. The feature crosses several business and state boundaries that must stay consistent.
 
 Use Superpowers, then prove whether its structured workflow improves the same agent's first-attempt result.
 
@@ -13,6 +13,8 @@ The duration for this challenge is 60 min or less.
 ## Project
 
 [team-collaboration-app](./team-collaboration-app) is a workspace application with existing membership rules, support incidents, and an unsafe legacy invitation helper.
+
+The required behavior and skill workflow are fixed. You decide the internal design, module boundaries, data flow, and test structure from repository evidence.
 
 Use this production change in both agent sessions:
 

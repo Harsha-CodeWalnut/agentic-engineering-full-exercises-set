@@ -1,7 +1,7 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "642f8ab3ae64e3eebf498aa47cacb21f83b3047466a4aed7a4d93d1481540524",
+    "../README.md": "c9e23b57da38d79ed2bfda8c7b0f0d28e6cc49e98f453c3fbc23067d998d33f9",
     "../docs/evidence-template.md": "9902b569d525fad144c3eddcb913984de140d8bdbe159d330273d7830b153fab",
     "../docs/invitation-contract.md": "b6135dc848f9b2d9fc3fa4fbe3293c7faad05dee8b9736aec1f150a2c3f19b17",
     "docs/feature-request.md": "4ee246918074e50d7d47e112d7acbc29f2c3360de03c88814bfefcb39ac1f6b8",

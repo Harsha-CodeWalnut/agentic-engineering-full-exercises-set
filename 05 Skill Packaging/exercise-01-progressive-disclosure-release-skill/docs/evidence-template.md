@@ -14,6 +14,7 @@ Replace every prompt with observed information. Do not infer resource access or 
 - Attempt: 1
 - Release-notes skill: [disabled or enabled]
 - Input context: [exact files or skill path provided]
+- Context bytes: [exact UTF-8 byte total from npm run context:measure]
 - Output: [before-output.md or after-output.md]
 
 Record files read, commands executed, decisions, verification results, and exit codes.
@@ -36,6 +37,12 @@ Create one object for each scenario in `docs/eval-scenarios.md`:
       "id": "full-release",
       "prompt": "exact scenario prompt",
       "resources_read": ["references/publication-policy.md"],
+      "context_files": ["SKILL.md", "references/publication-policy.md"],
+      "context_bytes": {
+        "SKILL.md": 1000,
+        "references/publication-policy.md": 500
+      },
+      "total_context_bytes": 1500,
       "scripts_run": ["scripts/extract-release.mjs"],
       "reason": "why each loaded resource was needed",
       "output": "path to the saved output"
@@ -44,7 +51,7 @@ Create one object for each scenario in `docs/eval-scenarios.md`:
 }
 ```
 
-Use skill-relative paths. Record only resources actually read or executed.
+Use skill-relative paths. Record only resources actually read or executed. Generate the byte values with `npm run context:measure -- <files>`; do not estimate them. Scripts are not context unless the agent read their source.
 
 ## eval-results.json
 
@@ -56,8 +63,8 @@ Compare trigger decision, Git range selection, customer-item accuracy, breaking 
 
 ## Required Run Files
 
-- `evidence/before.md` records the monolithic-prompt session, exact output path, resources read, commands, exit codes, and context size.
+- `evidence/before.md` records the monolithic-prompt session, exact output path, resources read, commands, exit codes, and measured context bytes.
 - `evidence/before.patch` contains the genuine Git diff for the first output and its evidence.
-- `evidence/after.md` records the matching packaged-skill session and the same measured fields.
+- `evidence/after.md` records the matching packaged-skill session and the full-release measured context bytes.
 - `evidence/after.patch` contains the genuine Git diff for the skill-backed result.
 - `evidence/comparison.md` compares accuracy, selective loading, extractor reuse, eval results, and context cost.

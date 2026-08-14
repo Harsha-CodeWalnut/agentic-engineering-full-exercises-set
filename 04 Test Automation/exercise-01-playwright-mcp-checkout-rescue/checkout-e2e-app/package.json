@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
+    "setup:browser": "playwright install chromium",
+    "setup:check": "node ./scripts/check-playwright-setup.mjs && npm run test:smoke",
     "test:e2e": "playwright test",
     "test:e2e:reproduce": "playwright test tests/e2e/flaky-checkout.spec.ts --repeat-each=4 --workers=2",
     "test:smoke": "playwright test tests/e2e/starter-smoke.spec.ts --workers=1",

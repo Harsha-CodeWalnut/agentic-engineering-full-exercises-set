@@ -32,7 +32,7 @@ Materialize the protected bundle with `npm run fixture:materialize -- <target-di
 
 5. Start a fresh session with the skill enabled. Use the same agent, model, tools, permissions, request, repository state, time limit, and first-attempt condition. Do not provide hints, corrections, or retries.
 
-6. Run the full, hotfix-only, and internal-only scenarios. Record the resources actually read and prove unrelated references were not loaded. The extractor must work with arbitrary repositories and Git ranges without fixture answers embedded in it.
+6. Run the full, hotfix-only, and internal-only scenarios. Record the resources actually read and their exact UTF-8 byte totals using `npm run context:measure -- <files>`. Prove unrelated references were not loaded. Record provider token usage too when your agent exposes it, but token telemetry is not required. The extractor must work with arbitrary repositories and Git ranges without fixture answers embedded in it.
 
 7. Save the outputs, before-and-after evidence, resource usage, eval results, and comparison. Raise the final PR only from the second branch.
 
@@ -43,7 +43,7 @@ Submit:
 - The complete `.agents/skills/release-notes/` package.
 - `evidence/before.md`, `evidence/before.patch`, and `evidence/before-output.md`.
 - `evidence/after.md`, `evidence/after.patch`, and `evidence/after-output.md`.
-- Hotfix and internal-only outputs, the skill record, `resource-usage.json`, `eval-results.json`, and `evidence/comparison.md`.
+- Hotfix and internal-only outputs, the skill record, byte-measured `resource-usage.json`, `eval-results.json`, and `evidence/comparison.md`.
 - Output from `npm run verify:exercise`.
 - A focused pull request containing only the exercise changes.
 
@@ -59,4 +59,5 @@ The challenge is complete when:
 - The skill has valid metadata, concise main instructions, clear trigger boundaries, and focused resources loaded only when needed.
 - The extractor accepts arbitrary repositories and ranges without hard-coded fixture answers.
 - Final notes trace both customer changes, identify breaking migration and missing evidence, and exclude internal telemetry.
-- Hotfix and internal-only runs avoid unrelated context, `npm run verify:exercise` passes, and all required proof is present.
+- Hotfix and internal-only runs avoid unrelated context, and the comparison proves the exact context-byte change without reducing quality.
+- `npm run verify:exercise` passes and all required proof is present.

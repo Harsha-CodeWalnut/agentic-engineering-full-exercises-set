@@ -4,7 +4,7 @@
 
 Your team is struggling with incorrect and inconsistent PRs from coding agents. Your mission is to create clear repository onboarding instructions that help a fresh agent make correct and tested changes.
 
-The application has limited documentation, mixed patterns, and important rules that are not clearly explained. Agents may change the wrong code, repeat existing mistakes, include unrelated work, or finish without running the right checks.
+The application has limited documentation and competing patterns. Decide what a fresh agent must understand; do not assume every existing pattern is correct.
 
 Build reusable onboarding, then prove that it improves an agent's work without giving the agent extra help.
 
@@ -24,7 +24,7 @@ The support team needs the following production change. It will be assigned firs
 
 2. In the first branch, start a fresh agent session without `AGENTS.md` or other onboarding files. Give the agent the production change exactly as written. Do not provide hints, corrections, or retries. Commit the agent's implementation and save the session details in `evidence/before.md` and its code changes in `evidence/before.patch`.
 
-3. Review the repository and the first implementation. Identify what the agent misunderstood or missed. Discover the project structure, correct coding patterns, unsafe existing patterns, development workflow, required tests, and completion checks.
+3. Review the repository and the first implementation. Identify what the agent misunderstood, the repository evidence behind the correct approach, and the decisions future agents need to make safely.
 
 4. Switch to the second branch and create:
 

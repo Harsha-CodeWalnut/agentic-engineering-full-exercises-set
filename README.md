@@ -12,6 +12,8 @@ Each exercise asks for concrete evidence such as code changes, tests, configurat
 
 ## How Learners Should Use This Repo
 
+Before starting, read the [setup, prerequisites, time, and model-run guide](./docs/EXERCISE_SETUP_AND_TIME.md). Exercise durations measure active challenge work after the required tools and starter project are ready.
+
 1. Pick one competency folder.
 2. Pick one exercise.
 3. Work only inside that exercise folder.

@@ -9,6 +9,7 @@
     "skill description",
     "protected trigger request",
     "model decision",
+    "raw routing response hash",
     "training split",
     "held-out split",
     "confusion matrix"
@@ -21,7 +22,7 @@
   "verificationGates": [
     "20 protected substantive cases",
     "three decisions per request and description",
-    "environment parity",
+    "provider, environment, timestamp, and response-hash parity",
     "7 of 8 held-out majority accuracy",
     "recall and specificity thresholds",
     "phrase-leakage check",
@@ -37,7 +38,7 @@
   ],
   "workingDeliverables": [
     "updated SKILL.md",
-    "120 raw trigger decisions",
+    "120 response-bound raw trigger decisions",
     "skill provenance",
     "training error analysis",
     "scored comparison and adoption decision",
@@ -47,7 +48,7 @@
   ],
   "masterySignals": [
     "clear positive and negative boundaries",
-    "fair repeated comparison",
+    "fair repeated comparison with reproducible routing provenance",
     "balanced precision and recall",
     "held-out improvement",
     "no prompt overfitting"

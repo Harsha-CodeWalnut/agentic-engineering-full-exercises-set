@@ -12,6 +12,7 @@ Both files must use this structure:
   "skill_name": "change-review",
   "description_sha256": "64-character hash printed by the validator",
   "environment": {
+    "provider": "agent provider",
     "agent": "agent name and version",
     "model": "model name and version",
     "runtime": "skill runtime or client version",
@@ -25,16 +26,22 @@ Both files must use this structure:
       "id": "case ID from evals/trigger-evals.json",
       "prompt": "exact protected prompt",
       "decisions": [
-        { "run": 1, "triggered": true, "observation": "exact routing observation" },
-        { "run": 2, "triggered": true, "observation": "exact routing observation" },
-        { "run": 3, "triggered": false, "observation": "exact routing observation" }
+        {
+          "run": 1,
+          "timestamp": "2026-01-01T10:00:00.000Z",
+          "selected_skills": ["change-review"],
+          "triggered": true,
+          "raw_response": "exact unedited routing response",
+          "response_sha256": "SHA-256 of raw_response",
+          "observation": "where the routing result was observed"
+        }
       ]
     }
   ]
 }
 ```
 
-Include every protected case exactly once. Keep `environment` identical in both files. The only intended change is the `change-review` description.
+Include three decision objects for every protected case. Keep `environment` identical in both files. Copy the raw response without editing it and calculate the SHA-256 of that exact UTF-8 string. `triggered` must agree with whether `change-review` appears in `selected_skills`. The only intended change is the `change-review` description.
 
 ## skill-record.md
 
@@ -54,7 +61,7 @@ Record the before and after train accuracy, held-out accuracy, precision, recall
 
 ## Required Run Files
 
-- `evidence/before.md` records the starting commit, agent, model, runtime, settings, description hash, 60-decision result, and `evidence/before-results.json`.
+- `evidence/before.md` records the starting commit, provider, agent, model, runtime, settings, description hash, 60-decision result, and `evidence/before-results.json`.
 - `evidence/before.patch` contains the original `change-review` skill snapshot as a genuine Git diff.
 - `evidence/after.md` records the same conditions, final description hash, 60-decision result, and `evidence/after-results.json`.
 - `evidence/after.patch` contains only the allowed description change and related evidence.

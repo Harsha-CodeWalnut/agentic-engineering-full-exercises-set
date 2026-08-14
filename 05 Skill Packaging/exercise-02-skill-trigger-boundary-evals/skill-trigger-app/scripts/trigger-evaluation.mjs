@@ -5,6 +5,10 @@ export function sha256(value) {
   return crypto.createHash("sha256").update(value.replaceAll("\r\n", "\n")).digest("hex");
 }
 
+export function rawSha256(value) {
+  return crypto.createHash("sha256").update(value, "utf8").digest("hex");
+}
+
 function unquoteYaml(value) {
   const trimmed = value.trim();
   if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
@@ -93,7 +97,7 @@ export function validateResultSet(label, result, evalCases) {
   const environment = result.environment;
   if (!isPlainObject(environment)) failures.push(`${label} environment must be an object`);
   else {
-    for (const field of ["agent", "model", "runtime"]) {
+    for (const field of ["provider", "agent", "model", "runtime"]) {
       if (typeof environment[field] !== "string" || environment[field].trim().length < 2) failures.push(`${label} environment.${field} is required`);
     }
     if (!isPlainObject(environment.settings) || !Object.keys(environment.settings).length) failures.push(`${label} environment.settings must record at least one setting or runtime default`);
@@ -129,6 +133,11 @@ export function validateResultSet(label, result, evalCases) {
       }
       runs.add(decision.run);
       if (typeof decision.triggered !== "boolean") failures.push(`${label} run ${decision.run} for ${expectedCase.id} needs a boolean triggered value`);
+      if (!Number.isFinite(Date.parse(decision.timestamp ?? "")) || !/Z$/.test(decision.timestamp ?? "")) failures.push(`${label} run ${decision.run} for ${expectedCase.id} needs a UTC timestamp`);
+      if (!Array.isArray(decision.selected_skills) || decision.selected_skills.some((item) => typeof item !== "string" || !item.trim())) failures.push(`${label} run ${decision.run} for ${expectedCase.id} needs the selected skills list`);
+      if (Array.isArray(decision.selected_skills) && decision.triggered !== decision.selected_skills.includes("change-review")) failures.push(`${label} run ${decision.run} for ${expectedCase.id} triggered must match selected_skills`);
+      if (typeof decision.raw_response !== "string" || decision.raw_response.trim().length < 10) failures.push(`${label} run ${decision.run} for ${expectedCase.id} needs the unedited raw routing response`);
+      if (typeof decision.raw_response === "string" && decision.response_sha256 !== rawSha256(decision.raw_response)) failures.push(`${label} run ${decision.run} for ${expectedCase.id} has an invalid response SHA-256`);
       if (typeof decision.observation !== "string" || decision.observation.trim().length < 10) failures.push(`${label} run ${decision.run} for ${expectedCase.id} needs an observed routing result`);
     }
     if (runs.size !== 3 || ![1, 2, 3].every((run) => runs.has(run))) failures.push(`${label} runs for ${expectedCase.id} must be numbered 1, 2, and 3`);

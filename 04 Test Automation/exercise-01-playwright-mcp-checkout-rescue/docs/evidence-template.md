@@ -24,7 +24,7 @@ Record every command, exit code, and relevant output.
 
 ## mcp-investigation.md
 
-Record the Playwright MCP configuration and exact `browser_snapshot`, `browser_network_requests`, and `browser_network_request` calls used.
+Record the Playwright MCP configuration, the successful `npm run setup:check` result, and exact `browser_snapshot`, `browser_network_requests`, and `browser_network_request` calls used.
 
 For each observation, include the live URL, relevant accessibility or request output, and the conclusion used in the tests. Cover tax loading and readiness, authorization pending, approval, decline, retry, and duplicate submission.
 

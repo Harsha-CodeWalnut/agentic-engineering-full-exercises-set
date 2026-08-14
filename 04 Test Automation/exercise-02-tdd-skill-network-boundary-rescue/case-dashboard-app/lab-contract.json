@@ -26,7 +26,7 @@
     "failing protected acceptance",
     "six-state participant suite",
     "three shuffled-order runs",
-    "TDD evidence verifier",
+    "tamper-evident command capture and TDD evidence verifier",
     "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
@@ -44,13 +44,13 @@
     "independent component tests",
     "before-and-after patches",
     "skill provenance",
-    "ordered TDD and stability evidence",
+    "machine-captured TDD command records and stability evidence",
     "evidence/before.md and evidence/before.patch",
     "evidence/after.md and evidence/after.patch",
     "evidence/comparison.md"
   ],
   "masterySignals": [
-    "red precedes each production change",
+    "hashed command evidence proves red precedes each production change",
     "one behaviour is completed per cycle",
     "tests use public UI and network seams",
     "unexpected requests fail",

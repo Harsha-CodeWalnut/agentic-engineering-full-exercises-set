@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { parseSkill, scoreResultSet, sha256, validateCandidateSkill, validateResultSet } from "./trigger-evaluation.mjs";
+import { parseSkill, rawSha256, scoreResultSet, sha256, validateCandidateSkill, validateResultSet } from "./trigger-evaluation.mjs";
 
 const evalCases = JSON.parse(fs.readFileSync("evals/trigger-evals.json", "utf8")).cases;
 const baseline = parseSkill(fs.readFileSync("fixtures/change-review-baseline/SKILL.md", "utf8"));
@@ -20,6 +20,7 @@ const result = {
   skill_name: "change-review",
   description_sha256: sha256(candidate.description),
   environment: {
+    provider: "local-self-test",
     agent: "framework-self-test",
     model: "deterministic-fixture",
     runtime: "node-test",
@@ -29,7 +30,18 @@ const result = {
   cases: evalCases.map((item) => ({
     id: item.id,
     prompt: item.prompt,
-    decisions: [1, 2, 3].map((run) => ({ run, triggered: item.expected, observation: "synthetic framework decision" })),
+    decisions: [1, 2, 3].map((run) => {
+      const rawResponse = item.expected ? "Selected skill: change-review" : "Selected skills: none";
+      return {
+        run,
+        timestamp: `2026-01-01T00:00:0${run}.000Z`,
+        selected_skills: item.expected ? ["change-review"] : [],
+        triggered: item.expected,
+        raw_response: rawResponse,
+        response_sha256: rawSha256(rawResponse),
+        observation: "synthetic framework decision",
+      };
+    }),
   })),
 };
 
