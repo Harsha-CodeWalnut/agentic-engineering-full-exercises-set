@@ -1,0 +1,309 @@
+diff --git a/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/App.tsx b/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/App.tsx
+index 40c9371..76cc9bb 100644
+--- a/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/App.tsx	
++++ b/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/App.tsx	
+@@ -1,17 +1,60 @@
++import { useState } from "react";
++
+ import { members, workspacePolicy } from "./data/team";
++import { acceptInvitation, createInvitation, revokeInvitation } from "./services/invitationService";
+ import { canManageInvitations, summarizeMemberAccess } from "./services/teamPolicy";
++import type { InvitationActionResult, InvitationErrorCode, InvitationRole, InvitationState } from "./types";
++
++const ERROR_MESSAGES: Record<InvitationErrorCode, string> = {
++  UNAUTHORIZED: "That actor may not manage invitations.",
++  INVALID_EMAIL: "Enter a valid email address.",
++  INVALID_ROLE: "Only member and guest invitations are supported.",
++  GUEST_DISABLED: "The workspace policy does not allow guest invitations.",
++  MEMBER_EXISTS: "That email already belongs to a team member.",
++  INVITATION_PENDING: "That email already has a pending invitation.",
++  DUPLICATE_INVITATION_ID: "That invitation identifier is already in use.",
++  INVITATION_NOT_FOUND: "That invitation no longer exists.",
++  INVITATION_EXPIRED: "That invitation has expired.",
++  INVITATION_FINAL: "That invitation was already accepted or revoked.",
++  DUPLICATE_MEMBER_ID: "That member identifier is already in use."
++};
++
++const initialState: InvitationState = { members, invitations: [], policy: workspacePolicy };
+ 
+ export default function App() {
++  const [state, setState] = useState(initialState);
++  const [email, setEmail] = useState("");
++  const [role, setRole] = useState<InvitationRole>("member");
++  const [actorId, setActorId] = useState(members[0].id);
++  const [message, setMessage] = useState("");
++
++  function apply(result: InvitationActionResult) {
++    // A rejected result carries the original state by value, so this is a no-op
++    // on failure: invitation and member data cannot change on a rejected action.
++    setState(result.state);
++    setMessage(result.ok ? "" : result.code ? ERROR_MESSAGES[result.code] : "That action could not be completed.");
++    return result.ok;
++  }
++
++  function onInvite(event: React.FormEvent) {
++    event.preventDefault();
++    const now = new Date().toISOString();
++    const invited = apply(
++      createInvitation(state, { invitationId: `INV-${crypto.randomUUID()}`, actorId, email, role, now })
++    );
++    if (invited) setEmail("");
++  }
++
+   return (
+     <main className="shell">
+       <section className="hero">
+         <p className="eyebrow">Workspace admin</p>
+         <h1>Team collaboration console</h1>
+-        <p>Members and roles exist. Invitation behavior is the unclear feature request for this exercise.</p>
++        <p>Members, roles, and the invitation lifecycle for this workspace.</p>
+       </section>
+ 
+       <section className="member-grid">
+-        {members.map((member) => (
++        {state.members.map((member) => (
+           <article className="member-card" key={member.id}>
+             <div>
+               <p className="eyebrow">{member.id}</p>
+@@ -25,7 +68,7 @@ export default function App() {
+               </div>
+               <div>
+                 <dt>Can manage invites</dt>
+-                <dd>{canManageInvitations(member, workspacePolicy) ? "yes" : "no"}</dd>
++                <dd>{canManageInvitations(member, state.policy) ? "yes" : "no"}</dd>
+               </div>
+               <div>
+                 <dt>Status</dt>
+@@ -35,6 +78,92 @@ export default function App() {
+           </article>
+         ))}
+       </section>
++
++      <section className="invitations">
++        <h2>Team Invitations</h2>
++        <p>
++          Invitations expire after {state.policy.defaultInviteExpiryDays} days. Guest invitations are{" "}
++          {state.policy.allowGuestInvites ? "allowed" : "disabled"} by the workspace policy.
++        </p>
++
++        <form onSubmit={onInvite}>
++          <label>
++            Acting as
++            <select value={actorId} onChange={(event) => setActorId(event.target.value)}>
++              {state.members.map((member) => (
++                <option key={member.id} value={member.id}>
++                  {member.name} ({member.role})
++                </option>
++              ))}
++            </select>
++          </label>
++          <label>
++            Email
++            <input type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
++          </label>
++          <label>
++            Role
++            <select value={role} onChange={(event) => setRole(event.target.value as InvitationRole)}>
++              <option value="member">member</option>
++              <option value="guest">guest</option>
++            </select>
++          </label>
++          <button type="submit">Send invitation</button>
++        </form>
++
++        {/* Rendered unconditionally so assistive technology has the live region
++            in the DOM before a message arrives. */}
++        <p role="alert" aria-live="polite">
++          {message}
++        </p>
++
++        {state.invitations.length === 0 ? (
++          <p>No invitations yet.</p>
++        ) : (
++          <ul>
++            {state.invitations.map((invitation) => (
++              <li key={invitation.id}>
++                <span>
++                  {invitation.email} &middot; {invitation.role} &middot; {invitation.status} &middot; expires{" "}
++                  {invitation.expiresAt}
++                </span>
++                {/* Rendered for every row, including finalized ones. Hiding them
++                    would put the single-use rule in a second place; letting the
++                    service reject keeps one owner for it and makes
++                    INVITATION_FINAL reachable. */}
++                <button
++                  type="button"
++                  onClick={() =>
++                    apply(
++                      acceptInvitation(state, {
++                        invitationId: invitation.id,
++                        memberId: `USR-${crypto.randomUUID()}`,
++                        now: new Date().toISOString()
++                      })
++                    )
++                  }
++                >
++                  Accept
++                </button>
++                <button
++                  type="button"
++                  onClick={() =>
++                    apply(
++                      revokeInvitation(state, {
++                        invitationId: invitation.id,
++                        actorId,
++                        now: new Date().toISOString()
++                      })
++                    )
++                  }
++                >
++                  Revoke
++                </button>
++              </li>
++            ))}
++          </ul>
++        )}
++      </section>
+     </main>
+   );
+ }
+diff --git a/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/services/invitationService.ts b/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/services/invitationService.ts
+index d861faf..a2d7632 100644
+--- a/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/services/invitationService.ts	
++++ b/02 Spec Framing/exercise-02-superpowers-skill-driven-development/team-collaboration-app/src/services/invitationService.ts	
+@@ -2,18 +2,128 @@ import type {
+   AcceptInvitationInput,
+   CreateInvitationInput,
+   InvitationActionResult,
++  InvitationErrorCode,
+   InvitationState,
+-  RevokeInvitationInput
++  RevokeInvitationInput,
++  TeamInvitation
+ } from "../types";
+ 
+-export function createInvitation(_state: InvitationState, _input: CreateInvitationInput): InvitationActionResult {
+-  throw new Error("Invitation lifecycle is not implemented");
++const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
++const DAY_MS = 24 * 60 * 60 * 1000;
++
++function normalizeEmail(email: string) {
++  // NFKC folds compatibility forms so that a case-folded "İRIS" cannot slip past
++  // the duplicate check as a distinct address from the stored "iris".
++  return email.trim().toLowerCase().normalize("NFKC");
++}
++
++function isExpired(invitation: TeamInvitation, now: string) {
++  return Date.parse(invitation.expiresAt) <= Date.parse(now);
++}
++
++function reject(state: InvitationState, code: InvitationErrorCode): InvitationActionResult {
++  return { ok: false, state, code };
++}
++
++function authorize(state: InvitationState, actorId: string) {
++  // Mirrors canManageInvitations in ./teamPolicy; kept inline so the test runner
++  // can load this module without a runtime cross-module import extension.
++  const actor = state.members.find((member) => member.id === actorId);
++  return actor?.status === "active" && state.policy.inviteRoles.includes(actor.role);
++}
++
++/**
++ * Preconditions shared by all three exports:
++ * - `input.now` must be a parseable date string. An unparseable value makes the
++ *   expiry computation throw a RangeError rather than return a result, because
++ *   `InvitationErrorCode` has no code for a malformed timestamp and reporting a
++ *   misleading one would be worse than failing loudly.
++ * - `policy.defaultInviteExpiryDays` must be positive. Zero or less produces an
++ *   invitation that is already expired at the boundary instant.
++ */
++export function createInvitation(state: InvitationState, input: CreateInvitationInput): InvitationActionResult {
++  if (!authorize(state, input.actorId)) return reject(state, "UNAUTHORIZED");
++  if (input.role !== "member" && input.role !== "guest") return reject(state, "INVALID_ROLE");
++  if (input.role === "guest" && !state.policy.allowGuestInvites) return reject(state, "GUEST_DISABLED");
++
++  const email = normalizeEmail(input.email);
++  if (!EMAIL_PATTERN.test(email)) return reject(state, "INVALID_EMAIL");
++  if (state.members.some((member) => normalizeEmail(member.email) === email)) return reject(state, "MEMBER_EXISTS");
++
++  const blocking = state.invitations.some(
++    (invitation) =>
++      normalizeEmail(invitation.email) === email &&
++      invitation.status === "pending" &&
++      !isExpired(invitation, input.now)
++  );
++  if (blocking) return reject(state, "INVITATION_PENDING");
++  if (state.invitations.some((invitation) => invitation.id === input.invitationId)) {
++    return reject(state, "DUPLICATE_INVITATION_ID");
++  }
++
++  const invitation: TeamInvitation = {
++    id: input.invitationId,
++    email,
++    role: input.role,
++    invitedBy: input.actorId,
++    createdAt: input.now,
++    expiresAt: new Date(Date.parse(input.now) + state.policy.defaultInviteExpiryDays * DAY_MS).toISOString(),
++    status: "pending"
++  };
++
++  return {
++    ok: true,
++    state: { ...state, invitations: [...state.invitations, invitation] },
++    invitation
++  };
+ }
+ 
+-export function acceptInvitation(_state: InvitationState, _input: AcceptInvitationInput): InvitationActionResult {
+-  throw new Error("Invitation lifecycle is not implemented");
++export function acceptInvitation(state: InvitationState, input: AcceptInvitationInput): InvitationActionResult {
++  const invitation = state.invitations.find((candidate) => candidate.id === input.invitationId);
++  if (!invitation) return reject(state, "INVITATION_NOT_FOUND");
++  if (invitation.status !== "pending") return reject(state, "INVITATION_FINAL");
++  if (isExpired(invitation, input.now)) return reject(state, "INVITATION_EXPIRED");
++  if (state.members.some((member) => member.id === input.memberId)) return reject(state, "DUPLICATE_MEMBER_ID");
++
++  const accepted: TeamInvitation = { ...invitation, status: "accepted" };
++
++  return {
++    ok: true,
++    state: {
++      ...state,
++      members: [
++        ...state.members,
++        {
++          id: input.memberId,
++          name: invitation.email,
++          email: invitation.email,
++          role: invitation.role,
++          status: "active",
++          lastActiveDays: 0
++        }
++      ],
++      invitations: state.invitations.map((candidate) => (candidate.id === accepted.id ? accepted : candidate))
++    },
++    invitation: accepted
++  };
+ }
+ 
+-export function revokeInvitation(_state: InvitationState, _input: RevokeInvitationInput): InvitationActionResult {
+-  throw new Error("Invitation lifecycle is not implemented");
++export function revokeInvitation(state: InvitationState, input: RevokeInvitationInput): InvitationActionResult {
++  if (!authorize(state, input.actorId)) return reject(state, "UNAUTHORIZED");
++
++  const invitation = state.invitations.find((candidate) => candidate.id === input.invitationId);
++  if (!invitation) return reject(state, "INVITATION_NOT_FOUND");
++  if (invitation.status !== "pending") return reject(state, "INVITATION_FINAL");
++  if (isExpired(invitation, input.now)) return reject(state, "INVITATION_EXPIRED");
++
++  const revoked: TeamInvitation = { ...invitation, status: "revoked" };
++
++  return {
++    ok: true,
++    state: {
++      ...state,
++      invitations: state.invitations.map((candidate) => (candidate.id === revoked.id ? revoked : candidate))
++    },
++    invitation: revoked
++  };
+ }
