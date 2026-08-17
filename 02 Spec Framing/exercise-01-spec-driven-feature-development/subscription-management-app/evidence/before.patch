@@ -1,0 +1,227 @@
+diff --git a/specs/plan.md b/specs/plan.md
+new file mode 100644
+index 0000000..2c2046b
+--- /dev/null
++++ b/specs/plan.md
+@@ -0,0 +1,50 @@
++# Subscription Management Technical Plan
++
++## PLAN-001: Define the domain and authorization policy
++
++**Requirements:** REQ-001, REQ-006
++
++Replace the display-only pending string with explicit subscription-change types for action, status, effective date, preview metadata, and provider correlation. Represent account tier separately so enterprise restrictions are enforceable. Add a centralized authorization policy shared by action discovery and mutation commands, with server-side enforcement as the authority.
++
++## PLAN-002: Add preview and confirmation boundaries
++
++**Requirements:** REQ-002, REQ-003
++
++Introduce a billing adapter operation that returns a normalized preview for a requested supported change. Persist or sign enough preview context to bind confirmation to the account, action, plan or seat quantity, price impact, effective date, and expiry. Require a valid preview token for mutation submission and map immediate versus renewal-date timing according to the action.
++
++## PLAN-003: Implement durable change requests and idempotent submission
++
++**Requirements:** REQ-003, REQ-004, REQ-005
++
++Create a subscription-change request record with a uniqueness rule allowing at most one pending request per account. Generate an idempotency key once per logical request, persist it before provider submission, and reuse it for retries. Treat provider acceptance as pending, not success. Reconcile conflicts by loading the existing pending request.
++
++## PLAN-004: Reconcile authenticated webhook outcomes
++
++**Requirements:** REQ-004, REQ-005
++
++Add a webhook handler that verifies event authenticity, correlates the event to a persisted request, and transitions pending requests idempotently to completed or failed. Apply provider-confirmed subscription state or scheduled-change state only on the appropriate outcome. Ignore safely repeated terminal events and record diagnostic details only in protected server logs.
++
++## PLAN-005: Build the subscription management experience
++
++**Requirements:** REQ-001, REQ-002, REQ-003, REQ-004, REQ-005, REQ-006
++
++Extend the current overview with role- and account-aware action controls, a preview and explicit-confirmation step, effective-date messaging, and distinct pending, completed, conflict, and failed states. Keep controls unavailable for viewers, forbidden cancellation roles, enterprise accounts, unsupported actions, and accounts with a pending request. Translate server error codes into safe customer messages.
++
++## PLAN-006: Verify policy, billing timing, concurrency, and recovery
++
++**Requirements:** REQ-001, REQ-002, REQ-003, REQ-004, REQ-005, REQ-006
++
++Add unit tests for policy and timing rules, integration tests for preview binding, authorization, pending uniqueness, idempotent retries, and webhook transitions, and component or end-to-end tests for observable acceptance behavior. Include negative tests proving unsupported or unauthorized commands never invoke the provider.
++
++## Delivery Sequence
++
++1. PLAN-001 establishes the domain vocabulary and authorization boundary.
++2. PLAN-002 establishes preview and billing-timing behavior.
++3. PLAN-003 and PLAN-004 establish durable asynchronous processing and recovery.
++4. PLAN-005 exposes only the behaviors supported by those boundaries.
++5. PLAN-006 verifies all requirements and acceptance criteria before release.
++
++## Decision Gate
++
++Before production implementation is accepted, product and finance must confirm the four assumptions listed in `specs/spec.md`. A changed answer requires updating the affected requirements, acceptance criteria, plan items, and tasks before feature code is merged.
++
+diff --git a/specs/spec.md b/specs/spec.md
+new file mode 100644
+index 0000000..280d2a1
+--- /dev/null
++++ b/specs/spec.md
+@@ -0,0 +1,95 @@
++# Subscription Management Specification
++
++## Purpose
++
++Provide a self-service workflow for eligible users to upgrade or downgrade a plan, increase seats, or cancel a subscription while preventing unauthorized changes, duplicate charges, and conflicting pending requests.
++
++This specification is based on `docs/feature-request.md`, `docs/stakeholder-notes.md`, `docs/billing-constraints.md`, and the current account model in `src/types.ts`. The stakeholder notes explicitly are not approved requirements. Because no clarification record or approved product decisions are available for this attempt, the following choices are assumptions and must be confirmed before release:
++
++- Cancellation is restricted to the account owner; billing admins may manage plans and increase seats but may not cancel.
++- Enterprise subscription mutations are excluded until an approval policy is decided.
++- Seat decreases are excluded because the evidence defines timing and provider capability only for seat increases.
++- A failed asynchronous request leaves the existing subscription unchanged and may be retried by the user.
++
++## Requirements
++
++### REQ-001: Authorize subscription management actions
++
++The system shall allow account owners to upgrade, downgrade, increase seats, and schedule cancellation. Billing admins shall be allowed to upgrade, downgrade, and increase seats, but not cancel. Viewers shall have read-only access. Authorization shall be enforced by the server for every mutation, regardless of which controls the client displays. Enterprise accounts shall not expose mutation actions in this release because their approval workflow is undecided.
++
++### REQ-002: Preview and explicitly confirm billing impact
++
++Before submitting a change, the system shall obtain and display a provider-backed preview containing the requested change, effective date, and price or proration impact. A change that may charge immediately shall require explicit confirmation of that displayed amount. A stale or unavailable preview shall not be confirmable.
++
++### REQ-003: Apply or schedule changes at the defined time
++
++Plan upgrades and seat increases shall apply immediately with proration after confirmation. Plan downgrades and cancellations shall be scheduled for the end of the current billing term and shall show the renewal date as their effective date. Immediate cancellation and automatic cancellation refunds shall not be offered.
++
++### REQ-004: Represent asynchronous and pending changes safely
++
++After the provider accepts a submission, the system shall show the request as pending until a final webhook result arrives. Only one plan-change request may be pending per account. While a request is pending, the system shall show its action and effective timing and shall prevent another subscription mutation. A provider conflict response shall be represented as the existing pending state rather than creating a second local request.
++
++### REQ-005: Handle failures and retries without exposing provider details
++
++Customer-visible failures shall use a safe translated message and shall not expose provider internals. A failed request shall be distinguishable from a pending or completed request, shall not be presented as an applied subscription change, and shall offer a retry when the action remains valid. Every logical submission shall use an idempotency key, and retries of that submission shall reuse the same key to prevent duplicate charges.
++
++### REQ-006: Bound the first-release scope
++
++The first release shall not implement enterprise approval workflows, seat decreases, immediate downgrades, immediate cancellations, automatic refunds, payment-method management, invoice management, or support-agent administration. Unsupported actions shall not be submitted to the provider and shall direct the user to contact support where appropriate.
++
++## Acceptance Criteria
++
++### AC-001: Account owner sees permitted actions
++
++Given a non-enterprise account and a signed-in account owner, when the subscription management view loads, then upgrade, downgrade, seat-increase, and cancellation actions are available.
++
++### AC-002: Restricted roles cannot perform restricted actions
++
++Given a billing admin or viewer, when that user views or directly attempts subscription actions, then a billing admin cannot cancel, a viewer cannot submit any mutation, and the server returns an authorization failure without calling the billing provider for a forbidden request.
++
++### AC-003: Enterprise changes are excluded
++
++Given an enterprise account, when an account owner or billing admin opens subscription management, then no mutation action is available and the interface explains that support is required.
++
++### AC-004: Immediate charge is previewed and confirmed
++
++Given an authorized user requests a plan upgrade or seat increase, when a current provider preview is returned, then the interface displays the immediate effective timing and proration amount and does not submit the change until the user explicitly confirms that preview.
++
++### AC-005: Unavailable or stale preview blocks submission
++
++Given the preview fails or ceases to match the requested change, when the user attempts to confirm, then no mutation is submitted and the user is asked to obtain a new preview.
++
++### AC-006: Deferred change uses renewal date
++
++Given an authorized user confirms a downgrade or cancellation, when the provider accepts the request, then the request shows as pending with the current renewal date as its effective date and the current subscription remains active until that date.
++
++### AC-007: Immediate change waits for final result
++
++Given an authorized user confirms an upgrade or seat increase, when the provider accepts the request but its final webhook has not arrived, then the interface shows a pending state and does not claim that the subscription has completed the change.
++
++### AC-008: A pending request prevents a conflicting request
++
++Given an account already has a pending change, when any eligible user views the account or attempts another mutation, then the pending action and timing are shown, all mutation controls are unavailable, and a conflict response does not create a second request.
++
++### AC-009: Successful webhook finalizes state
++
++Given a request is pending, when a matching success webhook is processed, then the request is marked completed exactly once and the displayed subscription or scheduled change reflects the provider result.
++
++### AC-010: Failure is safe and recoverable
++
++Given a submission or final provider result fails, when the failure is displayed, then the user sees a safe message without provider-internal details, the request is marked failed rather than pending or completed, and the prior subscription remains the displayed source of truth.
++
++### AC-011: Retry does not duplicate a charge
++
++Given a failed or indeterminate submission is eligible for retry, when the same logical request is retried, then the same idempotency key is sent and repeated responses or webhooks do not create a duplicate local change or charge.
++
++### AC-012: Unsupported actions cannot reach billing
++
++Given a user attempts a seat decrease, immediate downgrade, immediate cancellation, refund, or another out-of-scope action, when the request reaches the application boundary, then it is rejected without a billing-provider mutation and the user receives an appropriate support or scope message.
++
++## Operational Notes
++
++- Webhook processing must authenticate provider events and correlate them to the account and request before changing state.
++- Price previews and mutation commands are distinct operations; confirmation must bind to the previewed account, action, quantity or plan, amount, and expiry.
++- The current `SubscriptionAccount.pendingChange?: string` shape is insufficient to distinguish action, status, effective date, idempotency key, and provider correlation. The implementation plan introduces a structured representation rather than deriving state from display text.
++
+diff --git a/specs/tasks.md b/specs/tasks.md
+new file mode 100644
+index 0000000..a6822ed
+--- /dev/null
++++ b/specs/tasks.md
+@@ -0,0 +1,64 @@
++# Subscription Management Implementation Tasks
++
++## TASK-001: Model accounts and subscription-change lifecycle
++
++**Requirements:** REQ-001, REQ-003, REQ-004, REQ-005, REQ-006  
++**Acceptance criteria:** AC-003, AC-006, AC-007, AC-008, AC-009, AC-010, AC-011, AC-012
++
++Define typed account tier and structured change-request data for action, requested values, status, effective date, preview identity, idempotency key, and provider correlation. Add persistence and a database-level or equivalent atomic constraint that prevents two pending requests for one account.
++
++## TASK-002: Implement and test authorization and scope policy
++
++**Requirements:** REQ-001, REQ-006  
++**Acceptance criteria:** AC-001, AC-002, AC-003, AC-012
++
++Implement a centralized policy for account-owner, billing-admin, viewer, and enterprise behavior. Enforce it in mutation handlers as well as action discovery. Add tests that forbidden and unsupported commands return stable application errors without calling the provider.
++
++## TASK-003: Implement provider preview and bound confirmation
++
++**Requirements:** REQ-002, REQ-003  
++**Acceptance criteria:** AC-004, AC-005, AC-006
++
++Add the normalized provider preview operation and an expiring confirmation token or persisted preview. Bind confirmation to all price-relevant inputs and calculate effective timing by supported action. Test tampered, mismatched, expired, and unavailable previews.
++
++## TASK-004: Submit changes idempotently and handle conflicts
++
++**Requirements:** REQ-003, REQ-004, REQ-005  
++**Acceptance criteria:** AC-006, AC-007, AC-008, AC-011
++
++Persist each request and its idempotency key before submission, reuse the key on retry, and leave accepted requests pending. Atomically reject concurrent requests and map provider conflicts to the existing pending request. Add integration tests for simultaneous submissions, ambiguous responses, and repeated retry attempts.
++
++## TASK-005: Process final provider webhooks
++
++**Requirements:** REQ-003, REQ-004, REQ-005  
++**Acceptance criteria:** AC-006, AC-007, AC-009, AC-010, AC-011
++
++Authenticate and correlate webhook events, then idempotently finalize or fail the matching pending request. Update current or scheduled subscription state only from the correlated outcome. Test invalid signatures, unknown requests, out-of-order events, duplicate events, success, and failure.
++
++## TASK-006: Translate failures into safe application responses
++
++**Requirements:** REQ-005  
++**Acceptance criteria:** AC-010, AC-011
++
++Create stable customer-safe error codes and messages for preview, authorization, conflict, submission, and finalization failures. Keep provider detail in protected diagnostics only and expose retry only when the same logical request can safely reuse its idempotency key.
++
++## TASK-007: Build management controls and confirmation flow
++
++**Requirements:** REQ-001, REQ-002, REQ-003, REQ-006  
++**Acceptance criteria:** AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-012
++
++Add eligible actions to the subscription overview, collect the supported plan or seat-increase request, display the provider preview and effective date, and require explicit confirmation. Hide or disable actions according to returned policy and show support guidance for enterprise and unsupported cases. Add component tests for each role and action.
++
++## TASK-008: Build pending, conflict, success, and failure states
++
++**Requirements:** REQ-004, REQ-005  
++**Acceptance criteria:** AC-007, AC-008, AC-009, AC-010, AC-011
++
++Render structured request status and effective timing, disable all mutation controls while pending, refresh or subscribe for final results, and show safe recovery actions after failure. Add end-to-end coverage for accepted-then-success, accepted-then-failure, existing conflict, and safe retry journeys.
++
++## TASK-009: Run full acceptance and regression verification
++
++**Requirements:** REQ-001, REQ-002, REQ-003, REQ-004, REQ-005, REQ-006  
++**Acceptance criteria:** AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007, AC-008, AC-009, AC-010, AC-011, AC-012
++
++Run policy, adapter, persistence, webhook, component, and end-to-end suites plus the repository lint, typecheck, build, and specification verification commands. Record evidence that unauthorized, unsupported, stale-preview, conflict, and duplicate-retry paths make no unintended provider mutation or duplicate charge.
