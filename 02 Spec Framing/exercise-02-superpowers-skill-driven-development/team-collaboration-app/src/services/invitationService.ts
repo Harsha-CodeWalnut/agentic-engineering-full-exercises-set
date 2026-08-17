@@ -12,7 +12,9 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function normalizeEmail(email: string) {
-  return email.trim().toLowerCase();
+  // NFKC folds compatibility forms so that a case-folded "İRIS" cannot slip past
+  // the duplicate check as a distinct address from the stored "iris".
+  return email.trim().toLowerCase().normalize("NFKC");
 }
 
 function isExpired(invitation: TeamInvitation, now: string) {
@@ -30,6 +32,15 @@ function authorize(state: InvitationState, actorId: string) {
   return actor?.status === "active" && state.policy.inviteRoles.includes(actor.role);
 }
 
+/**
+ * Preconditions shared by all three exports:
+ * - `input.now` must be a parseable date string. An unparseable value makes the
+ *   expiry computation throw a RangeError rather than return a result, because
+ *   `InvitationErrorCode` has no code for a malformed timestamp and reporting a
+ *   misleading one would be worse than failing loudly.
+ * - `policy.defaultInviteExpiryDays` must be positive. Zero or less produces an
+ *   invitation that is already expired at the boundary instant.
+ */
 export function createInvitation(state: InvitationState, input: CreateInvitationInput): InvitationActionResult {
   if (!authorize(state, input.actorId)) return reject(state, "UNAUTHORIZED");
   if (input.role !== "member" && input.role !== "guest") return reject(state, "INVALID_ROLE");

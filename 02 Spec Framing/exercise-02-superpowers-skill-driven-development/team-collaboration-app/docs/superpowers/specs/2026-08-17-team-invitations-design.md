@@ -168,7 +168,11 @@ containing:
 - an email field and a role selector for `member` or `guest`
 - a submit control that calls `createInvitation`
 - a list of invitations showing email, role, status, and expiry, with Accept and
-  Revoke controls on pending rows only
+  Revoke controls on every row including finalized ones. Hiding the controls on
+  non-pending rows would place the single-use rule in the interface as well as
+  the service, which is the duplication this design rejects above. Letting the
+  service refuse a finalized invitation keeps one owner for the rule and makes
+  `INVITATION_FINAL` reachable by a user rather than only by a test.
 - an alert region rendering the message for the most recent rejection
 
 Invitation state lives in local React state, seeded from `src/data/team.ts` with
@@ -179,6 +183,23 @@ and `USR-${Date.now()}`; the current instant comes from
 
 Persistence across reloads is out of scope. Nothing in the invitation contract
 or the protected suite requires it.
+
+## Preconditions
+
+Added after code review, which found two inputs the original design left
+unaddressed.
+
+`input.now` must be a parseable date string. An unparseable value makes the
+expiry computation throw a `RangeError` rather than return an
+`InvitationActionResult`. `InvitationErrorCode` is fixed by the protected
+`src/types.ts` and has no code for a malformed timestamp, so the choice is
+between failing loudly and reporting a misleading reason. Failing loudly is the
+lesser harm, and the precondition is documented on the module.
+
+`policy.defaultInviteExpiryDays` must be positive. Zero or less produces an
+invitation that is already expired at its boundary instant, which then does not
+block a replacement, so the same address can be invited repeatedly and every
+invitation arrives dead.
 
 ## Testing
 

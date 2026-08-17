@@ -32,7 +32,7 @@ export default function App() {
     // A rejected result carries the original state by value, so this is a no-op
     // on failure: invitation and member data cannot change on a rejected action.
     setState(result.state);
-    setMessage(result.ok ? "" : ERROR_MESSAGES[result.code ?? "UNAUTHORIZED"]);
+    setMessage(result.ok ? "" : result.code ? ERROR_MESSAGES[result.code] : "That action could not be completed.");
     return result.ok;
   }
 
@@ -40,7 +40,7 @@ export default function App() {
     event.preventDefault();
     const now = new Date().toISOString();
     const invited = apply(
-      createInvitation(state, { invitationId: `INV-${Date.now()}`, actorId, email, role, now })
+      createInvitation(state, { invitationId: `INV-${crypto.randomUUID()}`, actorId, email, role, now })
     );
     if (invited) setEmail("");
   }
@@ -116,7 +116,11 @@ export default function App() {
           <button type="submit">Send invitation</button>
         </form>
 
-        {message ? <p role="alert">{message}</p> : null}
+        {/* Rendered unconditionally so assistive technology has the live region
+            in the DOM before a message arrives. */}
+        <p role="alert" aria-live="polite">
+          {message}
+        </p>
 
         {state.invitations.length === 0 ? (
           <p>No invitations yet.</p>
@@ -128,38 +132,38 @@ export default function App() {
                   {invitation.email} &middot; {invitation.role} &middot; {invitation.status} &middot; expires{" "}
                   {invitation.expiresAt}
                 </span>
-                {invitation.status === "pending" ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        apply(
-                          acceptInvitation(state, {
-                            invitationId: invitation.id,
-                            memberId: `USR-${Date.now()}`,
-                            now: new Date().toISOString()
-                          })
-                        )
-                      }
-                    >
-                      Accept
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        apply(
-                          revokeInvitation(state, {
-                            invitationId: invitation.id,
-                            actorId,
-                            now: new Date().toISOString()
-                          })
-                        )
-                      }
-                    >
-                      Revoke
-                    </button>
-                  </>
-                ) : null}
+                {/* Rendered for every row, including finalized ones. Hiding them
+                    would put the single-use rule in a second place; letting the
+                    service reject keeps one owner for it and makes
+                    INVITATION_FINAL reachable. */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    apply(
+                      acceptInvitation(state, {
+                        invitationId: invitation.id,
+                        memberId: `USR-${crypto.randomUUID()}`,
+                        now: new Date().toISOString()
+                      })
+                    )
+                  }
+                >
+                  Accept
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    apply(
+                      revokeInvitation(state, {
+                        invitationId: invitation.id,
+                        actorId,
+                        now: new Date().toISOString()
+                      })
+                    )
+                  }
+                >
+                  Revoke
+                </button>
               </li>
             ))}
           </ul>
