@@ -67,8 +67,34 @@ export function createInvitation(state: InvitationState, input: CreateInvitation
   };
 }
 
-export function acceptInvitation(_state: InvitationState, _input: AcceptInvitationInput): InvitationActionResult {
-  throw new Error("not implemented");
+export function acceptInvitation(state: InvitationState, input: AcceptInvitationInput): InvitationActionResult {
+  const invitation = state.invitations.find((candidate) => candidate.id === input.invitationId);
+  if (!invitation) return reject(state, "INVITATION_NOT_FOUND");
+  if (invitation.status !== "pending") return reject(state, "INVITATION_FINAL");
+  if (isExpired(invitation, input.now)) return reject(state, "INVITATION_EXPIRED");
+  if (state.members.some((member) => member.id === input.memberId)) return reject(state, "DUPLICATE_MEMBER_ID");
+
+  const accepted: TeamInvitation = { ...invitation, status: "accepted" };
+
+  return {
+    ok: true,
+    state: {
+      ...state,
+      members: [
+        ...state.members,
+        {
+          id: input.memberId,
+          name: invitation.email,
+          email: invitation.email,
+          role: invitation.role,
+          status: "active",
+          lastActiveDays: 0
+        }
+      ],
+      invitations: state.invitations.map((candidate) => (candidate.id === accepted.id ? accepted : candidate))
+    },
+    invitation: accepted
+  };
 }
 
 export function revokeInvitation(_state: InvitationState, _input: RevokeInvitationInput): InvitationActionResult {
