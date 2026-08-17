@@ -379,12 +379,7 @@ Change the member grid to iterate `state.members` and `state.policy` rather than
     </label>
     <label>
       Email
-      <input
-        type="text"
-        value={email}
-        placeholder="person@example.test"
-        onChange={(event) => setEmail(event.target.value)}
-      />
+      <input type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
     </label>
     <label>
       Role
