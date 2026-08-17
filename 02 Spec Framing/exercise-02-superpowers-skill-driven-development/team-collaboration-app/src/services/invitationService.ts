@@ -97,6 +97,22 @@ export function acceptInvitation(state: InvitationState, input: AcceptInvitation
   };
 }
 
-export function revokeInvitation(_state: InvitationState, _input: RevokeInvitationInput): InvitationActionResult {
-  throw new Error("not implemented");
+export function revokeInvitation(state: InvitationState, input: RevokeInvitationInput): InvitationActionResult {
+  if (!authorize(state, input.actorId)) return reject(state, "UNAUTHORIZED");
+
+  const invitation = state.invitations.find((candidate) => candidate.id === input.invitationId);
+  if (!invitation) return reject(state, "INVITATION_NOT_FOUND");
+  if (invitation.status !== "pending") return reject(state, "INVITATION_FINAL");
+  if (isExpired(invitation, input.now)) return reject(state, "INVITATION_EXPIRED");
+
+  const revoked: TeamInvitation = { ...invitation, status: "revoked" };
+
+  return {
+    ok: true,
+    state: {
+      ...state,
+      invitations: state.invitations.map((candidate) => (candidate.id === revoked.id ? revoked : candidate))
+    },
+    invitation: revoked
+  };
 }
