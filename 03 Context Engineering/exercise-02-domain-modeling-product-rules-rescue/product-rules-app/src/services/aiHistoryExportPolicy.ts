@@ -25,11 +25,24 @@ export interface ExportAuthorizationContext {
 }
 
 /**
- * Seeded previous-agent implementation. It follows the legacy `account owner`
- * rule and treats a role name as sufficient without checking its scope.
+ * Authorize AI-history export only for an active admin membership on the
+ * same eligible workspace. Billing-customer ownership is not a substitute.
  */
 export function canExportAIHistory(context: ExportAuthorizationContext) {
-  const isLegacyAccountOwner = context.billingCustomer.ownerUserId === context.callerUserId;
-  const hasAdminLabel = context.membership?.role === "admin";
-  return context.workspace.plan !== "Starter" && (isLegacyAccountOwner || hasAdminLabel);
+  const { callerUserId, workspace, membership } = context;
+
+  if (!membership) {
+    return false;
+  }
+
+  const eligibleWorkspace =
+    workspace.plan === "Enterprise" && workspace.dataResidency === "standard";
+
+  const authorizedAdministrator =
+    membership.status === "active" &&
+    membership.role === "admin" &&
+    membership.userId === callerUserId &&
+    membership.workspaceId === workspace.id;
+
+  return eligibleWorkspace && authorizedAdministrator;
 }
