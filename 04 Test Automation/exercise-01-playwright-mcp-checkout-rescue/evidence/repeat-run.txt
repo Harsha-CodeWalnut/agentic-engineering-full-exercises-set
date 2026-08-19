@@ -1,0 +1,126 @@
+npx playwright test tests/e2e/checkout-gate.spec.ts --repeat-each=20 --workers=2
+
+Running 80 tests using 2 workers
+
+
+
+
+
+[1/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[2/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[3/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[4/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[5/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[6/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[7/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[8/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[9/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[10/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[11/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[12/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[13/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[14/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[15/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[16/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[17/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[18/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[19/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[20/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[21/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[22/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[23/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[24/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[25/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[26/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[27/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[28/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[29/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[30/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[31/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[32/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[33/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[34/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[35/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[36/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[37/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[38/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[39/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[40/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[41/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[42/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[43/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[44/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[45/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[46/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[47/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[48/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[49/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[50/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[51/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[52/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[53/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[54/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[55/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[56/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[57/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[58/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[59/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[60/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[61/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[62/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[63/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[64/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[65/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[66/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[67/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[68/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[69/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[70/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[71/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[72/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+
+
+
+
+[73/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[74/80] [chromium] › tests/e2e/checkout-gate.spec.ts:13:1 › tax payload is quoted before Pay becomes ready
+[75/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[76/80] [chromium] › tests/e2e/checkout-gate.spec.ts:27:1 › approval posts the authorization payload and shows Order confirmed
+[77/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[78/80] [chromium] › tests/e2e/checkout-gate.spec.ts:44:1 › decline recovery retries with an approved card
+[79/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+[80/80] [chromium] › tests/e2e/checkout-gate.spec.ts:57:1 › duplicate submit keeps a single authorization request
+  80 passed (2.0m)
+exit code: 0
