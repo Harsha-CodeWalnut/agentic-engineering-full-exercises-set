@@ -1,9 +1,7 @@
 import type { WorkItem } from "../types";
 
-// This partial implementation follows an earlier rollout proposal.
-// The incident requires the participant to verify it against the current policy.
-export const AUTOMATIC_ESCALATION_HOURS = 24;
-const AUTOMATIC_OWNER = "Incident Desk";
+/** Waiting-time boundary from docs/current-sla-policy.md. Existing owner is preserved. */
+export const AUTOMATIC_ESCALATION_HOURS = 48;
 
 export function shouldAutomaticallyEscalate(item: WorkItem): boolean {
   return (
@@ -21,7 +19,6 @@ export function applyAutomaticEscalation(item: WorkItem): WorkItem {
     ...item,
     status: "Escalated",
     escalationMode: "automatic",
-    owner: AUTOMATIC_OWNER,
   };
 }
 
