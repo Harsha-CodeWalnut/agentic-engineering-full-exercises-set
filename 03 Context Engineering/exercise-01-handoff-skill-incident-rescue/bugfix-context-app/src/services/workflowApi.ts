@@ -31,8 +31,8 @@ export async function saveAction(itemId: string, draft: ActionDraft): Promise<Wo
 
 export async function runAutomaticEscalation(): Promise<WorkItem[]> {
   await wait(20);
-  const updatedItems = applyAutomaticEscalations(storedItems);
-  return updatedItems.map(cloneItem);
+  storedItems = applyAutomaticEscalations(storedItems);
+  return storedItems.map(cloneItem);
 }
 
 export async function collectEvidence(item: WorkItem): Promise<string[]> {
