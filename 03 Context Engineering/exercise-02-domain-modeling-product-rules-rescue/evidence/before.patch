@@ -1,0 +1,31 @@
+diff --git a/03 Context Engineering/exercise-02-domain-modeling-product-rules-rescue/product-rules-app/src/services/aiHistoryExportPolicy.ts b/03 Context Engineering/exercise-02-domain-modeling-product-rules-rescue/product-rules-app/src/services/aiHistoryExportPolicy.ts
+index fb368e8..c869639 100644
+--- a/03 Context Engineering/exercise-02-domain-modeling-product-rules-rescue/product-rules-app/src/services/aiHistoryExportPolicy.ts	
++++ b/03 Context Engineering/exercise-02-domain-modeling-product-rules-rescue/product-rules-app/src/services/aiHistoryExportPolicy.ts	
+@@ -25,11 +25,21 @@ export interface ExportAuthorizationContext {
+ }
+ 
+ /**
+- * Seeded previous-agent implementation. It follows the legacy `account owner`
+- * rule and treats a role name as sufficient without checking its scope.
++ * AI history may be exported only by an active admin of the same Enterprise
++ * workspace when data residency is standard. Billing ownership is not access.
+  */
+ export function canExportAIHistory(context: ExportAuthorizationContext) {
+-  const isLegacyAccountOwner = context.billingCustomer.ownerUserId === context.callerUserId;
+-  const hasAdminLabel = context.membership?.role === "admin";
+-  return context.workspace.plan !== "Starter" && (isLegacyAccountOwner || hasAdminLabel);
++  const { callerUserId, workspace, membership } = context;
++  if (!membership) {
++    return false;
++  }
++
++  return (
++    workspace.plan === "Enterprise" &&
++    workspace.dataResidency === "standard" &&
++    membership.userId === callerUserId &&
++    membership.workspaceId === workspace.id &&
++    membership.status === "active" &&
++    membership.role === "admin"
++  );
+ }
