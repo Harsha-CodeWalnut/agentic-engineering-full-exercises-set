@@ -1,0 +1,52 @@
+npm run test:network
+
+> case-dashboard-app@0.1.0 test:network
+> node ./scripts/run-network-stability.mjs
+
+Network stability seed: 104
+
+ RUN  v3.2.7 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app
+      Running tests with seed "104"
+
+ ✓ src/App.acceptance.test.tsx (3 tests) 324ms
+ ✓ src/App.weak.test.tsx (1 test) 128ms
+ ✓ src/App.network.test.tsx (6 tests) 335ms
+ ✓ src/utils/scoring.test.ts (2 tests) 3ms
+
+ Test Files  4 passed (4)
+      Tests  12 passed (12)
+   Start at  12:28:59
+   Duration  3.21s (transform 55ms, setup 557ms, collect 101ms, tests 790ms, environment 1.04s, prepare 134ms)
+
+Network stability seed: 108
+
+ RUN  v3.2.7 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app
+      Running tests with seed "108"
+
+ ✓ src/utils/scoring.test.ts (2 tests) 3ms
+ ✓ src/App.weak.test.tsx (1 test) 130ms
+ ✓ src/App.network.test.tsx (6 tests) 349ms
+ ✓ src/App.acceptance.test.tsx (3 tests) 322ms
+
+ Test Files  4 passed (4)
+      Tests  12 passed (12)
+   Start at  12:29:02
+   Duration  3.15s (transform 52ms, setup 482ms, collect 94ms, tests 804ms, environment 1.01s, prepare 133ms)
+
+Network stability seed: 220
+
+ RUN  v3.2.7 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app
+      Running tests with seed "220"
+
+ ✓ src/App.acceptance.test.tsx (3 tests) 318ms
+ ✓ src/App.weak.test.tsx (1 test) 126ms
+ ✓ src/App.network.test.tsx (6 tests) 337ms
+ ✓ src/utils/scoring.test.ts (2 tests) 3ms
+
+ Test Files  4 passed (4)
+      Tests  12 passed (12)
+   Start at  12:29:06
+   Duration  3.11s (transform 53ms, setup 485ms, collect 92ms, tests 783ms, environment 1.02s, prepare 134ms)
+
+Network stability passed for seeds: 104, 108, 220
+Exit code: 0
