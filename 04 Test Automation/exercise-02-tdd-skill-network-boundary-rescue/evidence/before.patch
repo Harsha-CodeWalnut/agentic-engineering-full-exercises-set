@@ -1,0 +1,108 @@
+diff --git a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.dashboard.test.tsx b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.dashboard.test.tsx
+new file mode 100644
+index 0000000..94b4738
+--- /dev/null
++++ b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.dashboard.test.tsx	
+@@ -0,0 +1,59 @@
++import { render, screen } from "@testing-library/react";
++import userEvent from "@testing-library/user-event";
++import { delay, http, HttpResponse } from "msw";
++import { describe, expect, it } from "vitest";
++import App from "./App";
++import { server } from "./test/server";
++
++describe("case dashboard without TDD skill", () => {
++  it("shows loading text while waiting", () => {
++    server.use(http.get("/api/cases", async () => {
++      await delay("infinite");
++      return HttpResponse.json([]);
++    }));
++    render(<App />);
++    expect(screen.getByText("Loading cases...")).toBeInTheDocument();
++  });
++
++  it("shows a returned case", async () => {
++    render(<App />);
++    expect(await screen.findByText("Northstar Health")).toBeInTheDocument();
++  });
++
++  it("shows server-empty copy", async () => {
++    server.use(http.get("/api/cases", () => HttpResponse.json([])));
++    render(<App />);
++    expect(await screen.findByText("No cases are assigned yet.")).toBeInTheDocument();
++  });
++
++  it("shows filtered-empty copy", async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText("Northstar Health");
++    await user.type(screen.getByRole("textbox", { name: "Filter cases" }), "unknown customer");
++    expect(screen.getByText('No cases match "unknown customer".')).toBeInTheDocument();
++  });
++
++  it("shows a request error and Retry", async () => {
++    server.use(http.get("/api/cases", () => HttpResponse.json({ message: "down" }, { status: 503 })));
++    render(<App />);
++    expect(await screen.findByRole("alert")).toHaveTextContent("We could not load cases");
++    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
++  });
++
++  it("retries after a failed GET /api/cases", async () => {
++    const user = userEvent.setup();
++    let requests = 0;
++    server.use(http.get("/api/cases", () => {
++      requests += 1;
++      if (requests === 1) return HttpResponse.json({ message: "temporary" }, { status: 503 });
++      return HttpResponse.json([
++        { id: "CASE-220", customer: "Recovered Co", owner: "support", summary: "Retry worked", status: "new" },
++      ]);
++    }));
++    render(<App />);
++    await screen.findByRole("alert");
++    await user.click(screen.getByRole("button", { name: "Retry" }));
++    expect(await screen.findByText("Recovered Co")).toBeInTheDocument();
++  });
++});
+diff --git a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx
+index a9205b1..707cd68 100644
+--- a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx	
++++ b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx	
+@@ -13,9 +13,10 @@ export default function App() {
+   const [cases, setCases] = useState<SupportCase[] | null>(null);
+   const [error, setError] = useState("");
+   const [query, setQuery] = useState("");
++  const [loading, setLoading] = useState(true);
+ 
+   const loadCases = useCallback(async () => {
+-    setCases(null);
++    setLoading(true);
+     setError("");
+     try {
+       const response = await fetch("/api/cases");
+@@ -23,6 +24,9 @@ export default function App() {
+       setCases((await response.json()) as SupportCase[]);
+     } catch (requestError) {
+       setError(requestError instanceof Error ? requestError.message : "Unable to load cases");
++      setCases([]);
++    } finally {
++      setLoading(false);
+     }
+   }, []);
+ 
+@@ -39,11 +43,11 @@ export default function App() {
+       <header><p className="eyebrow">Support Operations</p><h1>Case dashboard</h1></header>
+       <label className="search-label">Filter cases<input aria-label="Filter cases" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+ 
+-      {cases === null && !error && null}
+-      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => setError("")}>Retry</button></section>}
+-      {cases?.length === 0 && <p>No cases are assigned yet.</p>}
+-      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases are assigned yet.</p>}
+-      {filteredCases.length > 0 && (
++      {loading && <p>Loading cases...</p>}
++      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => void loadCases()}>Retry</button></section>}
++      {!loading && !error && cases?.length === 0 && <p>No cases are assigned yet.</p>}
++      {!loading && cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases match "{query}".</p>}
++      {!loading && filteredCases.length > 0 && (
+         <ul className="case-list" aria-label="Cases">
+           {filteredCases.map((item) => (
+             <li key={item.id}>

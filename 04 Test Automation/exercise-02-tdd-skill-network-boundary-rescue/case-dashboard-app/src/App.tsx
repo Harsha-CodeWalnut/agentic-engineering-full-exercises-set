@@ -13,9 +13,10 @@ export default function App() {
   const [cases, setCases] = useState<SupportCase[] | null>(null);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadCases = useCallback(async () => {
-    setCases(null);
+    setLoading(true);
     setError("");
     try {
       const response = await fetch("/api/cases");
@@ -23,6 +24,9 @@ export default function App() {
       setCases((await response.json()) as SupportCase[]);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "Unable to load cases");
+      setCases([]);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -39,11 +43,11 @@ export default function App() {
       <header><p className="eyebrow">Support Operations</p><h1>Case dashboard</h1></header>
       <label className="search-label">Filter cases<input aria-label="Filter cases" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
 
-      {cases === null && !error && null}
-      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => setError("")}>Retry</button></section>}
-      {cases?.length === 0 && <p>No cases are assigned yet.</p>}
-      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases are assigned yet.</p>}
-      {filteredCases.length > 0 && (
+      {loading && <p>Loading cases...</p>}
+      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => void loadCases()}>Retry</button></section>}
+      {!loading && !error && cases?.length === 0 && <p>No cases are assigned yet.</p>}
+      {!loading && cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases match "{query}".</p>}
+      {!loading && filteredCases.length > 0 && (
         <ul className="case-list" aria-label="Cases">
           {filteredCases.map((item) => (
             <li key={item.id}>
