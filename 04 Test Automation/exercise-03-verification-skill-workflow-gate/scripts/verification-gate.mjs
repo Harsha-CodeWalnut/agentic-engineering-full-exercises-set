@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const exerciseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const appRoot = path.join(exerciseRoot, "workflow-gate-app");
 const provider = path.join(exerciseRoot, "workflow-rules-api");
 
 function executeCommand(command, args, options) {
@@ -15,8 +16,13 @@ function executeCommand(command, args, options) {
   return spawnSync(command, args, { ...options, shell: false });
 }
 
-// Seeded previous-agent shortcut: this proves one provider unit-test class only.
 export const releaseSteps = [
+  {
+    id: "client-release",
+    command: "npm",
+    args: ["run", "test:release"],
+    cwd: appRoot,
+  },
   {
     id: "focused-provider-unit",
     command: process.platform === "win32" ? "mvnw.cmd" : "./mvnw",
