@@ -19,6 +19,10 @@ public class WorkflowService {
     WorkflowItem item = repository.findById(id)
         .orElseThrow(() -> new WorkflowNotFoundException(id));
 
+    if (!"Blocked".equals(decision.status()) && !"Ready".equals(decision.status())) {
+      throw new InvalidWorkflowDecisionException("Unsupported decision transition: " + decision.status());
+    }
+
     if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
       throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
     }

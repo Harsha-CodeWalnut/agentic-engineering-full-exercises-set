@@ -8,10 +8,27 @@ export interface ContractWorkflow {
   decisionState: string;
 }
 
-// Seeded previous-agent shortcut: a TypeScript assertion does not validate a
-// provider response at runtime.
+const ALLOWED_DECISION_STATES = new Set(["needs-evidence", "pending-review", "accepted"]);
+
 export function parseWorkflowResponse(value: unknown): ContractWorkflow {
-  return value as ContractWorkflow;
+  if (value === null || typeof value !== "object") {
+    throw new Error("Invalid workflow response");
+  }
+
+  const record = value as Record<string, unknown>;
+  if (typeof record.decisionState !== "string" || !ALLOWED_DECISION_STATES.has(record.decisionState)) {
+    throw new Error("decisionState is missing or unsupported");
+  }
+
+  return {
+    id: String(record.id ?? ""),
+    customer: String(record.customer ?? ""),
+    status: String(record.status ?? ""),
+    score: Number(record.score ?? 0),
+    owner: String(record.owner ?? ""),
+    note: String(record.note ?? ""),
+    decisionState: record.decisionState,
+  };
 }
 
 export async function listWorkflows(baseUrl = ""): Promise<ContractWorkflow[]> {
