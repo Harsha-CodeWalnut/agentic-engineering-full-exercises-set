@@ -1,0 +1,152 @@
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs b/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs
+index 71d756d..74cb9e8 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs	
+@@ -3,6 +3,7 @@ import path from "node:path";
+ import { fileURLToPath } from "node:url";
+ 
+ const exerciseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
++const appRoot = path.join(exerciseRoot, "workflow-gate-app");
+ const provider = path.join(exerciseRoot, "workflow-rules-api");
+ 
+ function executeCommand(command, args, options) {
+@@ -15,12 +16,29 @@ function executeCommand(command, args, options) {
+   return spawnSync(command, args, { ...options, shell: false });
+ }
+ 
+-// Seeded previous-agent shortcut: this proves one provider unit-test class only.
+ export const releaseSteps = [
+   {
+-    id: "focused-provider-unit",
++    id: "gate-contract",
++    command: "npm",
++    args: ["run", "test:gate"],
++    cwd: appRoot,
++  },
++  {
++    id: "client-release",
++    command: "npm",
++    args: ["run", "test:release"],
++    cwd: appRoot,
++  },
++  {
++    id: "client-quality-build",
++    command: "npm",
++    args: ["run", "agent:check"],
++    cwd: appRoot,
++  },
++  {
++    id: "provider-tests-build",
+     command: process.platform === "win32" ? "mvnw.cmd" : "./mvnw",
+-    args: ["-q", "-Dtest=WorkflowServiceTest", "test"],
++    args: ["-q", "verify"],
+     cwd: provider,
+   },
+ ];
+@@ -34,14 +52,21 @@ export function runReleaseGate(steps = releaseSteps, execute = executeCommand, l
+       shell: false,
+     });
+ 
+-    if (result.status && result.status !== 0) {
+-      logger.error(`FAILED ${step.id} with exit code ${result.status}`);
+-      return result.status;
++    if (result.error) {
++      logger.error(`FAILED ${step.id} with spawn error: ${result.error.message}`);
++      return 1;
++    }
++
++    if (result.status !== 0) {
++      const code = Number.isInteger(result.status) ? result.status : 1;
++      logger.error(`FAILED ${step.id} with exit code ${code}`);
++      return code;
+     }
++
+     logger.log(`PASS ${step.id}`);
+   }
+ 
+-  logger.log("VERIFIED focused provider check passed.");
++  logger.log("VERIFIED release gate passed.");
+   return 0;
+ }
+ 
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts
+index 0ed7251..15e083f 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts	
+@@ -8,10 +8,27 @@ export interface ContractWorkflow {
+   decisionState: string;
+ }
+ 
+-// Seeded previous-agent shortcut: a TypeScript assertion does not validate a
+-// provider response at runtime.
++const ALLOWED_DECISION_STATES = new Set(["needs-evidence", "pending-review", "accepted"]);
++
+ export function parseWorkflowResponse(value: unknown): ContractWorkflow {
+-  return value as ContractWorkflow;
++  if (value === null || typeof value !== "object") {
++    throw new Error("Invalid workflow response");
++  }
++
++  const record = value as Record<string, unknown>;
++  if (typeof record.decisionState !== "string" || !ALLOWED_DECISION_STATES.has(record.decisionState)) {
++    throw new Error("decisionState is missing or unsupported");
++  }
++
++  return {
++    id: String(record.id ?? ""),
++    customer: String(record.customer ?? ""),
++    status: String(record.status ?? ""),
++    score: Number(record.score ?? 0),
++    owner: String(record.owner ?? ""),
++    note: String(record.note ?? ""),
++    decisionState: record.decisionState,
++  };
+ }
+ 
+ export async function listWorkflows(baseUrl = ""): Promise<ContractWorkflow[]> {
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java
+index b947fb2..fe86a4b 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java	
+@@ -1,5 +1,7 @@
+ package dev.agentic.exercise.workflow;
+ 
++import com.fasterxml.jackson.annotation.JsonProperty;
++
+ public record WorkflowItem(
+     String id,
+     String customer,
+@@ -7,4 +9,18 @@ public record WorkflowItem(
+     int score,
+     String owner,
+     String note) {
++
++  @JsonProperty("decisionState")
++  public String decisionState() {
++    if ("Blocked".equals(status)) {
++      return "needs-evidence";
++    }
++    if ("In Review".equals(status)) {
++      return "pending-review";
++    }
++    if ("Ready".equals(status)) {
++      return "accepted";
++    }
++    throw new IllegalStateException("Unsupported workflow status: " + status);
++  }
+ }
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java
+index 57f8a6d..688e7af 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java	
+@@ -19,6 +19,10 @@ public class WorkflowService {
+     WorkflowItem item = repository.findById(id)
+         .orElseThrow(() -> new WorkflowNotFoundException(id));
+ 
++    if (!"Blocked".equals(decision.status()) && !"Ready".equals(decision.status())) {
++      throw new InvalidWorkflowDecisionException("Unsupported decision transition: " + decision.status());
++    }
++
+     if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
+       throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
+     }

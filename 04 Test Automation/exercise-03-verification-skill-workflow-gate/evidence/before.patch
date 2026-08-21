@@ -1,0 +1,75 @@
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs b/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs
+index 71d756d..ce2cca7 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/scripts/verification-gate.mjs	
+@@ -3,6 +3,7 @@ import path from "node:path";
+ import { fileURLToPath } from "node:url";
+ 
+ const exerciseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
++const appRoot = path.join(exerciseRoot, "workflow-gate-app");
+ const provider = path.join(exerciseRoot, "workflow-rules-api");
+ 
+ function executeCommand(command, args, options) {
+@@ -15,8 +16,13 @@ function executeCommand(command, args, options) {
+   return spawnSync(command, args, { ...options, shell: false });
+ }
+ 
+-// Seeded previous-agent shortcut: this proves one provider unit-test class only.
+ export const releaseSteps = [
++  {
++    id: "client-release",
++    command: "npm",
++    args: ["run", "test:release"],
++    cwd: appRoot,
++  },
+   {
+     id: "focused-provider-unit",
+     command: process.platform === "win32" ? "mvnw.cmd" : "./mvnw",
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts
+index 0ed7251..8effc7f 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-gate-app/src/services/workflowContractClient.ts	
+@@ -8,10 +8,12 @@ export interface ContractWorkflow {
+   decisionState: string;
+ }
+ 
+-// Seeded previous-agent shortcut: a TypeScript assertion does not validate a
+-// provider response at runtime.
+ export function parseWorkflowResponse(value: unknown): ContractWorkflow {
+-  return value as ContractWorkflow;
++  const record = value as ContractWorkflow | null;
++  if (!record?.decisionState) {
++    throw new Error("decisionState is required");
++  }
++  return record;
+ }
+ 
+ export async function listWorkflows(baseUrl = ""): Promise<ContractWorkflow[]> {
+diff --git a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java
+index b947fb2..32ebada 100644
+--- a/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java	
++++ b/04 Test Automation/exercise-03-verification-skill-workflow-gate/workflow-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowItem.java	
+@@ -1,5 +1,7 @@
+ package dev.agentic.exercise.workflow;
+ 
++import com.fasterxml.jackson.annotation.JsonProperty;
++
+ public record WorkflowItem(
+     String id,
+     String customer,
+@@ -7,4 +9,15 @@ public record WorkflowItem(
+     int score,
+     String owner,
+     String note) {
++
++  @JsonProperty("decisionState")
++  public String decisionState() {
++    if ("Blocked".equals(status)) {
++      return "needs-evidence";
++    }
++    if ("In Review".equals(status)) {
++      return "pending-review";
++    }
++    return "accepted";
++  }
+ }

@@ -1,0 +1,10 @@
+npm run test:gate
+
+> workflow-gate-app@0.1.0 test:gate
+> node ./scripts/verify-gate-contract.mjs
+
+PASS gate success path runs all four required surfaces once.
+PASS gate preserves a non-zero step and stops later work.
+PASS gate converts a process-spawn error to non-zero and stops later work.
+
+Exit code: 0
