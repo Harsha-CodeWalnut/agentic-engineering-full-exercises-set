@@ -1,4 +1,4 @@
-import type { Filters } from "../utils/filters";
+import { applyFilterPreset, savedFilterPresets, type Filters } from "../utils/filters";
 
 interface FilterBarProps {
   filters: Filters;
@@ -41,6 +41,11 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           ))}
         </select>
       </label>
+      {savedFilterPresets.map((preset) => (
+        <button key={preset.id} type="button" onClick={() => onChange(applyFilterPreset(filters, preset))}>
+          {preset.name}
+        </button>
+      ))}
     </section>
   );
 }
