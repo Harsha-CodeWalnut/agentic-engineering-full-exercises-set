@@ -3,6 +3,7 @@ interface PortfolioSummary {
   blocked: number;
   averageRisk: number;
   ready: number;
+  dueToday?: number;
 }
 
 interface MetricStripProps {
@@ -14,6 +15,7 @@ export function MetricStrip({ summary }: MetricStripProps) {
     { label: "Critical", value: summary.critical, hint: "risk score 90 or above" },
     { label: "Blocked", value: summary.blocked, hint: "blocked or escalated" },
     { label: "Ready", value: summary.ready, hint: "ready for action" },
+    { label: "Due today", value: summary.dueToday ?? 0, hint: "items due in zero days" },
     { label: "Average risk", value: summary.averageRisk, hint: "across the current queue" },
   ];
 
