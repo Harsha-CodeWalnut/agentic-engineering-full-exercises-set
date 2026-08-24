@@ -1,17 +1,8 @@
-import type { ActionDraft, WorkItem, WorkflowStatus } from "../types";
+import type { ActionDraft, EvidenceBundle, WorkItem } from "../types";
 import { workItems } from "../data/workItems";
 import { calculateRisk } from "../utils/scoring";
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
-
-export interface EvidenceBundle {
-  id: string;
-  owner: string;
-  status: WorkflowStatus;
-  risk: number;
-  evidence: string[];
-  generatedAt: string;
-}
 
 export async function fetchWorkItems(): Promise<WorkItem[]> {
   await wait(220);

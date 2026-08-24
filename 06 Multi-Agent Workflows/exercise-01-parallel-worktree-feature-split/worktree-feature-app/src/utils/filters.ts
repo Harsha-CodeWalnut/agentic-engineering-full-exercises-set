@@ -1,14 +1,7 @@
-import type { Priority, WorkItem, WorkflowStatus } from "../types";
+import type { FilterPreset, Priority, WorkItem, WorkflowStatus } from "../types";
 
 export interface Filters {
   query: string;
-  priority: Priority | "All";
-  status: WorkflowStatus | "All";
-}
-
-export interface FilterPreset {
-  id: string;
-  name: string;
   priority: Priority | "All";
   status: WorkflowStatus | "All";
 }

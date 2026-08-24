@@ -19,3 +19,19 @@ export interface ActionDraft {
   note: string;
   status: WorkflowStatus;
 }
+
+export interface FilterPreset {
+  id: string;
+  name: string;
+  priority: Priority | "All";
+  status: WorkflowStatus | "All";
+}
+
+export interface EvidenceBundle {
+  id: string;
+  owner: string;
+  status: WorkflowStatus;
+  risk: number;
+  evidence: string[];
+  generatedAt: string;
+}
