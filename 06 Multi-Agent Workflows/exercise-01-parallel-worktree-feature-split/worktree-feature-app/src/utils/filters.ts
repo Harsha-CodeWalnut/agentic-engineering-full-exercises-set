@@ -6,11 +6,35 @@ export interface Filters {
   status: WorkflowStatus | "All";
 }
 
+export interface FilterPreset {
+  id: string;
+  name: string;
+  priority: Priority | "All";
+  status: WorkflowStatus | "All";
+}
+
 export const defaultFilters: Filters = {
   query: "",
   priority: "All",
   status: "All",
 };
+
+export const savedFilterPresets: FilterPreset[] = [
+  {
+    id: "high-priority-blocked",
+    name: "High-priority Blocked",
+    priority: "High",
+    status: "Blocked",
+  },
+];
+
+export function applyFilterPreset(filters: Filters, preset: FilterPreset): Filters {
+  return {
+    ...filters,
+    priority: preset.priority,
+    status: preset.status,
+  };
+}
 
 export function filterItems(items: WorkItem[], filters: Filters): WorkItem[] {
   return items.filter((item) => {
