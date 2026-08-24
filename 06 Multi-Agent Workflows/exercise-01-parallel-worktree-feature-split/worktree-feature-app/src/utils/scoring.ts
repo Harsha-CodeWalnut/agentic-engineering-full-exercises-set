@@ -28,5 +28,6 @@ export function summarizePortfolio(items: WorkItem[]) {
     blocked,
     averageRisk,
     ready: items.filter((item) => item.status === "Ready").length,
+    dueToday: items.filter((item) => item.dueInDays === 0).length,
   };
 }
