@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "id": "a-timeline-source",
+      "text": "Detection, mitigation, and recovery cite their event sources.",
+      "critical": true,
+      "passed": true,
+      "evidence": "Found required values: [EVT-A1], [EVT-A3], [EVT-A5]"
+    },
+    {
+      "id": "a-recovery-boundary",
+      "text": "Recovery is tied to the 09:24 healthy signal, not the earlier mitigation.",
+      "critical": true,
+      "passed": true,
+      "evidence": "Found required values: 09:24, [EVT-A5]; Forbidden pattern was absent: (?:recovered|recovery)[^\\n.]{0,40}09:11|09:11[^\\n.]{0,40}(?:recovered|recovery)"
+    },
+    {
+      "id": "a-impact-source",
+      "text": "The exact failed-attempt impact is cited.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: 318, [IMP-A2]"
+    },
+    {
+      "id": "a-followup-state",
+      "text": "The alerting follow-up remains proposed and not started.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: [FUP-A1]; Found boundary language: proposed, not started, open"
+    },
+    {
+      "id": "a-output-contract",
+      "text": "The report uses every required incident-summary section.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: ## Timeline, ## Impact, ## Cause and uncertainty, ## Resolution, ## Follow-up actions"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}

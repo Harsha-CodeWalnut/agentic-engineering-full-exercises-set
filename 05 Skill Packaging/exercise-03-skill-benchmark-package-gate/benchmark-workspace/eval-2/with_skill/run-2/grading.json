@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "id": "b-impact-source",
+      "text": "The exact customer impact cites its source.",
+      "critical": true,
+      "passed": true,
+      "evidence": "Found required values: 41, [IMP-B2]"
+    },
+    {
+      "id": "b-uncertainty",
+      "text": "Both cause hypotheses are cited and remain unresolved.",
+      "critical": true,
+      "passed": true,
+      "evidence": "Found required values: [NOTE-B3a], [NOTE-B3b]; Found boundary language: unresolved, uncertain, conflict"
+    },
+    {
+      "id": "b-remediation",
+      "text": "The deployed worker-pool remediation is cited.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: worker pool, [REM-B4]"
+    },
+    {
+      "id": "b-followup-state",
+      "text": "The cause review remains open.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: [ACT-B5]; Found boundary language: open"
+    },
+    {
+      "id": "b-output-contract",
+      "text": "The report uses every required incident-summary section.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: ## Timeline, ## Impact, ## Cause and uncertainty, ## Resolution, ## Follow-up actions"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}

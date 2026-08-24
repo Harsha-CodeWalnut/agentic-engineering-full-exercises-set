@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "skill_name": "incident-summary",
+  "skill_tree_sha256": "bde565ae8d3a6dc325650315ebae484ae8df32b00123c34a966dfc31ed0e4cf9",
+  "archive_sha256": "4e77981a346067f7d1dcdf7739028bac086832ddfe743f500512b3aca4cada41",
+  "files": [
+    {
+      "file": "SKILL.md",
+      "sha256": "d0c4d3a3465abfa0c815982b87f812b7d10a83be132964535a39cc260cf30c98"
+    }
+  ]
+}

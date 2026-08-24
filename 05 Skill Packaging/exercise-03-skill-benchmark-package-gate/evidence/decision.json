@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "decision": "package",
+  "benchmark_sha256": "cca016f67eda41776ae32474225b36660dbe9a2bea49f65cbe2ed9c0752162b3",
+  "reason": "Quality-improvement mode: held-out pass rate is 1.00 with critical pass rate 1.00, beating no-skill (0.00) and starter (0.20) by more than 0.10. Train quality is 1.00, held-out variance is 0.00, and candidate tokens (0.697x) and elapsed time (0.658x) stay under the no-skill cost ceilings. Common checks and comparison checks both passed, so the evaluated skill is packaged."
+}

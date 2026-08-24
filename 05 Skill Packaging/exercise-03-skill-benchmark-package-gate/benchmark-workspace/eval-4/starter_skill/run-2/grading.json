@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "id": "d-conflict",
+      "text": "Both duration sources are cited and the conflict remains unresolved.",
+      "critical": true,
+      "passed": false,
+      "evidence": "Missing required values: 18 minutes, 23 minutes, [EVT-D1], [LOG-D4]; Expected one of: unresolved, conflict, disagree, difference"
+    },
+    {
+      "id": "d-impact",
+      "text": "The affected group is cited without an invented customer count.",
+      "critical": true,
+      "passed": false,
+      "evidence": "Missing required values: [IMP-D3]; Forbidden pattern was absent: \\b\\d+\\s+(?:customers|tenants)\\b"
+    },
+    {
+      "id": "d-remediation",
+      "text": "The cache invalidation remediation is cited.",
+      "critical": false,
+      "passed": false,
+      "evidence": "Missing required values: [REM-D5]"
+    },
+    {
+      "id": "d-owner",
+      "text": "The timing-reconciliation action remains open with its owner.",
+      "critical": false,
+      "passed": false,
+      "evidence": "Missing required values: [ACT-D2]; Expected one of: open, pending, not complete, not started"
+    },
+    {
+      "id": "d-output-contract",
+      "text": "The report uses every required incident-summary section.",
+      "critical": false,
+      "passed": true,
+      "evidence": "Found required values: ## Timeline, ## Impact, ## Cause and uncertainty, ## Resolution, ## Follow-up actions"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 4,
+    "total": 5,
+    "pass_rate": 0.2
+  }
+}

@@ -1,0 +1,16 @@
+diff --git a/05 Skill Packaging/exercise-03-skill-benchmark-package-gate/skill-benchmark-app/skills/incident-summary/SKILL.md b/05 Skill Packaging/exercise-03-skill-benchmark-package-gate/skill-benchmark-app/skills/incident-summary/SKILL.md
+new file mode 100644
+index 0000000..b46f76d
+--- /dev/null
++++ b/05 Skill Packaging/exercise-03-skill-benchmark-package-gate/skill-benchmark-app/skills/incident-summary/SKILL.md	
+@@ -0,0 +1,10 @@
++---
++name: incident-summary
++description: Create a polished incident summary from operational notes for technical or leadership readers. Use for incidents and postmortems; do not use for release notes.
++---
++
++# Incident Summary
++
++Read the supplied material and write a clear timeline, impact, cause, resolution, and follow-up section.
++
++Keep the output concise and professional.
