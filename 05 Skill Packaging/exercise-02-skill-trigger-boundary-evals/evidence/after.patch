@@ -1,0 +1,12 @@
+diff --git a/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/skills/change-review/SKILL.md b/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/skills/change-review/SKILL.md
+index 92b52bc..ce28b55 100644
+--- a/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/skills/change-review/SKILL.md	
++++ b/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/skills/change-review/SKILL.md	
+@@ -1,6 +1,6 @@
+ ---
+ name: change-review
+-description: Review and summarize changes when someone wants feedback.
++description: Use when the user wants an existing diff, branch, commit, pull request, or patch inspected for defects, regressions, correctness issues, or merge risk, with findings tied to code locations. Do not use for implementing or debugging a fix, writing release notes or customer updates, reporting an incident, reviewing a design document, summarizing an already approved change, or explaining review practices.
+ ---
+ 
+ # Change Review

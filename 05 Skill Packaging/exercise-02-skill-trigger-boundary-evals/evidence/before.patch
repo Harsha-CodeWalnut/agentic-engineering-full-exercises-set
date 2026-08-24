@@ -1,0 +1,14 @@
+diff --git a/Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/fixtures/change-review-baseline/SKILL.md b/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/skills/change-review/SKILL.md
+new file mode 100644
+index 0000000..92b52bc
+--- /dev/null
++++ b/05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/skill-trigger-app/skills/change-review/SKILL.md	
+@@ -0,0 +1,8 @@
++---
++name: change-review
++description: Review and summarize changes when someone wants feedback.
++---
++
++# Change Review
++
++Inspect the supplied code change and report actionable findings with file and line evidence.

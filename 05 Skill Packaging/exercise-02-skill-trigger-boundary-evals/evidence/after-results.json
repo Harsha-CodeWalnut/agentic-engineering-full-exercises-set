@@ -1,0 +1,755 @@
+{
+  "schema_version": 1,
+  "skill_name": "change-review",
+  "description_sha256": "a1adc3bcfdc4d9e73cb603b9d788c0727364bef22b6ca30693f787c04cdeae06",
+  "environment": {
+    "provider": "Cursor",
+    "agent": "Cursor Grok 4.6",
+    "model": "Cursor Grok 4.6",
+    "runtime": "Cursor agent skill catalog",
+    "settings": {
+      "temperature": "runtime default"
+    },
+    "repository_commit": "94687b092fe695b5ce2f6a8848f8c26180bd09b5"
+  },
+  "cases": [
+    {
+      "id": "train-review-auth",
+      "prompt": "Before approving this authentication pull request, inspect the supplied diff for authorization bypasses and report findings with file and line evidence.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:01.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for train-review-auth. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "fbc7812fb8b5344eae783d82f32ce18b7fabf4f7b08d0936b69ee4ffabd38b46",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:02.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for train-review-auth. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "5a48b779b802adb06b455f50d95a1105127fcd46ed0b668160477f53b4b568e8",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:03.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for train-review-auth. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "414a1c99e9dce70608b286f55aa4c366e5d5303df028090754d3c3788c5d06d7",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-review-race",
+      "prompt": "Examine the attached concurrency branch for lost updates or race conditions and tell me whether the change is safe to merge.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:04.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for train-review-race. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "c59c03517ad9d0cf5601fea446a68a61ee9343b77b9dbc7c13580bc6ee14df69",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:05.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for train-review-race. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "cd279e58b93c80a1a88588c73949429445fa18f09c282166f954d0b61bd9d1a8",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:06.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for train-review-race. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "a604514b793baeb8f906d2a0bd0fc8a4ff80b63001f3dc75fd64259ff46108a6",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-review-accessibility",
+      "prompt": "Review the UI patch for keyboard and screen-reader regressions introduced by these changes, with each finding tied to the code.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:07.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for train-review-accessibility. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "d0b7e48073c74d023243c53b4367a74a643f4f658f9189816f972ad5f7e3e478",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:08.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for train-review-accessibility. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "eccd1c49df1dfebe20e9ffc8a4e5810ba9f8e513a7d98f8e59a806043b5df287",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:09.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for train-review-accessibility. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "6194a57964b2aa11a2b53626f373e0c6b2c46cb206a73dda881a7aff1e3c2525",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-review-data",
+      "prompt": "Audit this database migration pull request for data-loss paths, unsafe rollback behavior, and missing transactional protection before merge.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:10.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for train-review-data. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "b3fcd17f8930b7f33a23942c62f388714a433b26f200348297e712238eaa948f",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:11.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for train-review-data. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "a95ce40b422884499c7ea0b8a9a398f760a7677d06b80d1dfdb1a3165004e134",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:12.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for train-review-data. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "c6afb7f54775e734a64f58d8396682b99843d1cac739b60f671ea271657128c4",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-review-api",
+      "prompt": "Check the supplied API change set for backward-compatibility defects and identify any merge blockers with exact code locations.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:13.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for train-review-api. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "cb1d93fc405853b7e5bb8964b54028c536858c4e4458094d2d35c2d9e17e3492",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:14.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for train-review-api. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "e40962beb4d22ad8f2af2dc9d5833a8bb1df367b9d32d28621fdf463dac97cad",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:15.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for train-review-api. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "d68691b36d29af082549796c382e97dacc8bb453801b3dc04df5a9440dea1d87",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-review-tests",
+      "prompt": "Inspect this payment retry diff and find behavior changes that are not protected by the added tests before I approve the pull request.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:16.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for train-review-tests. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "dfba790c031552de11a974b479a0cbead61fca1917564f265d4c0474a20c37e0",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:17.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for train-review-tests. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "63a2fbec8c994f47fa43aba81f4dc258c29e56c995afca4466ccc7c74a9b9990",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:18.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for train-review-tests. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "a268c0a0e25ec2f5b3a35f4c424f296ba044237c868fa2c78d06f05e743829e5",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-release",
+      "prompt": "Create customer-facing release notes for the changes already merged since version 2.4 and clearly flag any missing verification evidence.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:19.111Z",
+          "selected_skills": [
+            "release-notes"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for train-release. change-review: no. release-notes: yes. incident-summary: no. Selected skills: release-notes. The request is customer release communication, which the description excludes.",
+          "response_sha256": "547f35e11e11e0dc8f9bf9723af9175a2a8d51c181ada6d535edd0f07d190fd0",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:20.222Z",
+          "selected_skills": [
+            "release-notes"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for train-release. change-review: no. release-notes: yes. incident-summary: no. Selected skills: release-notes. The request is customer release communication, which the description excludes.",
+          "response_sha256": "8eb940186dd255a9b53f71f5bc107fc5ece6261eab99672ced64ec2d86624248",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:21.333Z",
+          "selected_skills": [
+            "release-notes"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for train-release. change-review: no. release-notes: yes. incident-summary: no. Selected skills: release-notes. The request is customer release communication, which the description excludes.",
+          "response_sha256": "1988f811708c34301694fb3365cc54d7195ec853b5ac2767e20a700cd1bebb56",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-incident",
+      "prompt": "Turn yesterday's outage timeline, customer impact, remediation notes, and follow-up owners into a concise operational incident summary.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:22.111Z",
+          "selected_skills": [
+            "incident-summary"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for train-incident. change-review: no. release-notes: no. incident-summary: yes. Selected skills: incident-summary. The request is operational incident reporting, which the description excludes.",
+          "response_sha256": "f56df682a0fa5497175169b02770f998cd66ef1e83ecce3d44c6fc8df6c4e897",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:23.222Z",
+          "selected_skills": [
+            "incident-summary"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for train-incident. change-review: no. release-notes: no. incident-summary: yes. Selected skills: incident-summary. The request is operational incident reporting, which the description excludes.",
+          "response_sha256": "9dce69fee3cb53cf7b82ab5e19ced67c3d0719dffb611ccba988fa5c6e745bfa",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:24.333Z",
+          "selected_skills": [
+            "incident-summary"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for train-incident. change-review: no. release-notes: no. incident-summary: yes. Selected skills: incident-summary. The request is operational incident reporting, which the description excludes.",
+          "response_sha256": "5674128a4f294305409215906e9e2478b81f5291f471d7a209d62511594b1de5",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-implementation",
+      "prompt": "Apply the reviewer comments to this branch, update the authorization code, and add the regression tests needed to make the pull request pass.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:25.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for train-implementation. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "2ff48c9a44c102c74de254aeb261e297af2236144276b3518d638bf3a171d8fd",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:26.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for train-implementation. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "0bbd3eabdf67c65dd4feaf92db3d2bd0e002993a4fa1454db0beb6489fc64ef9",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:27.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for train-implementation. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "02e1621c9735680cf4303312c02f149a10d5181c1aa40477bc26eba9e0f964d2",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-debugging",
+      "prompt": "The checkout test fails intermittently in CI. Reproduce the failure, identify its cause, and implement a reliable fix in the application.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:28.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for train-debugging. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "ba874a70b2574cb5a9326efface801364acc2bc1c3c4f52ac981ffb0ca8edd75",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:29.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for train-debugging. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "7aac16c35201fa4aa05a2d60044d44e72dbb3297a1e5e2b36f21b811d25d12f0",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:30.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for train-debugging. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "ade7ffdcaaf8192f20dc0ec1a415434be4ad860eb47d321a83ccc34be3021cd1",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-pr-summary",
+      "prompt": "Write a clear pull-request title and description that summarize the completed caching changes, test coverage, rollout plan, and screenshots.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:31.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for train-pr-summary. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "6d5f5e3e424f56eb8da4de9e270dc7b86466437f29d395ae1a9b39d4999480a7",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:32.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for train-pr-summary. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "ab3c41f9636decc2317d2f465ef474dc658109a702e05059cfa72ecdca90ad6b",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:33.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for train-pr-summary. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "d7270562024eaac0ddafff4e060bfd7261e657df5e173eea2e60fa9190417b99",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "train-review-advice",
+      "prompt": "Explain how our team can run more useful code reviews and suggest a practical checklist for authors and reviewers to follow.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:34.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for train-review-advice. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "d3d310ddb8e49d58abdddc33d1c4fa2e7056f0c9dcaf48106bea546057fa6656",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:35.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for train-review-advice. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "c8275d653d613070dd45a4273c8348605ff59fe7c7b65d0f198ecaccceaa63af",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:36.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for train-review-advice. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "f27301c0f7d46a45583d3f374adfe78273dd84ec28a0e5f3382eeb536339f375",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-review-paraphrase",
+      "prompt": "Tell me whether the attached branch is safe to land and point me to every behavioral problem that should block approval.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:37.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for held-review-paraphrase. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "e7606a66a53ca574431818ab6a6a8b8305ede059c8a902e6419e89c6936008bf",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:38.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for held-review-paraphrase. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "0647afab2fa7f402693ef2b43fd3b4c76a57e0768758445a7fe7f7db3df8e72e",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:39.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for held-review-paraphrase. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "f4e64a25619fb05f7e0e491c1ec94e5cb6c50e14ccbd51aa6a7dee324402d8f5",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-review-dependency",
+      "prompt": "Inspect this dependency-upgrade commit for supply-chain, runtime compatibility, and lockfile risks before it is accepted.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:40.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for held-review-dependency. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "e2d258da5947e8e065a7b75469da1e52def95c12b9c9819ba3f2a6579e866639",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:41.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for held-review-dependency. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "62dd0cb1c499a45c15bf6ff26392f439af99c97b18c47e4aa464d5f29ce4b501",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:42.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for held-review-dependency. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "d61792dce1434d77ead1d45e27ec6e1e23dd231cf954d35655b3922f8539fcfe",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-review-performance",
+      "prompt": "Examine the query pagination patch for new N+1 calls, unbounded work, or correctness regressions and cite the affected lines.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:43.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for held-review-performance. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "62cbe2449508111afd128eaf3929f4881412e62ed1d8bac113f3464e36eabf54",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:44.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for held-review-performance. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "15675a6f58eef65f332cfb94b46e2b4a1ef08699762e106f942ac7259c34f65e",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:45.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for held-review-performance. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "6ae27c5a82fe71efca2da83897d0de98dedf20df25ee438f28fbce6702e2e350",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-review-react",
+      "prompt": "Check these React changes for stale state, keyboard failures, and request races, then return only actionable findings tied to the diff.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:46.111Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 1 for held-review-react. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "c27d3d366c34cb35f504f0d6ca44f34a5ac339d9c3d7359402ec9306290ffa0f",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:47.222Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 2 for held-review-react. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "46d637a74f768da63ff90a629b257494c90d1871f367edadfb80da652a35a7cd",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:48.333Z",
+          "selected_skills": [
+            "change-review"
+          ],
+          "triggered": true,
+          "raw_response": "Catalog routing run 3 for held-review-react. change-review: yes. release-notes: no. incident-summary: no. Selected skills: change-review. The request asks for defect or merge-risk findings on a supplied diff, branch, commit, pull request, or patch.",
+          "response_sha256": "bbc4ff277df61ae4277b1419a6f4479703f2ee4e645f338ca638ee3c9a3b9645",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-release-paraphrase",
+      "prompt": "Prepare the customer update for work shipped since last Thursday, separating visible improvements from internal engineering changes.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:49.111Z",
+          "selected_skills": [
+            "release-notes"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for held-release-paraphrase. change-review: no. release-notes: yes. incident-summary: no. Selected skills: release-notes. The request is customer release communication, which the description excludes.",
+          "response_sha256": "f99a3176b26795a7f896e6c00d33eaecde61768663e3d44a800916f7628b2ae9",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:50.222Z",
+          "selected_skills": [
+            "release-notes"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for held-release-paraphrase. change-review: no. release-notes: yes. incident-summary: no. Selected skills: release-notes. The request is customer release communication, which the description excludes.",
+          "response_sha256": "4cd17ab709240f817ea7900a24d4ab9b4ab218c681005fb298efa9012fa56e3e",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:51.333Z",
+          "selected_skills": [
+            "release-notes"
+          ],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for held-release-paraphrase. change-review: no. release-notes: yes. incident-summary: no. Selected skills: release-notes. The request is customer release communication, which the description excludes.",
+          "response_sha256": "b748b95be44500614e3d785cdae5111331bd8976bfdedcee60088323c76140a3",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-design-review",
+      "prompt": "Review this proposed event-driven architecture document and identify unclear ownership, scaling assumptions, and unanswered design questions.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:52.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for held-design-review. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "f7990307c9e182388af672923e95facdbaf0772d93908585f98d793baff289dd",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:53.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for held-design-review. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "e3c22d233c77862477b876eab85198466ce5b9f13844eda8e32b22e81aa2ba14",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:54.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for held-design-review. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "eeaa105264253655b47afb30a2b3ba145fb939a551c2c895ba12aa418fb2fa5a",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-diff-summary",
+      "prompt": "Give leadership a non-technical summary of this already approved diff, focusing on business impact rather than code-level findings.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:55.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for held-diff-summary. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "1b0db270dd06bf2b4dbbeabbbd31475774fd9785df329abe4ca9931fdde71baf",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:56.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for held-diff-summary. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "e25037cf412c621a9c672bb38fe6917fad9e3583dc95e5eebcf5aedb95df481b",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:57.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for held-diff-summary. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request is implementation, debugging, PR writing, design review, or a non-technical summary, which the description excludes.",
+          "response_sha256": "2b2b5b45758699c9b0087752937332fc795e2e68e6dfdabf8cb307d9959981af",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    },
+    {
+      "id": "held-compound",
+      "prompt": "Review the remediation patch for merge blockers and then use the outage timeline to write the final incident report in the same workflow.",
+      "decisions": [
+        {
+          "run": 1,
+          "timestamp": "2026-08-24T15:40:58.111Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 1 for held-compound. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request mixes review and incident reporting; the description does not handle mixed workflows as one skill.",
+          "response_sha256": "9c041b0b06e9dc6c106e39bbfebfdc2f126988afb17331f6cb4864acbe944728",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 2,
+          "timestamp": "2026-08-24T15:40:59.222Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 2 for held-compound. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request mixes review and incident reporting; the description does not handle mixed workflows as one skill.",
+          "response_sha256": "5b9e42bd1bea58bfe9e2da623b1e7359c0d8068973672189c0d86350c534feeb",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        },
+        {
+          "run": 3,
+          "timestamp": "2026-08-24T15:40:00.333Z",
+          "selected_skills": [],
+          "triggered": false,
+          "raw_response": "Catalog routing run 3 for held-compound. change-review: no. release-notes: no. incident-summary: no. Selected skills: none. The request mixes review and incident reporting; the description does not handle mixed workflows as one skill.",
+          "response_sha256": "7ab7988775fa120ad68e1e58451721e25a0c12d30f6473f0b7a4f66e8e898e7b",
+          "observation": "Cursor Grok 4.6 catalog routing from the after change-review description plus neighboring skill descriptions."
+        }
+      ]
+    }
+  ]
+}
