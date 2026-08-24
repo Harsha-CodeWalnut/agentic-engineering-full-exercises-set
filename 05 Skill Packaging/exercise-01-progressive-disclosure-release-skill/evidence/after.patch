@@ -1,0 +1,318 @@
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/after-output.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/after-output.md
+new file mode 100644
+index 0000000..3e367f3
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/after-output.md	
+@@ -0,0 +1,17 @@
++# Release notes
++
++## Customer-facing changes
++
++### Checkout retry after declined cards
++
++Customers can retry a payment after a declined card and see a clearer decline message.
++
++- Trace: src/checkout.js
++- Verification: unit tests passed (CI-881-unit); browser test passed (CI-881-e2e); screenshot missing.
++
++### Billing export field rename
++
++Breaking change. The exported invoice field `invoiceTotal` is now `total`. Customers must migrate consumers of the previous field to `total`.
++
++- Trace: src/billing-export.js
++- Verification: provider contract passed (CI-884-pact); migration dry run missing.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/hotfix-output.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/hotfix-output.md
+new file mode 100644
+index 0000000..148e785
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/hotfix-output.md	
+@@ -0,0 +1,10 @@
++# Release notes
++
++## Customer-facing changes
++
++### Checkout retry after declined cards
++
++Customers can retry a payment after a declined card and see a clearer decline message.
++
++- Trace: src/checkout.js
++- Verification: unit tests passed (CI-881-unit); browser test passed (CI-881-e2e); screenshot missing.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/internal-output.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/internal-output.md
+new file mode 100644
+index 0000000..07f7d0a
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/evidence/internal-output.md	
+@@ -0,0 +1,5 @@
++# Release notes
++
++The range `breaking-head..origin/exercise-head` contains no customer-facing work.
++
++Git evidence: commit `1db5cd5b20841572c90bc1a347b0c4b06e01d19c` (`chore: clean events`) changes only `src/telemetry.js`. That is an internal event-name rename, not customer-visible behavior.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/SKILL.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/SKILL.md
+new file mode 100644
+index 0000000..e6e9515
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/SKILL.md	
+@@ -0,0 +1,31 @@
++---
++name: release-notes
++description: Use when the user asks for customer release notes, a changelog, or a publishable release summary from a Git comparison range with traces and verification status. Do not use for code review, incident reports, engineering summaries, refactors, telemetry cleanup, or test-only writeups.
++compatibility: Requires Git and Node.js to run scripts/extract-release.mjs against a local repository.
++---
++
++# Release notes
++
++Extract Git facts, then load only the policy this range needs.
++
++## Extract
++
++```bash
++node scripts/extract-release.mjs --repo <path> --base <ref> --head <ref>
++```
++
++Trust that JSON. Do not widen the range.
++
++## Load
++
++Always read `references/publication-policy.md`.
++
++When verification is required, read `references/evidence-policy.md`.
++
++When the range has a breaking change, read `references/migration-policy.md`.
++
++Hotfix without a contract change skips migration policy. Internal-only with nothing to publish loads publication policy only.
++
++## Draft
++
++Follow loaded policy. Exclude internal-only work. If nothing is publishable, say so and cite Git; do not invent `## Customer-facing changes`.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/evals/evals.json b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/evals/evals.json
+new file mode 100644
+index 0000000..0fd8e1a
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/evals/evals.json	
+@@ -0,0 +1,54 @@
++{
++  "skill_name": "release-notes",
++  "evals": [
++    {
++      "id": 1,
++      "prompt": "Create customer release notes for the full-release range exercise-base..origin/exercise-head. Trace every published item to Git, identify breaking and migration impact, report missing verification evidence, and exclude internal telemetry.",
++      "expected_output": "Two customer items: checkout retry with missing screenshot, and a breaking billing export rename from invoiceTotal to total with missing migration dry run. Telemetry excluded.",
++      "files": [
++        "SKILL.md",
++        "references/publication-policy.md",
++        "references/evidence-policy.md",
++        "references/migration-policy.md"
++      ],
++      "expectations": [
++        "Publishes exactly two items under ## Customer-facing changes",
++        "Checkout retry is traced to a Git path or SHA from the requested range",
++        "Billing item is explicitly breaking and names invoiceTotal, total, and migration",
++        "Missing screenshot and missing migration dry run remain explicit",
++        "Internal telemetry is absent from the customer section"
++      ]
++    },
++    {
++      "id": 2,
++      "prompt": "Create customer release notes for this hotfix-only range exercise-base..hotfix-head with Git traces and verification status. Do not load unrelated migration policy.",
++      "expected_output": "Exactly one customer item for the checkout hotfix, traced to Git, with passing CI IDs and the missing screenshot called out. No billing or telemetry.",
++      "files": [
++        "SKILL.md",
++        "references/publication-policy.md",
++        "references/evidence-policy.md"
++      ],
++      "expectations": [
++        "Publishes exactly one customer-facing checkout hotfix item",
++        "Trace includes src/checkout.js or the hotfix commit SHA",
++        "Cites CI-881-unit, CI-881-e2e, and the missing screenshot",
++        "Does not publish billing, telemetry, or migration-policy content"
++      ]
++    },
++    {
++      "id": 3,
++      "prompt": "Check whether this internal-only range breaking-head..origin/exercise-head contains anything suitable for customer release notes and support the decision with Git evidence.",
++      "expected_output": "No customer-facing section. The notes state there is no customer-facing work, name the range, and cite src/telemetry.js from Git.",
++      "files": [
++        "SKILL.md",
++        "references/publication-policy.md"
++      ],
++      "expectations": [
++        "Does not invent a ## Customer-facing changes section",
++        "Names the range breaking-head..origin/exercise-head",
++        "States there is no customer-facing work",
++        "Cites src/telemetry.js and Git evidence"
++      ]
++    }
++  ]
++}
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/evals/trigger-evals.json b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/evals/trigger-evals.json
+new file mode 100644
+index 0000000..fb112e4
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/evals/trigger-evals.json	
+@@ -0,0 +1,42 @@
++[
++  {
++    "query": "Create customer release notes for this Git comparison range and flag missing verification evidence for each published item.",
++    "should_trigger": true
++  },
++  {
++    "query": "Write a changelog of customer-facing changes from the supplied Git tags, with a trace for every published item.",
++    "should_trigger": true
++  },
++  {
++    "query": "Produce publishable release notes that identify breaking API changes and the customer migration those changes require.",
++    "should_trigger": true
++  },
++  {
++    "query": "Summarize this hotfix range as customer release notes with Git traces and the verification status of each item.",
++    "should_trigger": true
++  },
++  {
++    "query": "Check whether this commit range contains anything suitable for customer release notes and support that decision with Git.",
++    "should_trigger": true
++  },
++  {
++    "query": "Review this React pull request for accessibility bugs in the checkout form labels and focus order.",
++    "should_trigger": false
++  },
++  {
++    "query": "Investigate the production incident and write a customer-facing outage summary for the status page.",
++    "should_trigger": false
++  },
++  {
++    "query": "Refactor the billing export module and add unit tests; do not publish customer notes from this work.",
++    "should_trigger": false
++  },
++  {
++    "query": "Review this pull request for security issues in the telemetry pipeline and authentication headers.",
++    "should_trigger": false
++  },
++  {
++    "query": "Rewrite the release engineering wiki so the changelog process matches our commit message template.",
++    "should_trigger": false
++  }
++]
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/evidence-policy.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/evidence-policy.md
+new file mode 100644
+index 0000000..73c1c11
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/evidence-policy.md	
+@@ -0,0 +1,13 @@
++# Evidence policy
++
++Mark verification passed only when evidence has a passing result and an evidence ID.
++
++Cite each passing check by evidence ID on the item it supports.
++
++If a check is missing or has no evidence ID, report it as missing.
++
++A green unit test is not a pass for a different check or a missing artifact.
++
++Do not hide missing evidence.
++
++A screenshot or dry run absent from the evidence table remains missing.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/migration-policy.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/migration-policy.md
+new file mode 100644
+index 0000000..907b235
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/migration-policy.md	
+@@ -0,0 +1,13 @@
++# Migration policy
++
++Name every breaking contract change. Do not call it a compatibility update.
++
++State the old contract, including the previous field or behavior.
++
++State the new contract and the customer migration.
++
++Report missing migration evidence on that item.
++
++Do not treat a missing dry run as a pass.
++
++Keep the breaking change on the customer item it belongs to.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/publication-policy.md b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/publication-policy.md
+new file mode 100644
+index 0000000..e5f10a8
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/references/publication-policy.md	
+@@ -0,0 +1,15 @@
++# Publication policy
++
++Use extractor JSON for the range, commits, and changed paths.
++
++PR text and CI records support Git; they never replace it.
++
++Publish only customer-visible behavior under `## Customer-facing changes`.
++
++Each item needs a `###` heading and a `- Trace:` line with a path or SHA from the range.
++
++Exclude telemetry, refactors, tests, and build work.
++
++Leave internal-only work off the customer list.
++
++If nothing is publishable, state that with the range and Git evidence. Do not invent a customer-facing section.
+diff --git a/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/scripts/extract-release.mjs b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/scripts/extract-release.mjs
+new file mode 100644
+index 0000000..e64e68c
+--- /dev/null
++++ b/05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/release-notes-app/.agents/skills/release-notes/scripts/extract-release.mjs	
+@@ -0,0 +1,58 @@
++import { execFileSync } from "node:child_process";
++
++function parseArgs(argv) {
++  const parsed = {};
++  for (let index = 0; index < argv.length; index += 1) {
++    const flag = argv[index];
++    if (flag === "--repo" || flag === "--base" || flag === "--head") {
++      parsed[flag.slice(2)] = argv[index + 1];
++      index += 1;
++    }
++  }
++  return parsed;
++}
++
++function git(repo, args) {
++  return execFileSync("git", ["-C", repo, ...args], { encoding: "utf8" }).trim();
++}
++
++function requireRef(repo, ref) {
++  try {
++    git(repo, ["rev-parse", "--verify", ref]);
++  } catch {
++    throw new Error(`Invalid ref or range: ${ref}`);
++  }
++}
++
++const { repo, base, head } = parseArgs(process.argv.slice(2));
++if (!repo || !base || !head) {
++  console.error("Usage: extract-release.mjs --repo <path> --base <ref> --head <ref>");
++  process.exit(1);
++}
++
++try {
++  requireRef(repo, base);
++  requireRef(repo, head);
++  const range = `${base}..${head}`;
++  const separator = "\u001f";
++  const log = git(repo, ["log", "--reverse", `--format=%H${separator}%s`, range]);
++  const commits = log
++    ? log.split(/\n/).filter(Boolean).map((line) => {
++        const [sha, subject] = line.split(separator);
++        const files = git(repo, ["diff-tree", "--no-commit-id", "--name-only", "-r", sha])
++          .split(/\n/)
++          .filter(Boolean)
++          .sort();
++        return { sha, subject, files };
++      })
++    : [];
++  const changedFiles = git(repo, ["diff", "--name-only", range])
++    .split(/\n/)
++    .filter(Boolean)
++    .sort();
++  process.stdout.write(JSON.stringify({ range: { base, head }, commits, changedFiles }) + "\n");
++} catch (error) {
++  const message = error instanceof Error ? error.message : String(error);
++  console.error(/invalid ref or range/i.test(message) ? message : `Invalid ref or range: ${message}`);
++  process.exit(1);
++}

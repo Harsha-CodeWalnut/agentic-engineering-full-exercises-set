@@ -1,0 +1,54 @@
+{
+  "skill_name": "release-notes",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create customer release notes for the full-release range exercise-base..origin/exercise-head. Trace every published item to Git, identify breaking and migration impact, report missing verification evidence, and exclude internal telemetry.",
+      "expected_output": "Two customer items: checkout retry with missing screenshot, and a breaking billing export rename from invoiceTotal to total with missing migration dry run. Telemetry excluded.",
+      "files": [
+        "SKILL.md",
+        "references/publication-policy.md",
+        "references/evidence-policy.md",
+        "references/migration-policy.md"
+      ],
+      "expectations": [
+        "Publishes exactly two items under ## Customer-facing changes",
+        "Checkout retry is traced to a Git path or SHA from the requested range",
+        "Billing item is explicitly breaking and names invoiceTotal, total, and migration",
+        "Missing screenshot and missing migration dry run remain explicit",
+        "Internal telemetry is absent from the customer section"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create customer release notes for this hotfix-only range exercise-base..hotfix-head with Git traces and verification status. Do not load unrelated migration policy.",
+      "expected_output": "Exactly one customer item for the checkout hotfix, traced to Git, with passing CI IDs and the missing screenshot called out. No billing or telemetry.",
+      "files": [
+        "SKILL.md",
+        "references/publication-policy.md",
+        "references/evidence-policy.md"
+      ],
+      "expectations": [
+        "Publishes exactly one customer-facing checkout hotfix item",
+        "Trace includes src/checkout.js or the hotfix commit SHA",
+        "Cites CI-881-unit, CI-881-e2e, and the missing screenshot",
+        "Does not publish billing, telemetry, or migration-policy content"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Check whether this internal-only range breaking-head..origin/exercise-head contains anything suitable for customer release notes and support the decision with Git evidence.",
+      "expected_output": "No customer-facing section. The notes state there is no customer-facing work, name the range, and cite src/telemetry.js from Git.",
+      "files": [
+        "SKILL.md",
+        "references/publication-policy.md"
+      ],
+      "expectations": [
+        "Does not invent a ## Customer-facing changes section",
+        "Names the range breaking-head..origin/exercise-head",
+        "States there is no customer-facing work",
+        "Cites src/telemetry.js and Git evidence"
+      ]
+    }
+  ]
+}

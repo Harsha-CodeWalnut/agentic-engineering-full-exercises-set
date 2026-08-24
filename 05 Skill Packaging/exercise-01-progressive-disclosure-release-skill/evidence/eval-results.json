@@ -1,0 +1,120 @@
+{
+  "quality": [
+    {
+      "id": "full-release",
+      "configuration": "without_skill",
+      "passed": 1,
+      "total": 5,
+      "output": "evidence/before-output.md",
+      "evidence": [
+        "Customer-facing heading missing; draft used Highlights and Changes instead",
+        "Checkout item has no Trace line to src/checkout.js or a range SHA",
+        "Billing is labeled compatibility update, not breaking, and omits invoiceTotal",
+        "Missing screenshot and missing migration dry run are not reported",
+        "Customer section is absent, so telemetry is not listed there"
+      ]
+    },
+    {
+      "id": "full-release",
+      "configuration": "with_skill",
+      "passed": 5,
+      "total": 5,
+      "output": "evidence/after-output.md",
+      "evidence": [
+        "Customer-facing section contains exactly two ### items",
+        "Checkout item Trace names src/checkout.js from the extracted range",
+        "Billing item states breaking, invoiceTotal, total, and migrate",
+        "Checkout screenshot missing and billing migration dry run missing are explicit",
+        "src/telemetry.js and event cleanup are absent from customer items"
+      ]
+    },
+    {
+      "id": "hotfix-only",
+      "configuration": "with_skill",
+      "passed": 4,
+      "total": 4,
+      "output": "evidence/hotfix-output.md",
+      "evidence": [
+        "Customer-facing section contains exactly one checkout hotfix heading",
+        "Trace line includes src/checkout.js from extractor JSON",
+        "CI-881-unit, CI-881-e2e, and screenshot missing are all present",
+        "Customer section has no billing, telemetry, or migration-policy text"
+      ]
+    },
+    {
+      "id": "internal-only",
+      "configuration": "with_skill",
+      "passed": 4,
+      "total": 4,
+      "output": "evidence/internal-output.md",
+      "evidence": [
+        "Output has no ## Customer-facing changes heading",
+        "Range breaking-head..origin/exercise-head is named in the notes",
+        "Notes state there is no customer-facing work in the range",
+        "Git evidence cites src/telemetry.js for the internal-only commit"
+      ]
+    }
+  ],
+  "trigger": [
+    {
+      "query": "Create customer release notes for this Git comparison range and flag missing verification evidence for each published item.",
+      "expected": true,
+      "actual": true,
+      "evidence": "Matches use-when: customer release notes from a Git range with verification status."
+    },
+    {
+      "query": "Write a changelog of customer-facing changes from the supplied Git tags, with a trace for every published item.",
+      "expected": true,
+      "actual": true,
+      "evidence": "Changelog plus customer-facing traces is a positive trigger in the skill description."
+    },
+    {
+      "query": "Produce publishable release notes that identify breaking API changes and the customer migration those changes require.",
+      "expected": true,
+      "actual": true,
+      "evidence": "Publishable release notes with breaking migration match the skill trigger."
+    },
+    {
+      "query": "Summarize this hotfix range as customer release notes with Git traces and the verification status of each item.",
+      "expected": true,
+      "actual": true,
+      "evidence": "Hotfix customer release notes with Git traces are in scope for the skill."
+    },
+    {
+      "query": "Check whether this commit range contains anything suitable for customer release notes and support that decision with Git.",
+      "expected": true,
+      "actual": true,
+      "evidence": "Deciding whether a Git range is publishable is a release-notes trigger."
+    },
+    {
+      "query": "Review this React pull request for accessibility bugs in the checkout form labels and focus order.",
+      "expected": false,
+      "actual": false,
+      "evidence": "Do not use: code review and accessibility, not customer release notes."
+    },
+    {
+      "query": "Investigate the production incident and write a customer-facing outage summary for the status page.",
+      "expected": false,
+      "actual": false,
+      "evidence": "Do not use: incident report, even if the audience is customers."
+    },
+    {
+      "query": "Refactor the billing export module and add unit tests; do not publish customer notes from this work.",
+      "expected": false,
+      "actual": false,
+      "evidence": "Do not use: refactor and tests; the query excludes publishing notes."
+    },
+    {
+      "query": "Review this pull request for security issues in the telemetry pipeline and authentication headers.",
+      "expected": false,
+      "actual": false,
+      "evidence": "Do not use: security code review of telemetry, not a changelog request."
+    },
+    {
+      "query": "Rewrite the release engineering wiki so the changelog process matches our commit message template.",
+      "expected": false,
+      "actual": false,
+      "evidence": "Near-miss: mentions release, changelog, and commit, but asks to rewrite a wiki, not to generate notes."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "scenarios": [
+    {
+      "id": "full-release",
+      "prompt": "Create customer release notes for this range. Trace every published item to Git, identify breaking and migration impact, report missing verification evidence, and exclude internal-only work.",
+      "resources_read": [
+        "references/publication-policy.md",
+        "references/evidence-policy.md",
+        "references/migration-policy.md"
+      ],
+      "context_files": [
+        "SKILL.md",
+        "references/publication-policy.md",
+        "references/evidence-policy.md",
+        "references/migration-policy.md"
+      ],
+      "context_bytes": {
+        "SKILL.md": 1135,
+        "references/publication-policy.md": 526,
+        "references/evidence-policy.md": 419,
+        "references/migration-policy.md": 369
+      },
+      "total_context_bytes": 2449,
+      "scripts_run": ["scripts/extract-release.mjs"],
+      "reason": "Full range includes customer checkout, a breaking billing rename, and verification gaps, so publication, evidence, and migration policy were all required.",
+      "output": "evidence/after-output.md"
+    },
+    {
+      "id": "hotfix-only",
+      "prompt": "Create customer release notes for this hotfix range with Git traces and verification status.",
+      "resources_read": [
+        "references/publication-policy.md",
+        "references/evidence-policy.md"
+      ],
+      "context_files": [
+        "SKILL.md",
+        "references/publication-policy.md",
+        "references/evidence-policy.md"
+      ],
+      "context_bytes": {
+        "SKILL.md": 1135,
+        "references/publication-policy.md": 526,
+        "references/evidence-policy.md": 419
+      },
+      "total_context_bytes": 2080,
+      "scripts_run": ["scripts/extract-release.mjs"],
+      "reason": "Hotfix JSON contains only checkout.js, so publication and evidence policy were loaded and migration policy was skipped as unrelated.",
+      "output": "evidence/hotfix-output.md"
+    },
+    {
+      "id": "internal-only",
+      "prompt": "Check whether this range contains anything suitable for customer release notes and support the decision with Git evidence.",
+      "resources_read": [
+        "references/publication-policy.md"
+      ],
+      "context_files": [
+        "SKILL.md",
+        "references/publication-policy.md"
+      ],
+      "context_bytes": {
+        "SKILL.md": 1135,
+        "references/publication-policy.md": 526
+      },
+      "total_context_bytes": 1661,
+      "scripts_run": ["scripts/extract-release.mjs"],
+      "reason": "Internal-only JSON changes only telemetry.js, so publication policy plus the extractor were enough and evidence and migration policies were not loaded.",
+      "output": "evidence/internal-output.md"
+    }
+  ]
+}

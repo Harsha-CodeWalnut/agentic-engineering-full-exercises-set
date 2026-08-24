@@ -1,0 +1,42 @@
+[
+  {
+    "query": "Create customer release notes for this Git comparison range and flag missing verification evidence for each published item.",
+    "should_trigger": true
+  },
+  {
+    "query": "Write a changelog of customer-facing changes from the supplied Git tags, with a trace for every published item.",
+    "should_trigger": true
+  },
+  {
+    "query": "Produce publishable release notes that identify breaking API changes and the customer migration those changes require.",
+    "should_trigger": true
+  },
+  {
+    "query": "Summarize this hotfix range as customer release notes with Git traces and the verification status of each item.",
+    "should_trigger": true
+  },
+  {
+    "query": "Check whether this commit range contains anything suitable for customer release notes and support that decision with Git.",
+    "should_trigger": true
+  },
+  {
+    "query": "Review this React pull request for accessibility bugs in the checkout form labels and focus order.",
+    "should_trigger": false
+  },
+  {
+    "query": "Investigate the production incident and write a customer-facing outage summary for the status page.",
+    "should_trigger": false
+  },
+  {
+    "query": "Refactor the billing export module and add unit tests; do not publish customer notes from this work.",
+    "should_trigger": false
+  },
+  {
+    "query": "Review this pull request for security issues in the telemetry pipeline and authentication headers.",
+    "should_trigger": false
+  },
+  {
+    "query": "Rewrite the release engineering wiki so the changelog process matches our commit message template.",
+    "should_trigger": false
+  }
+]
