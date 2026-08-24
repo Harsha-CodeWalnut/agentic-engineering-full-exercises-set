@@ -1,4 +1,5 @@
 import type { WorkItem } from "../types";
+import { createEvidenceBundle, serializeEvidenceBundle } from "../services/workflowApi";
 
 interface EvidencePanelProps {
   item: WorkItem;
@@ -14,6 +15,16 @@ export function EvidencePanel({ item, evidence, onCollect }: EvidencePanelProps)
         <button type="button" onClick={onCollect}>
           Collect
         </button>
+        {evidence.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => {
+              serializeEvidenceBundle(createEvidenceBundle(item, evidence, new Date().toISOString()));
+            }}
+          >
+            Export JSON
+          </button>
+        ) : null}
       </div>
       {evidence.length === 0 ? (
         <p className="muted">No evidence collected for {item.name} yet.</p>
