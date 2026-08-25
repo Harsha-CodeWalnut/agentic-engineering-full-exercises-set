@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+  "lane": {
+    "card_id": "ESC-120",
+    "agent": "Cursor Composer / kanban-control session",
+    "branch": "lane/esc-120-inherited-severity",
+    "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+    "commit_sha": "26442dc1565327db01e438c476cacd89bc609c27",
+    "owned_paths": [
+      "src/utils/scoring.ts",
+      "src/components/SeverityBadge.tsx",
+      "tests/esc-120/"
+    ],
+    "changed_paths": [
+      "src/components/SeverityBadge.tsx",
+      "src/utils/scoring.ts",
+      "tests/esc-120/inherited-severity.test.ts"
+    ],
+    "verification": {
+      "command": "npm run feature:verify",
+      "exit_code": 0,
+      "output_path": "evidence/commands/esc-120.txt",
+      "output_sha256": "d565705ac338e0bc2ac0170184f822acee7a24c17b2739cd8d3dcc1ddeda1d1f"
+    },
+    "reviewer": "risk-owner",
+    "review_decision": "accept",
+    "review_path": "evidence/completed-lane.md",
+    "review_sha256": "e233ee99e972339236f2f64373ee571978b325da79ae64ff0ca8faea3a42a266",
+    "rollback": "git revert 8c1a3f55858bab579bf39575548e17924417d5be"
+  },
+  "integration": {
+    "branch": "integration/kanban-control",
+    "merge_commit_sha": "8c1a3f55858bab579bf39575548e17924417d5be",
+    "control_commit_sha": "92042d86739847a2ec437adaf75e244069615a29",
+    "board_verification": {
+      "command": "npm run board:verify",
+      "exit_code": 0,
+      "output_path": "evidence/commands/board.txt",
+      "output_sha256": "579e36244fcd6d9ffbb15ea1e467e4dfe13271e469bc576f8358c41f827c5d82"
+    },
+    "decision": "accept"
+  }
+}

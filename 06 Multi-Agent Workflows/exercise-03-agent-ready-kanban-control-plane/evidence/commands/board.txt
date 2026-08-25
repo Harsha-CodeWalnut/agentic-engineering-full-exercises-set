@@ -1,0 +1,7 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> kanban-control-app@0.1.0 board:verify
+> node ./scripts/verify-board.mjs
+
+Reviewed SHA: 92042d86739847a2ec437adaf75e244069615a29
+PASS: board mirrors, card histories, blockers, reservation releases, ownership, and integration records are consistent.

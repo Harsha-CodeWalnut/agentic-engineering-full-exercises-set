@@ -1,0 +1,16 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> kanban-control-app@0.1.0 feature:verify
+> node ./scripts/run-feature-check.mjs
+
+Reviewed SHA: 26442dc1565327db01e438c476cacd89bc609c27
+Card: ESC-120
+
+ RUN  v4.1.10 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app
+
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  12:42:43
+   Duration  180ms (transform 54ms, setup 0ms, import 90ms, tests 7ms, environment 0ms)
+
