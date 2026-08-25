@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AccessReviewQueue } from "./components/AccessReviewQueue";
 import { ReviewNote } from "./components/ReviewNote";
 import { accessReviews } from "./data/accessReviews";
-import { approveAccessReview } from "./services/accessReviewApi";
+import { approveAccessReview, type ApprovalActor } from "./services/accessReviewApi";
 import { calculatePortfolioRisk } from "./utils/accessReviewRisk";
 import "./styles.css";
+
+const reviewer: ApprovalActor = { id: "operator-1", canApprovePrivileged: true };
 
 export default function App() {
   const [reviews, setReviews] = useState(accessReviews);
   const [selectedId, setSelectedId] = useState(reviews[0].id);
   const [error, setError] = useState("");
   const selected = reviews.find((item) => item.id === selectedId) ?? reviews[0];
-  const portfolioRisk = calculatePortfolioRisk(reviews);
+  const portfolioRisk = useMemo(() => calculatePortfolioRisk(reviews), [reviews]);
 
   async function approve() {
     setError("");
     try {
-      const updated = await approveAccessReview(selected);
+      const updated = await approveAccessReview(selected, reviewer);
       setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Approval failed");
