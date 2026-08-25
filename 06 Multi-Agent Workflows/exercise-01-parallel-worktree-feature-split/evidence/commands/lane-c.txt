@@ -1,0 +1,14 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> worktree-feature-app@0.1.0 test:lane-c
+> vitest run acceptance/lane-c.evidence-export.test.tsx tests/lane-c
+
+
+ RUN  v4.1.10 /Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-evidence-export/06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/worktree-feature-app
+
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  10:31:53
+   Duration  164ms (transform 56ms, setup 0ms, import 90ms, tests 9ms, environment 0ms)
+

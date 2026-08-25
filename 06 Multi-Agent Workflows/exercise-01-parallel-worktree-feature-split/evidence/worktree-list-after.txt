@@ -1,0 +1,4 @@
+worktree /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set
+HEAD 9a3f736fc8d5476aba1b3fabd854338d662fc0e0
+branch refs/heads/integration/parallel-features
+

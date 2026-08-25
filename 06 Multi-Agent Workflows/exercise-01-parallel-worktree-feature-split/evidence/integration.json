@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+  "integration_branch": "integration/parallel-features",
+  "merge_order": ["B", "A", "C"],
+  "merge_commits": {
+    "B": "be2538d97e66173c12b36d74bd78bbd22c995e54",
+    "A": "3fe66c993a056ff183f6104d4aad45a697c79785",
+    "C": "effd61981cce976ff0463da99d4a8d8caeb6a54d"
+  },
+  "shared_commit_sha": "9a3f736fc8d5476aba1b3fabd854338d662fc0e0",
+  "product_head": "9a3f736fc8d5476aba1b3fabd854338d662fc0e0",
+  "verification": {
+    "command": "npm run test:integrated",
+    "exit_code": 0,
+    "output_path": "evidence/commands/integrated.txt",
+    "output_sha256": "c03ff16585fb413841807eb87793d47689fb0c16de8cfba0122d5c2119502552"
+  }
+}

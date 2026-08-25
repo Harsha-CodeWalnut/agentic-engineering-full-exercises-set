@@ -1,0 +1,159 @@
+=== BASE 94687b092fe695b5ce2f6a8848f8c26180bd09b5 npm run test:lane-a ===
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> worktree-feature-app@0.1.0 test:lane-a
+> vitest run acceptance/lane-a.saved-filters.test.tsx tests/lane-a
+
+
+ RUN  v4.1.10 /private/tmp/ex01-parallel-base/06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/worktree-feature-app
+
+ ❯ acceptance/lane-a.saved-filters.test.tsx (2 tests | 2 failed) 10ms
+     × provides a high-priority blocked preset without erasing search 2ms
+     × renders the preset as a filter-bar action 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  acceptance/lane-a.saved-filters.test.tsx > lane A saved filters > provides a high-priority blocked preset without erasing search
+TypeError: Cannot read properties of undefined (reading 'find')
+ ❯ acceptance/lane-a.saved-filters.test.tsx:14:39
+     12| describe("lane A saved filters", () => {
+     13|   it("provides a high-priority blocked preset without erasing search",…
+     14|     const preset = savedFilterPresets.find((candidate) => candidate.id…
+       |                                       ^
+     15|     expect(preset?.name).toBe("High-priority Blocked");
+     16|     const filters = applyFilterPreset({ ...defaultFilters, query: "atl…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  acceptance/lane-a.saved-filters.test.tsx > lane A saved filters > renders the preset as a filter-bar action
+AssertionError: expected '<section class="filter-bar" aria-labe…' to contain 'High-priority Blocked'
+
+Expected: "High-priority Blocked"
+Received: "<section class="filter-bar" aria-label="Filters"><label>Search<input placeholder="Name, owner, tag, or note" value=""/></label><label>Priority<select><option selected="">All</option><option>Low</option><option>Medium</option><option>High</option></select></label><label>Status<select><option selected="">All</option><option>Queued</option><option>Ready</option><option>In Review</option><option>Blocked</option><option>Escalated</option></select></label></section>"
+
+ ❯ acceptance/lane-a.saved-filters.test.tsx:23:20
+     21|   it("renders the preset as a filter-bar action", () => {
+     22|     const markup = renderToStaticMarkup(<FilterBar filters={defaultFil…
+     23|     expect(markup).toContain("High-priority Blocked");
+       |                    ^
+     24|   });
+     25| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  10:31:53
+   Duration  170ms (transform 32ms, setup 0ms, import 55ms, tests 10ms, environment 0ms)
+
+EXIT:1
+
+=== BASE 94687b092fe695b5ce2f6a8848f8c26180bd09b5 npm run test:lane-b ===
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> worktree-feature-app@0.1.0 test:lane-b
+> vitest run acceptance/lane-b.sla-risk.test.tsx tests/lane-b
+
+
+ RUN  v4.1.10 /private/tmp/ex01-parallel-base/06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/worktree-feature-app
+
+ ❯ acceptance/lane-b.sla-risk.test.tsx (2 tests | 2 failed) 12ms
+     × counts work due today and keeps a due-today blocked item critical 4ms
+     × renders the due-today portfolio metric 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  acceptance/lane-b.sla-risk.test.tsx > lane B SLA risk > counts work due today and keeps a due-today blocked item critical
+AssertionError: expected undefined to be 1 // Object.is equality
+
+- Expected:
+1
+
++ Received:
+undefined
+
+ ❯ acceptance/lane-b.sla-risk.test.tsx:10:30
+      8|   it("counts work due today and keeps a due-today blocked item critica…
+      9|     const summary = summarizePortfolio(workItems);
+     10|     expect(summary.dueToday).toBe(1);
+       |                              ^
+     11|     expect(riskLabel(calculateRisk(workItems[0]))).toBe("Critical");
+     12|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  acceptance/lane-b.sla-risk.test.tsx > lane B SLA risk > renders the due-today portfolio metric
+AssertionError: expected '<section class="metric-strip" aria-la…' to contain 'Due today'
+
+Expected: "Due today"
+Received: "<section class="metric-strip" aria-label="Portfolio metrics"><article class="metric"><span>Critical</span><strong>6</strong><small>risk score 90 or above</small></article><article class="metric"><span>Blocked</span><strong>3</strong><small>blocked or escalated</small></article><article class="metric"><span>Ready</span><strong>2</strong><small>ready for action</small></article><article class="metric"><span>Average risk</span><strong>90</strong><small>across the current queue</small></article></section>"
+
+ ❯ acceptance/lane-b.sla-risk.test.tsx:16:20
+     14|   it("renders the due-today portfolio metric", () => {
+     15|     const markup = renderToStaticMarkup(<MetricStrip summary={summariz…
+     16|     expect(markup).toContain("Due today");
+       |                    ^
+     17|   });
+     18| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  10:31:53
+   Duration  223ms (transform 44ms, setup 0ms, import 73ms, tests 12ms, environment 0ms)
+
+EXIT:1
+
+=== BASE 94687b092fe695b5ce2f6a8848f8c26180bd09b5 npm run test:lane-c ===
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> worktree-feature-app@0.1.0 test:lane-c
+> vitest run acceptance/lane-c.evidence-export.test.tsx tests/lane-c
+
+
+ RUN  v4.1.10 /private/tmp/ex01-parallel-base/06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/worktree-feature-app
+
+ ❯ acceptance/lane-c.evidence-export.test.tsx (2 tests | 2 failed) 10ms
+     × builds a deterministic JSON evidence bundle 2ms
+     × offers export only after evidence has been collected 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  acceptance/lane-c.evidence-export.test.tsx > lane C evidence export > builds a deterministic JSON evidence bundle
+TypeError: createEvidenceBundle is not a function
+ ❯ acceptance/lane-c.evidence-export.test.tsx:10:20
+      8|   it("builds a deterministic JSON evidence bundle", () => {
+      9|     const generatedAt = "2026-08-13T09:00:00.000Z";
+     10|     const bundle = createEvidenceBundle(workItems[0], ["Policy approva…
+       |                    ^
+     11|     expect(bundle).toMatchObject({
+     12|       id: "parall-01",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  acceptance/lane-c.evidence-export.test.tsx > lane C evidence export > offers export only after evidence has been collected
+AssertionError: expected '<section class="evidence-panel" aria-…' to contain 'Export JSON'
+
+Expected: "Export JSON"
+Received: "<section class="evidence-panel" aria-label="Evidence panel"><div class="section-title"><h2>Evidence</h2><button type="button">Collect</button></div><ul><li>Policy approval attached</li></ul></section>"
+
+ ❯ acceptance/lane-c.evidence-export.test.tsx:29:26
+     27|       <EvidencePanel item={workItems[0]} evidence={[]} onCollect={asyn…
+     28|     );
+     29|     expect(withEvidence).toContain("Export JSON");
+       |                          ^
+     30|     expect(withoutEvidence).not.toContain("Export JSON");
+     31|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  10:31:54
+   Duration  157ms (transform 30ms, setup 0ms, import 52ms, tests 10ms, environment 0ms)
+
+EXIT:1

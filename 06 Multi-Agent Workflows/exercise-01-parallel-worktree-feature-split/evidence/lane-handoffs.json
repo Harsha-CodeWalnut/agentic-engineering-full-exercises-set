@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+  "lanes": [
+    {
+      "lane": "A",
+      "agent": "Cursor Grok 4.6 / lane-saved-filters worktree",
+      "branch": "lane/saved-filters",
+      "worktree_path": "/Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-saved-filters",
+      "status": "ready",
+      "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+      "commit_sha": "f627db342c598df040b86f94293d89a32ae66624",
+      "owned_paths": [
+        "src/components/FilterBar.tsx",
+        "src/utils/filters.ts",
+        "tests/lane-a/"
+      ],
+      "changed_paths": [
+        "src/components/FilterBar.tsx",
+        "src/utils/filters.ts",
+        "tests/lane-a/high-priority-blocked-preset.test.ts"
+      ],
+      "shared_requests": [
+        {
+          "path": "src/types.ts",
+          "symbol": "FilterPreset",
+          "reason": "Promote the lane-local FilterPreset interface so saved presets share one contract after integration."
+        }
+      ],
+      "verification": {
+        "command": "npm run test:lane-a",
+        "exit_code": 0,
+        "output_path": "evidence/commands/lane-a.txt",
+        "output_sha256": "fd8f0130d839e8ea9f79a1e16decaff178579d0e5f48c4d0531fecb06804e752"
+      },
+      "rollback": "git revert f627db342c598df040b86f94293d89a32ae66624",
+      "risks": "none"
+    },
+    {
+      "lane": "B",
+      "agent": "Cursor Grok 4.6 / lane-sla-risk worktree",
+      "branch": "lane/sla-risk",
+      "worktree_path": "/Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-sla-risk",
+      "status": "ready",
+      "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+      "commit_sha": "cf5703f04cc0be78d84d5a357958d22bac952f6d",
+      "owned_paths": [
+        "src/components/MetricStrip.tsx",
+        "src/utils/scoring.ts",
+        "tests/lane-b/"
+      ],
+      "changed_paths": [
+        "src/components/MetricStrip.tsx",
+        "src/utils/scoring.ts",
+        "tests/lane-b/due-today-metric.test.ts"
+      ],
+      "shared_requests": [],
+      "verification": {
+        "command": "npm run test:lane-b",
+        "exit_code": 0,
+        "output_path": "evidence/commands/lane-b.txt",
+        "output_sha256": "84440999a8fc714094d724e64ae75c903f749d94202db19d6e31dee6dbcd9b54"
+      },
+      "rollback": "git revert cf5703f04cc0be78d84d5a357958d22bac952f6d",
+      "risks": "none"
+    },
+    {
+      "lane": "C",
+      "agent": "Cursor Grok 4.6 / lane-evidence-export worktree",
+      "branch": "lane/evidence-export",
+      "worktree_path": "/Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-evidence-export",
+      "status": "ready",
+      "base_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+      "commit_sha": "4aa57dd3fc10119329352833297a5af52c9c5bfa",
+      "owned_paths": [
+        "src/components/EvidencePanel.tsx",
+        "src/services/workflowApi.ts",
+        "tests/lane-c/"
+      ],
+      "changed_paths": [
+        "src/components/EvidencePanel.tsx",
+        "src/services/workflowApi.ts",
+        "tests/lane-c/evidence-bundle.test.ts"
+      ],
+      "shared_requests": [
+        {
+          "path": "src/types.ts",
+          "symbol": "EvidenceBundle",
+          "reason": "Promote the lane-local EvidenceBundle interface so export payloads share one contract after integration."
+        }
+      ],
+      "verification": {
+        "command": "npm run test:lane-c",
+        "exit_code": 0,
+        "output_path": "evidence/commands/lane-c.txt",
+        "output_sha256": "f438e3e11af8eec63f2c41738c93e7df05901d21c436a9427056c893b486596b"
+      },
+      "rollback": "git revert 4aa57dd3fc10119329352833297a5af52c9c5bfa",
+      "risks": "none"
+    }
+  ]
+}

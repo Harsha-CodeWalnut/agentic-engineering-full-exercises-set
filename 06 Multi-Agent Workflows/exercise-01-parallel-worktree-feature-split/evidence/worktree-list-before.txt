@@ -1,0 +1,16 @@
+worktree /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set
+HEAD 9a3f736fc8d5476aba1b3fabd854338d662fc0e0
+branch refs/heads/integration/parallel-features
+
+worktree /Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-evidence-export
+HEAD 4aa57dd3fc10119329352833297a5af52c9c5bfa
+branch refs/heads/lane/evidence-export
+
+worktree /Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-saved-filters
+HEAD f627db342c598df040b86f94293d89a32ae66624
+branch refs/heads/lane/saved-filters
+
+worktree /Users/harsh01/.cursor/worktrees/parallel-worktree-feature-split/lane-sla-risk
+HEAD cf5703f04cc0be78d84d5a357958d22bac952f6d
+branch refs/heads/lane/sla-risk
+
