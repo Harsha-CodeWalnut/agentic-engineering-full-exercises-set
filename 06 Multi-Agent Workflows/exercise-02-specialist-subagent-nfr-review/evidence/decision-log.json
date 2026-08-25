@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "baseline_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+  "remediation_sha": "94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+  "merge_decision": "approve",
+  "rollback": "git revert 94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+  "changed_paths": [
+    "src/App.tsx",
+    "src/components/AccessReviewQueue.tsx",
+    "src/components/ReviewNote.tsx",
+    "src/services/accessReviewApi.ts",
+    "src/utils/accessReviewRisk.ts",
+    "tests/approval-boundary.test.ts"
+  ],
+  "residual_risk": "none for the five required blockers; Export of notes is plain text without rich formatting",
+  "decisions": [
+    {
+      "finding_id": "SEC-01",
+      "decision": "fix",
+      "owner": "integration owner",
+      "rationale": "Untrusted HTML in reviewer notes is an exploitable content execution path.",
+      "verification": "npm run review:security at remediation SHA 94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+      "residual_risk": "none; notes render as escaped text"
+    },
+    {
+      "finding_id": "SEC-02",
+      "decision": "fix",
+      "owner": "integration owner",
+      "rationale": "Privileged approval must not trust the UI for authorization or evidence completeness.",
+      "verification": "npm run review:security rejects MISSING_EVIDENCE and NOT_AUTHORIZED",
+      "residual_risk": "none at the service boundary"
+    },
+    {
+      "finding_id": "A11Y-01",
+      "decision": "fix",
+      "owner": "integration owner",
+      "rationale": "Clickable divs block keyboard-native queue selection.",
+      "verification": "npm run review:accessibility shows buttons and aria-pressed",
+      "residual_risk": "none for the selection workflow"
+    },
+    {
+      "finding_id": "PERF-01",
+      "decision": "fix",
+      "owner": "integration owner",
+      "rationale": "Repeated 150000-pass work on each render exceeds the protected performance gate.",
+      "verification": "durationMs 173.894 to 0.048 with identical sampleSize, iterations, and result 41",
+      "residual_risk": "none for the protected portfolio-risk scenario"
+    },
+    {
+      "finding_id": "TEST-01",
+      "decision": "fix",
+      "owner": "integration owner",
+      "rationale": "window.setTimeout makes approval success and failure nondeterministic outside a browser.",
+      "verification": "npm run review:testability with injected wait and no window reference",
+      "residual_risk": "none for deterministic boundary tests"
+    }
+  ]
+}

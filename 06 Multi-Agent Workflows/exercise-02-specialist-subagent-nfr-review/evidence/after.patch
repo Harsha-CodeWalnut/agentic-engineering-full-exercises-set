@@ -1,0 +1,174 @@
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx
+index 08d072e..631c2a7 100644
+--- a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx	
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx	
+@@ -1,22 +1,24 @@
+-import { useState } from "react";
++import { useMemo, useState } from "react";
+ import { AccessReviewQueue } from "./components/AccessReviewQueue";
+ import { ReviewNote } from "./components/ReviewNote";
+ import { accessReviews } from "./data/accessReviews";
+-import { approveAccessReview } from "./services/accessReviewApi";
++import { approveAccessReview, type ApprovalActor } from "./services/accessReviewApi";
+ import { calculatePortfolioRisk } from "./utils/accessReviewRisk";
+ import "./styles.css";
+ 
++const reviewer: ApprovalActor = { id: "operator-1", canApprovePrivileged: true };
++
+ export default function App() {
+   const [reviews, setReviews] = useState(accessReviews);
+   const [selectedId, setSelectedId] = useState(reviews[0].id);
+   const [error, setError] = useState("");
+   const selected = reviews.find((item) => item.id === selectedId) ?? reviews[0];
+-  const portfolioRisk = calculatePortfolioRisk(reviews);
++  const portfolioRisk = useMemo(() => calculatePortfolioRisk(reviews), [reviews]);
+ 
+   async function approve() {
+     setError("");
+     try {
+-      const updated = await approveAccessReview(selected);
++      const updated = await approveAccessReview(selected, reviewer);
+       setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
+     } catch (cause) {
+       setError(cause instanceof Error ? cause.message : "Approval failed");
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx
+index 2e5d28d..22534da 100644
+--- a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx	
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx	
+@@ -10,15 +10,17 @@ export function AccessReviewQueue({ reviews, selectedId, onSelect }: AccessRevie
+   return (
+     <section className="queue" aria-label="Access reviews">
+       {reviews.map((item) => (
+-        <div
++        <button
++          type="button"
+           className={item.id === selectedId ? "queue-row selected" : "queue-row"}
++          aria-pressed={item.id === selectedId}
+           onClick={() => onSelect(item.id)}
+           key={item.id}
+         >
+           <strong>{item.requester}</strong>
+           <span>{item.resource}</span>
+           <small>{item.status}</small>
+-        </div>
++        </button>
+       ))}
+     </section>
+   );
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx
+index c1feaa5..980318e 100644
+--- a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx	
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx	
+@@ -3,5 +3,5 @@ interface ReviewNoteProps {
+ }
+ 
+ export function ReviewNote({ note }: ReviewNoteProps) {
+-  return <div className="request-note" dangerouslySetInnerHTML={{ __html: note }} />;
++  return <div className="request-note">{note}</div>;
+ }
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/services/accessReviewApi.ts b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/services/accessReviewApi.ts
+index 6c5dae2..7c9a83d 100644
+--- a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/services/accessReviewApi.ts	
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/services/accessReviewApi.ts	
+@@ -1,10 +1,39 @@
+ import type { AccessReview } from "../data/accessReviews";
+ 
+-const wait = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
++export class ApprovalError extends Error {
++  readonly code: string;
+ 
+-export async function approveAccessReview(review: AccessReview): Promise<AccessReview> {
++  constructor(code: string, message: string) {
++    super(message);
++    this.name = "ApprovalError";
++    this.code = code;
++  }
++}
++
++export interface ApprovalActor {
++  id: string;
++  canApprovePrivileged: boolean;
++}
++
++const defaultWait = (milliseconds: number) => new Promise<void>((resolve) => {
++  setTimeout(resolve, milliseconds);
++});
++
++export async function approveAccessReview(
++  review: AccessReview,
++  actor: ApprovalActor,
++  options?: { wait?: (milliseconds: number) => Promise<void> },
++): Promise<AccessReview> {
++  const wait = options?.wait ?? defaultWait;
+   await wait(120);
+-  // Seeded boundary defect: the API simulation trusts the UI and does not
+-  // reject privileged requests whose evidence is incomplete.
++
++  if (review.privileged && !actor.canApprovePrivileged) {
++    throw new ApprovalError("NOT_AUTHORIZED", "Actor cannot approve privileged access");
++  }
++
++  if (review.privileged && !review.evidenceComplete) {
++    throw new ApprovalError("MISSING_EVIDENCE", "Privileged approval requires complete evidence");
++  }
++
+   return { ...review, status: "approved" };
+ }
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts
+index 6aa1576..edf95b4 100644
+--- a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts	
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts	
+@@ -1,9 +1,6 @@
+ import type { AccessReview } from "../data/accessReviews";
+ 
+ export function calculatePortfolioRisk(items: AccessReview[]) {
+-  let score = 0;
+-  for (let pass = 0; pass < 150_000; pass += 1) {
+-    score = items.reduce((total, item) => total + item.risk + (item.privileged ? 20 : 0), pass % 7);
+-  }
+-  return Math.round(score / Math.max(items.length, 1));
++  const total = items.reduce((sum, item) => sum + item.risk + (item.privileged ? 20 : 0), 0);
++  return Math.round(total / Math.max(items.length, 1));
+ }
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/tests/approval-boundary.test.ts b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/tests/approval-boundary.test.ts
+new file mode 100644
+index 0000000..47e1ba0
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/tests/approval-boundary.test.ts	
+@@ -0,0 +1,36 @@
++import { describe, expect, it, vi } from "vitest";
++import { accessReviews } from "../src/data/accessReviews";
++import {
++  ApprovalError,
++  approveAccessReview,
++  type ApprovalActor,
++} from "../src/services/accessReviewApi";
++
++describe("access review approval boundary", () => {
++  it("givenIncompletePrivilegedEvidence_whenAuthorizedActorApproves_thenThrowsMissingEvidence", async () => {
++    // Arrange
++    const actor: ApprovalActor = { id: "operator-1", canApprovePrivileged: true };
++    const wait = vi.fn(async () => undefined);
++
++    // Act
++    const attempt = approveAccessReview(accessReviews[0], actor, { wait });
++
++    // Assert
++    await expect(attempt).rejects.toBeInstanceOf(ApprovalError);
++    await expect(approveAccessReview(accessReviews[0], actor, { wait })).rejects.toMatchObject({
++      code: "MISSING_EVIDENCE",
++    });
++  });
++
++  it("givenAPrivilegedReview_whenUnauthorizedActorApproves_thenThrowsNotAuthorized", async () => {
++    // Arrange
++    const actor: ApprovalActor = { id: "operator-2", canApprovePrivileged: false };
++    const wait = vi.fn(async () => undefined);
++
++    // Act
++    const attempt = approveAccessReview(accessReviews[2], actor, { wait });
++
++    // Assert
++    await expect(attempt).rejects.toMatchObject({ code: "NOT_AUTHORIZED" });
++  });
++});

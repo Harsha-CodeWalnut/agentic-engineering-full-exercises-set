@@ -1,0 +1,8 @@
+{
+  "sourceSha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+  "scenario": "portfolio-risk",
+  "sampleSize": 200,
+  "iterations": 5,
+  "durationMs": 173.894,
+  "result": 41
+}

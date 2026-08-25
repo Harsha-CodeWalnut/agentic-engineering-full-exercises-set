@@ -1,0 +1,16 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nfr-swarm-app@0.1.0 review:testability
+> node ./scripts/run-specialist-check.mjs testability
+
+Reviewed SHA: 94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089
+Specialist: testability
+
+ RUN  v4.1.10 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  11:26:36
+   Duration  128ms (transform 24ms, setup 0ms, import 32ms, tests 3ms, environment 0ms)
+

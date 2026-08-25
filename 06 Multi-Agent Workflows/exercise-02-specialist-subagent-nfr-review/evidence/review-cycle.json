@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "baseline_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+  "remediation_sha": "94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+  "performance": {
+    "before_path": "evidence/performance-before.json",
+    "before_sha256": "cd28af379aad387cb4917a94efec7533c623e3c01dcb3588e50eefb7ac4105a3",
+    "after_path": "evidence/performance-after.json",
+    "after_sha256": "4021c50c146652177469fc531af0fb0ed00eaa0358ff55d25d70807635907fb4"
+  },
+  "specialists": [
+    {
+      "specialist": "security",
+      "before": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "sec-before-20260825a",
+        "reviewed_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+        "report_path": "evidence/specialists/security-before.md",
+        "report_sha256": "b5b124b1e97c29ad5d67788f94aafc2fca5a33268e96d3e6ec1d170bc57d0930",
+        "command": "npm run review:security",
+        "exit_code": 1,
+        "output_path": "evidence/commands/security-before.txt",
+        "output_sha256": "74fc80d1274eadb466ef11a1d89efb6bf45a6034bc702c7c51ef56156d85895f",
+        "findings": [
+          {
+            "id": "SEC-01",
+            "severity": "blocker",
+            "path": "nfr-swarm-app/src/components/ReviewNote.tsx",
+            "line": 6,
+            "reproduction": "Rendered a hostile img onerror note through ReviewNote and inspected the HTML output.",
+            "impact": "Untrusted request notes execute as HTML in the reviewer browser.",
+            "recommendation": "Render the note as text so markup is escaped."
+          },
+          {
+            "id": "SEC-02",
+            "severity": "blocker",
+            "path": "nfr-swarm-app/src/services/accessReviewApi.ts",
+            "line": 9,
+            "reproduction": "Called approveAccessReview on AR-204 directly, bypassing the UI approval button.",
+            "impact": "Privileged access is approved with missing evidence and no actor check.",
+            "recommendation": "Reject at the service with NOT_AUTHORIZED and MISSING_EVIDENCE codes."
+          }
+        ]
+      },
+      "after": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "sec-after-20260825e",
+        "reviewed_sha": "94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+        "report_path": "evidence/specialists/security-after.md",
+        "report_sha256": "7eb3d01ea14899bb348e7f71aaae26e17df416482034eb8e6673e03545342d88",
+        "command": "npm run review:security",
+        "exit_code": 0,
+        "output_path": "evidence/commands/security-after.txt",
+        "output_sha256": "097d03d0d63db4ad6d91727c1b0edafaa9d5e01ca93953a4960dc5d045cd5686",
+        "result": "pass"
+      }
+    },
+    {
+      "specialist": "accessibility",
+      "before": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "a11y-before-20260825b",
+        "reviewed_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+        "report_path": "evidence/specialists/accessibility-before.md",
+        "report_sha256": "8288a1a3df451d76d0ae24684e6b7c5d57de9b3136694c97f2586304e007b6d7",
+        "command": "npm run review:accessibility",
+        "exit_code": 1,
+        "output_path": "evidence/commands/accessibility-before.txt",
+        "output_sha256": "1fd83fbbcbdbddd0f2936af1cbd03c97eb06ffd8591e705ce80747dff54a2656",
+        "findings": [
+          {
+            "id": "A11Y-01",
+            "severity": "blocker",
+            "path": "nfr-swarm-app/src/components/AccessReviewQueue.tsx",
+            "line": 13,
+            "reproduction": "Rendered AccessReviewQueue and counted button elements; rows were clickable divs only.",
+            "impact": "Keyboard users cannot complete review selection with native controls.",
+            "recommendation": "Replace clickable divs with buttons and set aria-pressed on the selected row."
+          }
+        ]
+      },
+      "after": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "a11y-after-20260825f",
+        "reviewed_sha": "94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+        "report_path": "evidence/specialists/accessibility-after.md",
+        "report_sha256": "d7c075b0f3149c9adbb46b8cba2168f438cebd07bcabab60c8abc24b811da414",
+        "command": "npm run review:accessibility",
+        "exit_code": 0,
+        "output_path": "evidence/commands/accessibility-after.txt",
+        "output_sha256": "490442df7836e001b616ae3fd0002ecf0d456a9e1a08dbe781e041213ababe05",
+        "result": "pass"
+      }
+    },
+    {
+      "specialist": "performance",
+      "before": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "perf-before-20260825c",
+        "reviewed_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+        "report_path": "evidence/specialists/performance-before.md",
+        "report_sha256": "9dedfc2ba64b3b4f4a0067b70fa2bca8deb1ed68789dd657dd484538e6985381",
+        "command": "npm run review:performance",
+        "exit_code": 1,
+        "output_path": "evidence/commands/performance-before.txt",
+        "output_sha256": "9d1804ff5bffe9c1439b617768b54665bb05aaf597a9d2361393397a648c3c09",
+        "findings": [
+          {
+            "id": "PERF-01",
+            "severity": "blocker",
+            "path": "nfr-swarm-app/src/utils/accessReviewRisk.ts",
+            "line": 5,
+            "reproduction": "Ran the protected portfolio-risk measurement at the baseline SHA with sampleSize 200.",
+            "impact": "Every render repeats a 150000-pass loop and the one-pass total is incorrect.",
+            "recommendation": "Reduce in one pass and memoize calculatePortfolioRisk while reviews stay unchanged."
+          }
+        ]
+      },
+      "after": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "perf-after-20260825g",
+        "reviewed_sha": "94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+        "report_path": "evidence/specialists/performance-after.md",
+        "report_sha256": "4f227e3f1d88e1205df8556c8838032c797540f2fadc2a490275b8634b9283af",
+        "command": "npm run review:performance",
+        "exit_code": 0,
+        "output_path": "evidence/commands/performance-after.txt",
+        "output_sha256": "f68adb96966f6356261b9ddd4c7e78b216f5bb8c705b6901a2422116ea9a6cb1",
+        "result": "pass"
+      }
+    },
+    {
+      "specialist": "testability",
+      "before": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "test-before-20260825d",
+        "reviewed_sha": "94687b092fe695b5ce2f6a8848f8c26180bd09b5",
+        "report_path": "evidence/specialists/testability-before.md",
+        "report_sha256": "91ada5591a4dccacbbcdacba3c5ceef0521323ee622086d89c21e84cad81d3b6",
+        "command": "npm run review:testability",
+        "exit_code": 1,
+        "output_path": "evidence/commands/testability-before.txt",
+        "output_sha256": "d11da861739d730fc97256caa231eb5d9bdd473e02ab333c77daddb83826fbbf",
+        "findings": [
+          {
+            "id": "TEST-01",
+            "severity": "blocker",
+            "path": "nfr-swarm-app/src/services/accessReviewApi.ts",
+            "line": 3,
+            "reproduction": "Imported approveAccessReview in Vitest; the module threw because window.setTimeout is missing.",
+            "impact": "Approval success and failure cannot be tested deterministically outside a browser.",
+            "recommendation": "Inject wait, remove window, and return structured ApprovalError failures."
+          }
+        ]
+      },
+      "after": {
+        "agent": "Cursor Grok 4.6",
+        "session_id": "test-after-20260825h",
+        "reviewed_sha": "94ddbb5ad1d11cd1f78fd222c32a40c7cdc19089",
+        "report_path": "evidence/specialists/testability-after.md",
+        "report_sha256": "28b67679fe6e2d7a0e87ec05b6e89194bad9280e20d310b212f0edd1e110fdbe",
+        "command": "npm run review:testability",
+        "exit_code": 0,
+        "output_path": "evidence/commands/testability-after.txt",
+        "output_sha256": "df62be0ae4f47f694de7b0f8c3621e7e529ef2c85fbfdd2b3ccc332fd0f49688",
+        "result": "pass"
+      }
+    }
+  ]
+}
