@@ -1,10 +1,11 @@
-# Ownership Map Seed
+# Ownership Map
 
-| Requested path | Active reservation | Waiting card | Required action |
+| Requested path | Final reservation | Waiting card | Action taken |
 |---|---|---|---|
-| `src/utils/scoring.ts` | ESC-120 and ESC-122 | ESC-122 | Keep ESC-120 only; release ESC-122. |
-| `src/components/SeverityBadge.tsx` | ESC-120 | ESC-122 | Release after ESC-120 integration. |
-| `src/services/workflowApi.ts` | ESC-118 | ESC-118 | Release until reproduction exists. |
-| `src/services/exportApi.ts` | ESC-121 | none | Release because the card is cancelled. |
+| `src/utils/scoring.ts` | none | ESC-122 | ESC-120 merged; ESC-122 collision released. |
+| `src/components/SeverityBadge.tsx` | none | ESC-122 | Released after ESC-120 integration. |
+| `tests/esc-120/` | none | none | Lane-owned regression test merged with ESC-120. |
+| `src/services/workflowApi.ts` | none | ESC-118 | Released until reproduction exists. |
+| `src/services/exportApi.ts` | none | none | Released because ESC-121 is cancelled. |
 
-After integration, no card owns an active reservation. ESC-122 still requests the scoring paths but remains blocked by `RULE-ESC-122`.
+After integration there are no active reservations. ESC-118 stays needs-info, ESC-121 stays cancelled, ESC-122 stays blocked by `RULE-ESC-122`, and ESC-120 is merged with released paths.

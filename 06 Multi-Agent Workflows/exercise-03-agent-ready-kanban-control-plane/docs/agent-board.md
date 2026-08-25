@@ -1,12 +1,14 @@
-# Agent Board Seed
+# Agent Board
 
-The canonical structured board is [agent-board.json](./agent-board.json). The application copy must remain identical.
+The canonical structured board is [agent-board.json](./agent-board.json). The application copy in `kanban-control-app/src/data/agent-board.json` matches exactly.
 
-| Card | Seed state | Unsafe condition |
+| Card | Final state | Reservation status |
 |---|---|---|
-| ESC-118 | needs-info | Holds `workflowApi.ts` without a reproduction. |
-| ESC-120 | ready-for-agent | Correctly reserves the inherited-severity lane. |
-| ESC-122 | blocked | Illegally reserves `scoring.ts` while waiting. |
-| ESC-121 | cancelled | Still reserves `exportApi.ts` after cancellation. |
+| ESC-118 | needs-info | Released `workflowApi.ts`; still blocked by `REPRO-118`. |
+| ESC-120 | merged | Lane integrated; no active reservations. |
+| ESC-122 | blocked | Collision released; remains blocked by `RULE-ESC-122` only. |
+| ESC-121 | cancelled | Cancellation retained; `exportApi.ts` released. |
 
-The final board keeps unsafe work visible, marks ESC-120 merged, releases every reservation, and records the full transition history.
+All four cards remain visible with complete state histories. ESC-120 is the only merged card. There are no active reservations across the board.
+
+Integration owner synchronized both JSON mirrors and this rendered board after the `--no-ff` merge of lane commit `26442dc1565327db01e438c476cacd89bc609c27`.
