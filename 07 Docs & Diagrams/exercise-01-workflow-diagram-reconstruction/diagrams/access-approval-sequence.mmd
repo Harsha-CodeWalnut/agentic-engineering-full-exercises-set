@@ -1,0 +1,28 @@
+sequenceDiagram
+  actor Employee
+  participant Application
+  participant Manager
+  participant PolicyEngine
+  participant Security
+  participant DataOwner
+  participant IdentityProvider
+  %% EDGE: WF-01
+  Employee->>Application: Submit access request from draft
+  %% EDGE: WF-02
+  Application->>Manager: Request manager approval
+  Manager-->>Application: Manager approved the business need
+  alt High risk
+    %% EDGE: WF-03
+    PolicyEngine->>Security: Route high risk request to security review
+    %% EDGE: WF-05
+    Security-->>Application: Security approved high-risk access
+    Application->>DataOwner: Open data owner review after security
+  else Normal risk
+    %% EDGE: WF-04
+    Application->>DataOwner: Open normal data owner review
+  end
+  %% EDGE: WF-06
+  DataOwner-->>Application: Approve data owner access
+  Application->>IdentityProvider: Provision access in identity groups
+  %% EDGE: WF-07
+  IdentityProvider-->>Application: Access granted and provisioned when healthy

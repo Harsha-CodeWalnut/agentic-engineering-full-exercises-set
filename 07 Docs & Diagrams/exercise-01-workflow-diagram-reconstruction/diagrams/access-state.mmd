@@ -1,0 +1,25 @@
+stateDiagram-v2
+  %% Source-led reconstruction of nextStepFor in workflow.tsx
+  [*] --> draft
+  %% EDGE: WF-01
+  draft --> submitted
+  %% EDGE: WF-02
+  submitted --> manager_approved
+  %% EDGE: WF-03
+  manager_approved --> security_review : high risk
+  %% EDGE: WF-04
+  manager_approved --> data_owner_review : normal risk
+  %% EDGE: WF-05
+  security_review --> data_owner_review
+  %% EDGE: WF-06
+  data_owner_review --> provisioning
+  %% EDGE: WF-07
+  provisioning --> provisioned : healthy
+  %% EDGE: WF-08
+  provisioning --> failed_provisioning : unhealthy
+  %% EDGE: WF-09
+  failed_provisioning --> rollback_requested
+  %% EDGE: WF-10
+  rollback_requested --> rolled_back
+  provisioned --> [*]
+  rolled_back --> [*]
