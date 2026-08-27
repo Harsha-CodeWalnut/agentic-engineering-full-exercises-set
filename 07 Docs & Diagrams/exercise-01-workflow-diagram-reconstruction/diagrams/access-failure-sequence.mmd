@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant Application
+  participant DataOwner
+  participant IdentityProvider
+  participant IdentityAdmin
+  %% EDGE: WF-06
+  DataOwner->>Application: Approve data access
+  Application->>IdentityProvider: Provision access
+  %% EDGE: WF-08
+  IdentityProvider-->>Application: Provisioning failed after partial access
+  %% EDGE: WF-09
+  Application->>IdentityProvider: Open rollback request for the unhealthy grant
+  IdentityProvider->>IdentityAdmin: Remove partial access from the identity group
+  %% EDGE: WF-10
+  IdentityAdmin-->>Application: Partial access removed and rolled back
