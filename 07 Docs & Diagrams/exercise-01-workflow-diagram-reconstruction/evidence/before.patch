@@ -1,0 +1,50 @@
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
+new file mode 100644
+index 0000000..1cc03ac
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd	
+@@ -0,0 +1,13 @@
++sequenceDiagram
++  actor Employee
++  participant Application
++  participant Manager
++  participant DataOwner
++  participant IdentityProvider
++  Employee->>Application: Submit access request
++  Application->>Manager: Request manager approval
++  Manager-->>Application: Manager approved
++  Application->>DataOwner: Open data owner approval
++  DataOwner-->>Application: Data owner approved
++  Application->>IdentityProvider: Provision access
++  IdentityProvider-->>Application: Access granted and provisioned
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
+new file mode 100644
+index 0000000..3ce3c39
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd	
+@@ -0,0 +1,9 @@
++sequenceDiagram
++  participant Application
++  participant DataOwner
++  participant IdentityProvider
++  DataOwner->>Application: Approve data access
++  Application->>IdentityProvider: Provision access
++  IdentityProvider-->>Application: Provisioning failed
++  Application->>IdentityProvider: Automatic retry until access is granted
++  IdentityProvider-->>Application: Access granted after retry
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd
+new file mode 100644
+index 0000000..7b1a2a3
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd	
+@@ -0,0 +1,10 @@
++stateDiagram-v2
++  [*] --> draft
++  draft --> submitted
++  submitted --> manager_approved
++  manager_approved --> data_owner_review
++  data_owner_review --> provisioning
++  provisioning --> provisioned
++  provisioning --> failed_provisioning
++  failed_provisioning --> provisioning : automatic retry
++  provisioned --> [*]
