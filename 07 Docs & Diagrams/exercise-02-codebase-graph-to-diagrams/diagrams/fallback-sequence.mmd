@@ -1,0 +1,24 @@
+sequenceDiagram
+  actor Client
+  participant ChannelRouter
+  participant ProviderStatus
+  participant ConsentPolicy
+  participant RouteResult
+  Client->>ChannelRouter: request a route
+  %% EDGE: DEP-01
+  ChannelRouter->>ProviderStatus: push unavailable
+  %% EDGE: DEP-02
+  ChannelRouter->>ProviderStatus: sms available
+  %% EDGE: DEP-03
+  ChannelRouter->>ConsentPolicy: sms not consented
+  %% EDGE: DEP-04
+  ChannelRouter->>ProviderStatus: email available
+  %% EDGE: DEP-05
+  ChannelRouter->>RouteResult: email selected
+  Client->>ChannelRouter: request a route again
+  ChannelRouter->>ProviderStatus: push unavailable
+  ChannelRouter->>ProviderStatus: sms available
+  ChannelRouter->>ConsentPolicy: sms not consented
+  ChannelRouter->>ProviderStatus: email unavailable
+  %% EDGE: DEP-06
+  ChannelRouter->>RouteResult: durable queue selected
