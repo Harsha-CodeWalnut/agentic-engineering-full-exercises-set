@@ -1,0 +1,9 @@
+
+> notification-mesh-app@0.1.0 graph:build
+> node ./scripts/build-code-graph.mjs
+
+Source SHA: 1ee294aa42661dcc8eda3c5956c28381b7731bfd
+Graph: artifacts/code-graph.json
+Nodes: 11
+Edges: 9
+PASS generated graph directly from notification source
