@@ -1,0 +1,74 @@
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-architecture.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-architecture.mmd
+new file mode 100644
+index 0000000..b446ece
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-architecture.mmd	
+@@ -0,0 +1,11 @@
++flowchart LR
++CheckoutUI[Checkout UI]
++GatewayAdapter[External gateway]
++LedgerRecord[Ledger]
++ReceiptRecord[Receipt]
++WebhookHandler[Webhook]
++CheckoutUI --> GatewayAdapter
++GatewayAdapter --> LedgerRecord
++GatewayAdapter --> ReceiptRecord
++GatewayAdapter --> WebhookHandler
++WebhookHandler --> LedgerRecord
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-data.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-data.mmd
+new file mode 100644
+index 0000000..b4f9d18
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-data.mmd	
+@@ -0,0 +1,9 @@
++erDiagram
++CUSTOMER ||--o{ CHECKOUT_ORDER : places
++CHECKOUT_ORDER ||--|{ ORDER_ITEM : contains
++CHECKOUT_ORDER ||--|| PAYMENT_INTENT : funds
++PAYMENT_METHOD ||--o{ PAYMENT_INTENT : used_by
++PAYMENT_INTENT ||--o{ GATEWAY_TRANSACTION : produces
++PAYMENT_INTENT ||--o{ LEDGER_ENTRY : posts
++GATEWAY_TRANSACTION ||--o{ WEBHOOK_EVENT : emits
++CHECKOUT_ORDER ||--|| RECEIPT : receives
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-sequence.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-sequence.mmd
+new file mode 100644
+index 0000000..3e41ca1
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-sequence.mmd	
+@@ -0,0 +1,22 @@
++sequenceDiagram
++actor Shopper
++participant CheckoutUI
++participant GatewayAdapter
++participant Ledger
++participant ReceiptNotifier
++participant WebhookHandler
++Shopper->>CheckoutUI: Confirm checkout
++CheckoutUI->>GatewayAdapter: Call external gateway directly
++alt Authorization approved
++  GatewayAdapter-->>CheckoutUI: Authorization approved
++  GatewayAdapter->>Ledger: Create capture ledger entry
++  GatewayAdapter->>ReceiptNotifier: Send receipt
++else Authorization declined
++  GatewayAdapter-->>CheckoutUI: Authorization declined
++  CheckoutUI->>GatewayAdapter: Retry authorization once
++  GatewayAdapter-->>CheckoutUI: Authorization approved after retry
++  GatewayAdapter->>Ledger: Create capture ledger entry
++end
++GatewayAdapter->>WebhookHandler: Deliver signed capture webhook
++WebhookHandler->>Ledger: Create a new ledger entry for every valid capture delivery
++WebhookHandler->>Ledger: Duplicate signed delivery creates another ledger entry
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/webhook-reconciliation-state.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/webhook-reconciliation-state.mmd
+new file mode 100644
+index 0000000..56a0926
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/webhook-reconciliation-state.mmd	
+@@ -0,0 +1,8 @@
++stateDiagram-v2
++[*] --> received
++received --> signature_check
++signature_check --> rejected : invalid signature
++signature_check --> ledger_recorded : valid signed capture
++ledger_recorded --> handled
++handled --> [*]
++rejected --> [*]
