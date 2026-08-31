@@ -1,0 +1,9 @@
+
+> workflow-reconstruction-app@0.1.0 diagrams:parse
+> node ./scripts/parse-diagrams.mjs
+
+Source SHA: 6a34ba70d5a6212cde6d4c73aacebc755fa2214d
+PASS: diagrams/access-state.mmd parsed as stateDiagram
+PASS: diagrams/access-approval-sequence.mmd parsed as sequence
+PASS: diagrams/access-failure-sequence.mmd parsed as sequence
+PASS: all three Mermaid diagrams parsed successfully.
