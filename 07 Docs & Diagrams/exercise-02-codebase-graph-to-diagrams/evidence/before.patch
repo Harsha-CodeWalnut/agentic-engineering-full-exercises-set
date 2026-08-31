@@ -1,0 +1,27 @@
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd
+new file mode 100644
+index 0000000..4dcae74
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd	
+@@ -0,0 +1,10 @@
++sequenceDiagram
++  actor Client
++  participant ChannelRouter
++  participant ProviderStatus
++  participant RouteResult
++  Client->>ChannelRouter: route notification
++  ChannelRouter->>ProviderStatus: check every available provider
++  ProviderStatus->>ChannelRouter: SMS available
++  ChannelRouter->>RouteResult: immediate SMS without consent
++  ChannelRouter->>RouteResult: after provider failure use durable queue
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd
+new file mode 100644
+index 0000000..2884d81
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd	
+@@ -0,0 +1,5 @@
++flowchart LR
++  ChannelRouter --> ProviderStatus
++  ChannelRouter --> ImmediateRoute
++  ProviderStatus --> ConsentPolicy
++  ImmediateRoute --> DurableQueue
