@@ -1,0 +1,19 @@
+# npm run rollout:verify
+
+Working directory: 08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app
+Source SHA: 803ab79345e5d1b3ca863d96966bcbcd9ebf8295
+Commands used to generate evidence:
+npm run rollout:capture -- --scenario enabled --sha 803ab79345e5d1b3ca863d96966bcbcd9ebf8295 --output ../evidence/enabled.json
+npm run rollout:capture -- --scenario disabled --sha 803ab79345e5d1b3ca863d96966bcbcd9ebf8295 --output ../evidence/disabled.json
+npm run rollout:capture -- --scenario provider-error --sha 803ab79345e5d1b3ca863d96966bcbcd9ebf8295 --output ../evidence/provider-error.json
+npm run rollback:drill -- --sha 803ab79345e5d1b3ca863d96966bcbcd9ebf8295 --json ../evidence/rollback-drill.json --markdown ../evidence/rollback-drill.md
+
+> feature-flag-app@0.1.0 rollout:verify
+> node ./scripts/verify-rollout-submission.mjs
+
+Source SHA: 803ab79345e5d1b3ca863d96966bcbcd9ebf8295
+PASS enabled evidence proves one evaluation, one API call, and one accurate telemetry event
+PASS disabled and provider-error evidence prove legacy behavior with zero preview side effects
+PASS rollback drill atomically disables the flag, clears targeting, records audit data, and meets the 1000 ms objective
+PASS protected scenarios and rollback drill reproduce from the submitted implementation
+PASS Git source binding and evidence-only follow-up history verified

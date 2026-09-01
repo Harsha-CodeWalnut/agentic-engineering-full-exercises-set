@@ -1,0 +1,48 @@
+diff --git a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/evidence/pr-summary.md b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/evidence/pr-summary.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b0daaba56c997f94f315b3986a67aaff2ef70f03
+--- /dev/null
++++ b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/evidence/pr-summary.md	
+@@ -0,0 +1,5 @@
++# Invoice preview flag repair
++
++The flag now returns legacy when disabled. Rollback flips `enabled` to false in `config/invoice-preview.json`.
++
++Preview is still loaded so operators can confirm the invoice totals after a kill switch.
+diff --git a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/rollback-invoice-preview.mjs b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/rollback-invoice-preview.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..80fa55c195b43dfa8f4f4f96608921bc529fd1ba
+--- /dev/null
++++ b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/rollback-invoice-preview.mjs	
+@@ -0,0 +1,6 @@
++import fs from "node:fs";
++
++const configPath = process.argv[process.argv.indexOf("--config") + 1];
++const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
++config.enabled = false;
++fs.writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
+diff --git a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs
+index 04dee6ee30c4f14ad20548bf5239db8629c92e67..78c09d7ba48ee8f3fd4f0cec735324ae87ef028a 100644
+--- a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs	
++++ b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs	
+@@ -1,4 +1,4 @@
+-/** Seeded rollout: disabled and provider-error states still touch the new service. */
++/** Unstructured first attempt: keep preview reachable after a disable. */
+ export async function loadInvoiceExperience({ flagClient, context, api, telemetry }) {
+   let enabled = true;
+   try {
+@@ -7,13 +7,12 @@ export async function loadInvoiceExperience({ flagClient, context, api, telemetr
+     enabled = false;
+   }
+ 
++  const preview = await api.loadPreview(context.accountId);
+   if (enabled) {
+-    const preview = await api.loadPreview(context.accountId);
+     telemetry.emit("invoice_preview_viewed", { targetingKey: context.targetingKey });
+     return { experience: "preview", preview };
+   }
+ 
+-  const preview = await api.loadPreview(context.accountId);
+   telemetry.emit("invoice_preview_disabled", { targetingKey: context.targetingKey });
+   return { experience: "legacy", reason: "flag-disabled", preview };
+ }

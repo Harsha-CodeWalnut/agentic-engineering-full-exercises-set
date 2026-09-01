@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "803ab79345e5d1b3ca863d96966bcbcd9ebf8295",
+  "scenario": "disabled",
+  "flagKey": "invoice-preview-v2",
+  "configSha256": "d24ea840ff3a6e2302fe5e7f8066d99d4539b9ae12f3c428d1e5b324c3dfd77a",
+  "context": {
+    "targetingKey": "acct-999",
+    "accountId": "acct-999"
+  },
+  "evaluation": [
+    {
+      "flagKey": "invoice-preview-v2",
+      "defaultValue": false,
+      "context": {
+        "targetingKey": "acct-999",
+        "accountId": "acct-999"
+      }
+    }
+  ],
+  "outcome": {
+    "experience": "legacy",
+    "reason": "flag-disabled"
+  },
+  "apiCalls": [],
+  "telemetry": [],
+  "result": "passed"
+}
