@@ -1,19 +1,39 @@
-/** Seeded rollout: disabled and provider-error states still touch the new service. */
+const FLAG_KEY = "invoice-preview-v2";
+
+function isValidTargetingContext(context) {
+  const targetingKey = context?.targetingKey;
+  const accountId = context?.accountId;
+  return typeof targetingKey === "string" && typeof accountId === "string"
+    && targetingKey.trim() !== "" && accountId.trim() !== ""
+    && targetingKey === accountId;
+}
+
 export async function loadInvoiceExperience({ flagClient, context, api, telemetry }) {
-  let enabled = true;
+  if (!isValidTargetingContext(context)) {
+    return { experience: "legacy", reason: "invalid-context" };
+  }
+
+  const evaluationContext = { targetingKey: context.targetingKey, accountId: context.accountId };
+  let enabled = false;
   try {
-    enabled = await flagClient.getBooleanValue("invoice-preview-v2", true, context);
+    enabled = await flagClient.getBooleanValue(FLAG_KEY, false, evaluationContext);
   } catch {
-    enabled = false;
+    return { experience: "legacy", reason: "flag-evaluation-error" };
   }
 
-  if (enabled) {
+  if (!enabled) {
+    return { experience: "legacy", reason: "flag-disabled" };
+  }
+
+  try {
     const preview = await api.loadPreview(context.accountId);
-    telemetry.emit("invoice_preview_viewed", { targetingKey: context.targetingKey });
+    telemetry.emit("invoice_preview_viewed", {
+      targetingKey: context.targetingKey,
+      accountId: context.accountId,
+      flagKey: FLAG_KEY,
+    });
     return { experience: "preview", preview };
+  } catch {
+    return { experience: "legacy", reason: "preview-unavailable" };
   }
-
-  const preview = await api.loadPreview(context.accountId);
-  telemetry.emit("invoice_preview_disabled", { targetingKey: context.targetingKey });
-  return { experience: "legacy", reason: "flag-disabled", preview };
 }
