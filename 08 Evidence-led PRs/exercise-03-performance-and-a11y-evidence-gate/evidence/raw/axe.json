@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "0d826991ec491eecc0b29688311a87634be9848d",
+  "testedUrl": "http://127.0.0.1:4173/",
+  "route": "/",
+  "generatedAt": "2026-09-01T17:13:53.227Z",
+  "browser": {
+    "name": "chrome",
+    "version": "152.0.7977.65"
+  },
+  "violations": []
+}

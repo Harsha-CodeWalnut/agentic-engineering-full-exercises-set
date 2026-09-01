@@ -1,0 +1,16 @@
+# npm run quality:verify
+
+Working directory: 08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app
+Source SHA: 0d826991ec491eecc0b29688311a87634be9848d
+Capture command:
+npm run quality:capture -- --sha 0d826991ec491eecc0b29688311a87634be9848d
+
+> quality-gate-app@0.1.0 quality:verify
+> node ./scripts/verify-quality-evidence.mjs
+
+Source SHA: 0d826991ec491eecc0b29688311a87634be9848d
+PASS three raw Lighthouse reports use one route and Chrome environment
+PASS pessimistic performance, accessibility, LCP, and axe thresholds met
+PASS raw artifact SHA-256 digests and generated comparison verified
+PASS performance and axe negative controls return non-zero with failed decisions
+PASS Git source binding and evidence-only follow-up history verified

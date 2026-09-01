@@ -1,0 +1,24 @@
+diff --git a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/evidence/pr-summary.md b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/evidence/pr-summary.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..d013e3d49635d22d94ef0c4a312ec6059d118804
+--- /dev/null
++++ b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/evidence/pr-summary.md	
+@@ -0,0 +1,5 @@
++# Dashboard quality check
++
++The header icon now has a tooltip. The page looks correct in the browser, so this is ready to merge.
++
++Performance was judged from one visual load. There is no three-run Lighthouse gate, no axe scan, and no worst-case threshold.
+diff --git a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx
+index 8d235e0bbb8f83b106b0df207fc1375391e155e4..bc1759cb0919fa265e1f986fc777dfdf5bff748f 100644
+--- a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx	
++++ b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx	
+@@ -14,7 +14,7 @@ export default function App() {
+           <h1>{labContract.title}</h1>
+           <p>{labContract.domain}</p>
+         </div>
+-        <button className="icon-only-action" type="button">
++        <button className="icon-only-action" type="button" title="Download">
+           <svg aria-hidden="true" viewBox="0 0 24 24">
+             <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
+           </svg>

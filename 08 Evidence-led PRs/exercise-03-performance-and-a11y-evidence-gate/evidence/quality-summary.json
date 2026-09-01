@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "0d826991ec491eecc0b29688311a87634be9848d",
+  "route": "/",
+  "aggregation": "pessimistic",
+  "thresholds": {
+    "minimumPerformance": 0.9,
+    "minimumAccessibility": 1,
+    "maximumLargestContentfulPaintMs": 2500,
+    "maximumAxeViolations": 0
+  },
+  "lighthouseRuns": [
+    {
+      "file": "run-1.json",
+      "sha256": "81330a0b724cc6fcbe3dc3acbd37b54a335cab4ed78b1cfe998bbdb5d169c22c",
+      "fetchTime": "2026-09-01T17:13:25.905Z",
+      "lighthouseVersion": "13.4.1",
+      "finalUrl": "http://127.0.0.1:4173/",
+      "route": "/",
+      "environment": {
+        "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Mobile Safari/537.36",
+        "browserMajor": "152",
+        "formFactor": "mobile",
+        "throttlingMethod": "simulate"
+      },
+      "performance": 1,
+      "accessibility": 1,
+      "largestContentfulPaintMs": 1356.0639
+    },
+    {
+      "file": "run-2.json",
+      "sha256": "1d2b81191c1f3a66583e102d225673cb8516395f9964b8ff5ebbae74e127b347",
+      "fetchTime": "2026-09-01T17:13:35.728Z",
+      "lighthouseVersion": "13.4.1",
+      "finalUrl": "http://127.0.0.1:4173/",
+      "route": "/",
+      "environment": {
+        "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Mobile Safari/537.36",
+        "browserMajor": "152",
+        "formFactor": "mobile",
+        "throttlingMethod": "simulate"
+      },
+      "performance": 1,
+      "accessibility": 1,
+      "largestContentfulPaintMs": 1355.0905
+    },
+    {
+      "file": "run-3.json",
+      "sha256": "24f98fbe95534979ab937cb81a2cc2910ee3bb4e6251bd2ecd5f7a490b8f3197",
+      "fetchTime": "2026-09-01T17:13:42.611Z",
+      "lighthouseVersion": "13.4.1",
+      "finalUrl": "http://127.0.0.1:4173/",
+      "route": "/",
+      "environment": {
+        "hostUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Mobile Safari/537.36",
+        "browserMajor": "152",
+        "formFactor": "mobile",
+        "throttlingMethod": "simulate"
+      },
+      "performance": 1,
+      "accessibility": 1,
+      "largestContentfulPaintMs": 1353.0435
+    }
+  ],
+  "axe": {
+    "file": "axe.json",
+    "sha256": "c3db2b926f946d956f0ba88523bccd2e41e48d8d64497964ad70ac0c845943c5",
+    "testedUrl": "http://127.0.0.1:4173/",
+    "route": "/",
+    "generatedAt": "2026-09-01T17:13:53.227Z",
+    "browser": {
+      "name": "chrome",
+      "version": "152.0.7977.65"
+    },
+    "violations": []
+  },
+  "worstCase": {
+    "performance": 1,
+    "accessibility": 1,
+    "largestContentfulPaintMs": 1356.0639,
+    "axeViolations": 0
+  },
+  "failures": [],
+  "releaseDecision": "passed"
+}
