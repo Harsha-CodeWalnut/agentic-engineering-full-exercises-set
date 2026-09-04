@@ -3,7 +3,7 @@
   <desc id="desc">Mapped quality ratings from the exercise gates. SonarQube is not configured in this repository.</desc>
   <rect width="920" height="420" fill="#f8fafc"/>
   <rect x="24" y="24" width="872" height="372" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-  <text x="48" y="64" font-family="Arial, sans-serif" font-size="22" fill="#0f172a">Quality scorecard  Performance and Accessibility Gate</text>
+  <text x="48" y="64" font-family="Arial, sans-serif" font-size="22" fill="#0f172a">Quality scorecard - Performance and Accessibility Gate</text>
   <text x="48" y="90" font-family="Arial, sans-serif" font-size="13" fill="#475569">SonarQube is not installed in this exercise repo. Ratings below are mapped from the same questions a reviewer would ask Sonar: reliability, security, maintainability, and the measured Lighthouse/axe gate.</text>
   <g font-family="Arial, sans-serif">
     <rect x="48" y="118" width="196" height="120" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
