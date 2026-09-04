@@ -4,20 +4,20 @@
   <g font-family="Arial, sans-serif">
     <text x="490" y="36" text-anchor="middle" font-size="20" fill="#0f172a">What a reviewer would see</text>
     <rect x="24" y="56" width="452" height="280" rx="12" fill="#ffffff" stroke="#fca5a5"/>
-    <text x="250" y="88" text-anchor="middle" font-size="16" fill="#991b1b">Before  unstructured summary</text>
+    <text x="250" y="88" text-anchor="middle" font-size="16" fill="#991b1b">Before - unstructured summary</text>
     <text x="48" y="124" font-size="14" fill="#334155">Overall: passed (looks mergeable)</text>
-    <text x="48" y="152" font-size="14" fill="#16a34a">unit-tests  passed</text>
-    <text x="48" y="180" font-size="14" fill="#16a34a">ui-screenshot  passed</text>
-    <text x="48" y="208" font-size="14" fill="#dc2626">checkout-smoke  omitted</text>
+    <text x="48" y="152" font-size="14" fill="#16a34a">unit-tests - passed</text>
+    <text x="48" y="180" font-size="14" fill="#16a34a">ui-screenshot - passed</text>
+    <text x="48" y="208" font-size="14" fill="#dc2626">checkout-smoke - omitted</text>
     <text x="48" y="244" font-size="13" fill="#64748b">No SHA-256 digests</text>
     <text x="48" y="268" font-size="13" fill="#64748b">No risk / reviewer action / rollback</text>
     <text x="48" y="292" font-size="13" fill="#64748b">No workflow to upload a failed pack</text>
     <rect x="504" y="56" width="452" height="280" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
-    <text x="730" y="88" text-anchor="middle" font-size="16" fill="#065f46">After  contract pack</text>
-    <text x="528" y="124" font-size="14" fill="#b45309">Overall: failed · exit 1</text>
-    <text x="528" y="152" font-size="14" fill="#16a34a">unit-tests  passed · digest present</text>
-    <text x="528" y="180" font-size="14" fill="#dc2626">checkout-smoke  failed · exit 1</text>
-    <text x="528" y="208" font-size="14" fill="#16a34a">ui-screenshot  passed · digest present</text>
+    <text x="730" y="88" text-anchor="middle" font-size="16" fill="#065f46">After - contract pack</text>
+    <text x="528" y="124" font-size="14" fill="#b45309">Overall: failed, exit 1</text>
+    <text x="528" y="152" font-size="14" fill="#16a34a">unit-tests - passed, digest present</text>
+    <text x="528" y="180" font-size="14" fill="#dc2626">checkout-smoke - failed, exit 1</text>
+    <text x="528" y="208" font-size="14" fill="#16a34a">ui-screenshot - passed, digest present</text>
     <text x="528" y="244" font-size="13" fill="#334155">Reviewer action: block merge until smoke is explained</text>
     <text x="528" y="268" font-size="13" fill="#334155">Rollback: do not deploy / revert checkout</text>
     <text x="528" y="292" font-size="13" fill="#334155">Actions uploads evidence/generated even when red</text>
