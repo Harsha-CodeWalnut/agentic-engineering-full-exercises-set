@@ -3,7 +3,7 @@
   <desc id="desc">Mapped quality ratings from the exercise gates. SonarQube is not configured in this repository.</desc>
   <rect width="920" height="420" fill="#f8fafc"/>
   <rect x="24" y="24" width="872" height="372" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-  <text x="48" y="64" font-family="Arial, sans-serif" font-size="22" fill="#0f172a">Quality scorecard  Feature Flag Kill-Switch</text>
+  <text x="48" y="64" font-family="Arial, sans-serif" font-size="22" fill="#0f172a">Quality scorecard - Feature Flag Kill-Switch</text>
   <text x="48" y="90" font-family="Arial, sans-serif" font-size="13" fill="#475569">SonarQube is not installed in this exercise repo. Ratings map the same questions a reviewer would ask Sonar onto the rollout tests and rollback drill.</text>
   <g font-family="Arial, sans-serif">
     <rect x="48" y="118" width="196" height="120" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
@@ -25,7 +25,7 @@
     <rect x="48" y="256" width="268" height="112" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
     <text x="64" y="284" font-size="13" fill="#475569">Enabled side effects</text>
     <text x="64" y="324" font-size="28" fill="#0f172a">1 / 1 / 1</text>
-    <text x="64" y="348" font-size="12" fill="#334155">eval · API · viewed event</text>
+    <text x="64" y="348" font-size="12" fill="#334155">eval, API, viewed event</text>
     <rect x="332" y="256" width="268" height="112" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
     <text x="348" y="284" font-size="13" fill="#475569">Disabled / provider error</text>
     <text x="348" y="324" font-size="28" fill="#0f172a">0 API</text>
