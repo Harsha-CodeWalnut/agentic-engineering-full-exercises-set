@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="420" viewBox="0 0 980 420" role="img" aria-labelledby="title">
+  <title id="title">Invoice preview flag states a reviewer must understand</title>
+  <rect width="980" height="420" fill="#f8fafc"/>
+  <g font-family="Arial, sans-serif">
+    <text x="490" y="36" text-anchor="middle" font-size="20" fill="#0f172a">invoice-preview-v2  who sees preview?</text>
+    <rect x="24" y="56" width="180" height="88" rx="8" fill="#ffffff" stroke="#64748b"/>
+    <text x="114" y="92" text-anchor="middle" font-size="13" fill="#0f172a">Request context</text>
+    <text x="114" y="114" text-anchor="middle" font-size="12" fill="#475569">targetingKey, accountId</text>
+    <rect x="228" y="56" width="200" height="88" rx="8" fill="#fef2f2" stroke="#ef4444"/>
+    <text x="328" y="88" text-anchor="middle" font-size="13" fill="#991b1b">Invalid context</text>
+    <text x="328" y="110" text-anchor="middle" font-size="12" fill="#475569">legacy · 0 API · 0 events</text>
+    <rect x="452" y="56" width="200" height="88" rx="8" fill="#fff7ed" stroke="#f97316"/>
+    <text x="552" y="88" text-anchor="middle" font-size="13" fill="#9a3412">Provider error</text>
+    <text x="552" y="110" text-anchor="middle" font-size="12" fill="#475569">legacy · 0 API · 0 events</text>
+    <rect x="676" y="56" width="280" height="88" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="816" y="88" text-anchor="middle" font-size="13" fill="#0f172a">getBooleanValue default false</text>
+    <text x="816" y="110" text-anchor="middle" font-size="12" fill="#475569">flag key invoice-preview-v2</text>
+    <rect x="80" y="180" width="260" height="120" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="210" y="216" text-anchor="middle" font-size="14" fill="#334155">Disabled</text>
+    <text x="210" y="244" text-anchor="middle" font-size="13" fill="#0f172a">acct-999 ’ legacy</text>
+    <text x="210" y="268" text-anchor="middle" font-size="12" fill="#64748b">reason: flag-disabled</text>
+    <text x="210" y="288" text-anchor="middle" font-size="12" fill="#64748b">apiCalls []  telemetry []</text>
+    <rect x="360" y="180" width="260" height="120" rx="8" fill="#ecfdf5" stroke="#10b981"/>
+    <text x="490" y="216" text-anchor="middle" font-size="14" fill="#065f46">Enabled</text>
+    <text x="490" y="244" text-anchor="middle" font-size="13" fill="#0f172a">acct-100 ’ preview $42</text>
+    <text x="490" y="268" text-anchor="middle" font-size="12" fill="#334155">1 API call, 1 viewed event</text>
+    <text x="490" y="288" text-anchor="middle" font-size="12" fill="#334155">targetingKey + accountId + flagKey</text>
+    <rect x="640" y="180" width="260" height="120" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="770" y="216" text-anchor="middle" font-size="14" fill="#334155">Preview API fails</text>
+    <text x="770" y="244" text-anchor="middle" font-size="13" fill="#0f172a">legacy</text>
+    <text x="770" y="268" text-anchor="middle" font-size="12" fill="#64748b">reason: preview-unavailable</text>
+    <text x="770" y="288" text-anchor="middle" font-size="12" fill="#64748b">no success telemetry</text>
+    <text x="490" y="340" text-anchor="middle" font-size="13" fill="#475569">Only the enabled path may call loadPreview or emit invoice_preview_viewed.</text>
+    <text x="490" y="392" text-anchor="middle" font-size="13" fill="#334155">Protected proofs: evidence/enabled.json · disabled.json · provider-error.json</text>
+  </g>
+</svg>
