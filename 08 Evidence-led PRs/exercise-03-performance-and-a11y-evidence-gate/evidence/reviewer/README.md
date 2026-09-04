@@ -17,6 +17,7 @@ The dashboard could look correct while still being too slow to paint and while a
 | Does the UI still look like the lab dashboard? | [dashboard.png](./dashboard.png) | Header, domain model, seeded defects, 100% readiness |
 | Is the download control named? | Same screenshot, icon button next to Readiness | `aria-label="Download evidence"` in `src/App.tsx` |
 | Did performance actually improve? | [quality-scorecard.svg](./quality-scorecard.svg) and `../quality-summary.json` | Worst LCP **1356 ms** (was 3380 ms) |
+| What changed vs a visual-only pass? | [before-vs-after.svg](./before-vs-after.svg) | Delay gone, named button, worst-run gate |
 | Can one bad run still fail the gate? | [flow.svg](./flow.svg) and `../commands/quality-verify.txt` | Injected 0.89 performance and a `button-name` violation both exit non-zero |
 | Is evidence bound to the code you are reviewing? | Source SHA `0d826991ec491eecc0b29688311a87634be9848d` | Later commits are `evidence/` only |
 
@@ -27,6 +28,10 @@ The dashboard could look correct while still being too slow to paint and while a
 ![Quality-gate dashboard after the UI fix](./dashboard.png)
 
 This is the production build at `/`. The download icon is the control that previously failed axe `button-name`.
+
+### Naive visual pass vs pessimistic gate
+
+![Before vs after quality gate](./before-vs-after.svg)
 
 ### How the gate decides
 
