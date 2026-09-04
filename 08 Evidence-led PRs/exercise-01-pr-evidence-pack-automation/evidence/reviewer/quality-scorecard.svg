@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="420" viewBox="0 0 920 420" role="img" aria-labelledby="title desc">
+  <title id="title">Quality scorecard for exercise 8.1</title>
+  <desc id="desc">Mapped quality ratings from the exercise gates. SonarQube is not configured in this repository.</desc>
+  <rect width="920" height="420" fill="#f8fafc"/>
+  <rect x="24" y="24" width="872" height="372" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="48" y="64" font-family="Arial, sans-serif" font-size="22" fill="#0f172a">Quality scorecard  Failure-Preserving PR Evidence</text>
+  <text x="48" y="90" font-family="Arial, sans-serif" font-size="13" fill="#475569">SonarQube is not installed in this exercise repo. Ratings map the same questions a reviewer would ask Sonar onto the generator, workflow, and verifier.</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="48" y="118" width="196" height="120" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
+    <text x="64" y="146" font-size="13" fill="#047857">Reliability</text>
+    <text x="64" y="186" font-size="36" fill="#065f46">A</text>
+    <text x="64" y="214" font-size="12" fill="#334155">Verifier + mixed fixture pass</text>
+    <rect x="260" y="118" width="196" height="120" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
+    <text x="276" y="146" font-size="13" fill="#047857">Security</text>
+    <text x="276" y="186" font-size="36" fill="#065f46">A</text>
+    <text x="276" y="214" font-size="12" fill="#334155">contents:read, pinned SHAs</text>
+    <rect x="472" y="118" width="196" height="120" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
+    <text x="488" y="146" font-size="13" fill="#047857">Maintainability</text>
+    <text x="488" y="186" font-size="36" fill="#065f46">A</text>
+    <text x="488" y="214" font-size="12" fill="#334155">2 files, +186 / -0</text>
+    <rect x="684" y="118" width="196" height="120" rx="8" fill="#eff6ff" stroke="#93c5fd"/>
+    <text x="700" y="146" font-size="13" fill="#1d4ed8">Coverage (harness)</text>
+    <text x="700" y="186" font-size="28" fill="#1e3a8a">100%</text>
+    <text x="700" y="214" font-size="12" fill="#334155">Fail + pass fixtures proved</text>
+    <rect x="48" y="256" width="268" height="112" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+    <text x="64" y="284" font-size="13" fill="#475569">Overall pack result</text>
+    <text x="64" y="324" font-size="28" fill="#991b1b">failed</text>
+    <text x="64" y="348" font-size="12" fill="#334155">Exit 1  smoke not hidden</text>
+    <rect x="332" y="256" width="268" height="112" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="348" y="284" font-size="13" fill="#475569">Checks preserved</text>
+    <text x="348" y="324" font-size="28" fill="#0f172a">3 / 3</text>
+    <text x="348" y="348" font-size="12" fill="#334155">Including checkout-smoke</text>
+    <rect x="616" y="256" width="264" height="112" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="632" y="284" font-size="13" fill="#475569">CI masking</text>
+    <text x="632" y="324" font-size="22" fill="#0f172a">none</text>
+    <text x="632" y="348" font-size="12" fill="#334155">always() upload, job stays red</text>
+  </g>
+</svg>

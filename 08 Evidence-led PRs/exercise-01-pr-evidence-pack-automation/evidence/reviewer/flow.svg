@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="260" viewBox="0 0 980 260" role="img" aria-labelledby="title">
+  <title id="title">How a reviewer should read the evidence generator and workflow</title>
+  <rect width="980" height="260" fill="#f8fafc"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <g font-family="Arial, sans-serif" font-size="13">
+    <rect x="16" y="70" width="150" height="70" rx="8" fill="#ffffff" stroke="#64748b"/>
+    <text x="91" y="100" text-anchor="middle" fill="#0f172a">Source SHA</text>
+    <text x="91" y="120" text-anchor="middle" fill="#475569">36b2cca</text>
+    <line x1="166" y1="105" x2="196" y2="105" stroke="#334155" marker-end="url(#arrow)"/>
+    <rect x="196" y="70" width="160" height="70" rx="8" fill="#eff6ff" stroke="#3b82f6"/>
+    <text x="276" y="100" text-anchor="middle" fill="#1e3a8a">Mixed fixture</text>
+    <text x="276" y="120" text-anchor="middle" fill="#475569">smoke failed</text>
+    <line x1="356" y1="105" x2="386" y2="105" stroke="#334155" marker-end="url(#arrow)"/>
+    <rect x="386" y="70" width="170" height="70" rx="8" fill="#fff7ed" stroke="#f97316"/>
+    <text x="471" y="100" text-anchor="middle" fill="#9a3412">Copy + SHA-256</text>
+    <text x="471" y="120" text-anchor="middle" fill="#475569">all 3 artifacts</text>
+    <line x1="556" y1="105" x2="586" y2="105" stroke="#334155" marker-end="url(#arrow)"/>
+    <rect x="586" y="70" width="160" height="70" rx="8" fill="#fef2f2" stroke="#ef4444"/>
+    <text x="666" y="100" text-anchor="middle" fill="#991b1b">Write pack</text>
+    <text x="666" y="120" text-anchor="middle" fill="#475569">then exit 1</text>
+    <line x1="746" y1="105" x2="776" y2="105" stroke="#334155" marker-end="url(#arrow)"/>
+    <rect x="776" y="40" width="184" height="50" rx="8" fill="#ecfdf5" stroke="#10b981"/>
+    <text x="868" y="70" text-anchor="middle" fill="#065f46">always() verify</text>
+    <rect x="776" y="120" width="184" height="50" rx="8" fill="#ecfdf5" stroke="#10b981"/>
+    <text x="868" y="150" text-anchor="middle" fill="#065f46">always() upload</text>
+    <text x="490" y="220" text-anchor="middle" fill="#475569">The job stays failed. Reviewers still get JSON, summary, and artifact bytes. continue-on-error is not used.</text>
+  </g>
+</svg>
