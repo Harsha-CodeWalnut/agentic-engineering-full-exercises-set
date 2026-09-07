@@ -1,0 +1,29 @@
+> fresh-review-app@0.1.0 verify:exercise
+> npm run agent:check && npm run verify:implementation && npm run verify:submission
+
+Verified 42 protected challenge inputs.
+lint-check passed
+fresh triage verifier self-test passed
+agent-check passed for Independent Diff Triage
+format-check passed
+typecheck passed
+vite build succeeded (39 modules)
+
+> fresh-review-app@0.1.0 verify:implementation
+> npm run test:cache
+
+ Test Files  2 passed (2)
+      Tests  9 passed (9)
+PASS filter changes do not clear persisted workflow data
+
+> fresh-review-app@0.1.0 triage:verify
+> node ./scripts/verify-triage-submission.mjs
+
+Source SHA: bbf2a4cf0131908689948b521608f3af05d260aa
+PASS fresh reviewer context and exact prompt binding verified
+PASS exact protected base-to-head comparison verified
+PASS four cache blockers and unsupported claim triaged with evidence
+PASS focused fixes and learner regression tests bound to source SHA
+PASS later history contains evidence only
+Verified Independent Diff Triage: 8 files and 0 directories.
+exit code: 0

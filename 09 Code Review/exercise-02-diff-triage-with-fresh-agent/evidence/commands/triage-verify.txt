@@ -1,0 +1,9 @@
+> fresh-review-app@0.1.0 triage:verify
+> node ./scripts/verify-triage-submission.mjs
+
+Source SHA: bbf2a4cf0131908689948b521608f3af05d260aa
+PASS fresh reviewer context and exact prompt binding verified
+PASS exact protected base-to-head comparison verified
+PASS four cache blockers and unsupported claim triaged with evidence
+PASS focused fixes and learner regression tests bound to source SHA
+PASS later history contains evidence only

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "cursor-grok-fresh-review-09-02",
+  "contextMode": "fresh",
+  "tool": "Cursor Grok 4.6",
+  "startedAt": "2026-09-07T12:40:00.000Z",
+  "providedFiles": [
+    "docs/review-brief.md",
+    "fixtures/manifest.json",
+    "pr/review-target.diff"
+  ],
+  "excludedContext": [
+    "docs/implementer-notes.md",
+    "earlier reviews",
+    "expected finding IDs",
+    "implementation chat"
+  ],
+  "promptSha256": "5478a3736d67fcc02f610a0ae496098165a4986bc1d3bd89eb0fc47db4a937cd"
+}

@@ -1,0 +1,205 @@
+diff --git a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx
+index 8476baf..0371886 100644
+--- a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx	
++++ b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx	
+@@ -5,7 +5,7 @@ import { FilterBar } from "./components/FilterBar";
+ import { MetricStrip } from "./components/MetricStrip";
+ import { PageHeader } from "./components/PageHeader";
+ import { WorkQueue } from "./components/WorkQueue";
+-import { clearCachedWorkflowItems, collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
++import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
+ import type { ActionDraft, WorkItem } from "./types";
+ import { defaultFilters, filterItems } from "./utils/filters";
+ import { summarizePortfolio } from "./utils/scoring";
+@@ -37,10 +37,6 @@ export default function DiffTriageWithFreshAgentApp() {
+     setEvidence(await collectEvidence(selected));
+   }
+ 
+-  useEffect(() => {
+-    clearCachedWorkflowItems();
+-  }, [filters.priority, filters.status]);
+-
+   if (!selected) return <main className="app-shell">Loading workspace...</main>;
+ 
+   return (
+diff --git a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts
+index d6814ed..9f6a51c 100644
+--- a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts	
++++ b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts	
+@@ -2,39 +2,53 @@ import type { ActionDraft, WorkItem } from "../types";
+ import { workItems } from "../data/workItems";
+ 
+ const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
++const CACHE_KEY = "workflow-items";
+ 
+-export async function fetchWorkItems(): Promise<WorkItem[]> {
+-  await wait(220);
+-  const cached = window.localStorage.getItem("workflow-items");
+-  if (cached) {
+-    return JSON.parse(cached) as WorkItem[];
++function readCachedItems(): WorkItem[] | null {
++  const cached = window.localStorage.getItem(CACHE_KEY);
++  if (!cached) return null;
++  try {
++    const parsed = JSON.parse(cached) as unknown;
++    if (Array.isArray(parsed)) return parsed as WorkItem[];
++  } catch {
++    // Damaged JSON must not crash the workspace.
+   }
++  window.localStorage.removeItem(CACHE_KEY);
++  return null;
++}
+ 
+-  return workItems.sort((left, right) => left.dueInDays - right.dueInDays);
++function snapshotItems(): WorkItem[] {
++  return workItems.map((item) => ({ ...item }));
+ }
+ 
+-export function clearCachedWorkflowItems() {
+-  window.localStorage.removeItem("workflow-items");
++export async function fetchWorkItems(): Promise<WorkItem[]> {
++  await wait(220);
++  const cached = readCachedItems();
++  if (cached) return cached;
++  return snapshotItems().sort((left, right) => left.dueInDays - right.dueInDays);
+ }
+ 
+ export async function saveAction(itemId: string, draft: ActionDraft): Promise<WorkItem> {
+   await wait(180);
+-  const item = workItems.find((candidate) => candidate.id === itemId);
++  const current = readCachedItems() ?? snapshotItems();
++  const item = current.find((candidate) => candidate.id === itemId);
+   if (!item) {
+     throw new Error("Work item was not found");
+   }
+ 
+-  return {
++  const next = {
+     ...item,
+     status: draft.status,
+     owner: draft.owner,
+     note: draft.note,
+   };
++  const updated = current.map((candidate) => (candidate.id === itemId ? next : candidate));
++  window.localStorage.setItem(CACHE_KEY, JSON.stringify(updated));
++  return next;
+ }
+ 
+ export async function collectEvidence(item: WorkItem): Promise<string[]> {
+   await wait(140);
+-  window.localStorage.setItem("workflow-items", JSON.stringify(workItems));
+   return [
+     `Risk score: ${item.score}`,
+     `Owner: ${item.owner}`,
+diff --git a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/tests/cache-regressions.test.ts b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/tests/cache-regressions.test.ts
+new file mode 100644
+index 0000000..ff3466d
+--- /dev/null
++++ b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/tests/cache-regressions.test.ts	
+@@ -0,0 +1,106 @@
++import { beforeEach, describe, expect, it } from "vitest";
++import { workItems } from "../src/data/workItems";
++import { collectEvidence, fetchWorkItems, saveAction } from "../src/services/workflowApi";
++
++class MemoryStorage implements Storage {
++  private values = new Map<string, string>();
++  get length() { return this.values.size; }
++  clear() { this.values.clear(); }
++  getItem(key: string) { return this.values.get(key) ?? null; }
++  key(index: number) { return [...this.values.keys()][index] ?? null; }
++  removeItem(key: string) { this.values.delete(key); }
++  setItem(key: string, value: string) { this.values.set(key, String(value)); }
++}
++
++const storage = new MemoryStorage();
++const immediateTimeout = ((handler: TimerHandler) => {
++  if (typeof handler === "function") handler();
++  return 0;
++}) as typeof window.setTimeout;
++
++Object.defineProperty(globalThis, "window", {
++  configurable: true,
++  value: { localStorage: storage, setTimeout: immediateTimeout },
++});
++
++beforeEach(() => storage.clear());
++
++describe("cache regressions", () => {
++  it("givenMalformedOrNonArrayCachedJson_whenItemsAreFetched_thenAppFallsBackAndClearsCache", async () => {
++    // Arrange
++    for (const malformed of ["{broken", JSON.stringify({ id: "not-an-array" })]) {
++      storage.setItem("workflow-items", malformed);
++
++      // Act
++      const loaded = await fetchWorkItems();
++
++      // Assert
++      expect(loaded).toHaveLength(workItems.length);
++      expect(storage.getItem("workflow-items")).toBeNull();
++    }
++  });
++
++  it("givenSharedFixture_whenDefaultResultsAreOrdered_thenImportedFixtureIsUnchanged", async () => {
++    // Arrange
++    const original = [...workItems];
++    const reversed = [...workItems].reverse();
++    workItems.splice(0, workItems.length, ...reversed);
++
++    try {
++      // Act
++      const loaded = await fetchWorkItems();
++
++      // Assert
++      expect(workItems.map((item) => item.id)).toEqual(reversed.map((item) => item.id));
++      expect(loaded.map((item) => item.dueInDays)).toEqual(
++        [...loaded].map((item) => item.dueInDays).sort((left, right) => left - right),
++      );
++    } finally {
++      workItems.splice(0, workItems.length, ...original);
++    }
++  });
++
++  it("givenSavedOwnerStatusAndNote_whenItemsAreFetchedAgain_thenSaveSurvivesReload", async () => {
++    // Arrange
++    const target = workItems[0];
++
++    // Act
++    await saveAction(target.id, { owner: "Cache owner", note: "Persisted after save", status: "In Review" });
++    const reloaded = await fetchWorkItems();
++
++    // Assert
++    expect(reloaded.find((item) => item.id === target.id)).toMatchObject({
++      owner: "Cache owner",
++      note: "Persisted after save",
++      status: "In Review",
++    });
++  });
++
++  it("givenCachedWorkflowState_whenEvidenceIsCollected_thenReadOnlyEvidenceDoesNotRewriteCache", async () => {
++    // Arrange
++    const sentinel = JSON.stringify([{ id: "saved-state" }]);
++    storage.setItem("workflow-items", sentinel);
++
++    // Act
++    await collectEvidence(workItems[0]);
++
++    // Assert
++    expect(storage.getItem("workflow-items")).toBe(sentinel);
++  });
++
++  it("givenFilterChange_whenSavedCacheExists_thenFetchStillReturnsSavedWork", async () => {
++    // Arrange
++    const target = workItems[1];
++    await saveAction(target.id, { owner: "Filter owner", note: "Keep after filter", status: "Ready" });
++
++    // Act
++    const reloaded = await fetchWorkItems();
++
++    // Assert
++    expect(reloaded.find((item) => item.id === target.id)).toMatchObject({
++      owner: "Filter owner",
++      note: "Keep after filter",
++      status: "Ready",
++    });
++  });
++});

@@ -1,0 +1,20 @@
+
+ RUN  v3.2.7 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app
+
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > recovers from malformed and non-array cached JSON 1ms
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > orders a copy without mutating the shared fixture 0ms
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > persists an update and reads it on the next load 0ms
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > collects evidence without changing cached workflow data 0ms
+ ✓ tests/cache-regressions.test.ts > cache regressions > givenMalformedOrNonArrayCachedJson_whenItemsAreFetched_thenAppFallsBackAndClearsCache 1ms
+ ✓ tests/cache-regressions.test.ts > cache regressions > givenSharedFixture_whenDefaultResultsAreOrdered_thenImportedFixtureIsUnchanged 0ms
+ ✓ tests/cache-regressions.test.ts > cache regressions > givenSavedOwnerStatusAndNote_whenItemsAreFetchedAgain_thenSaveSurvivesReload 0ms
+ ✓ tests/cache-regressions.test.ts > cache regressions > givenCachedWorkflowState_whenEvidenceIsCollected_thenReadOnlyEvidenceDoesNotRewriteCache 0ms
+ ✓ tests/cache-regressions.test.ts > cache regressions > givenFilterChange_whenSavedCacheExists_thenFetchStillReturnsSavedWork 0ms
+
+ Test Files  2 passed (2)
+      Tests  9 passed (9)
+   Start at  18:13:12
+   Duration  339ms (transform 56ms, setup 0ms, collect 67ms, tests 6ms, environment 0ms, prepare 124ms)
+
+PASS filter changes do not clear persisted workflow data
+exit code: 0
