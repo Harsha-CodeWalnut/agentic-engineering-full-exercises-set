@@ -1,0 +1,10 @@
+
+> review-gauntlet-app@0.1.0 review:verify
+> node ./scripts/verify-review-submission.mjs
+
+Source SHA: ed0a8a596b24f8452d6c7202ac68a15b1c60e64d
+PASS exact protected base-to-head review range verified
+PASS five required findings classified with evidence and regression tests
+PASS dynamic HTML true positive and static false positive decisions verified
+PASS keyboard, validation, and server policy fixes verified
+PASS Git source binding and evidence-only follow-up history verified

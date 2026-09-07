@@ -1,0 +1,19 @@
+
+> review-gauntlet-app@0.1.0 test:review
+> vitest run src/server/reviewPolicy.test.ts tests/review-regressions.test.ts && node ./scripts/run-review-component-tests.mjs
+
+
+ RUN  v3.2.7 /Users/harsh01/IdeaProjects/agentic-engineering-full-exercises-set/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app
+
+ ✓ src/server/reviewPolicy.test.ts (6 tests) 3ms
+ ✓ tests/review-regressions.test.ts (5 tests) 15ms
+
+ Test Files  2 passed (2)
+      Tests  11 passed (11)
+   Start at  17:12:27
+   Duration  1.35s (transform 765ms, setup 0ms, collect 726ms, tests 19ms, environment 13ms, prepare 1.09s)
+
+PASS notes render without an untrusted HTML sink
+PASS client note validation and explicit button type restored
+PASS queue rows use native keyboard-operable buttons
+PASS deliberate source-controlled scanner finding retained

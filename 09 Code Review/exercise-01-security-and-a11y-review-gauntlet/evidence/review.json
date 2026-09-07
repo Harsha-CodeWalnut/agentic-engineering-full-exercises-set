@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "f81c3e56a46338c77cce0d0e81b8ae150db5da19",
+  "headSha": "8292b946c6a756980ecaf6aa1d99adf7105ea597",
+  "comparison": "review-base..review-head",
+  "sourceSha": "ed0a8a596b24f8452d6c7202ac68a15b1c60e64d",
+  "reviewerSession": "cursor-grok-fresh-review-09-01",
+  "mergeDecision": "request-changes",
+  "reviewerAgent": "Cursor Grok 4.6 using github-deep-review habits on the local protected range",
+  "tools": ["git bundle", "semgrep react-dangerous-html-review", "vitest", "source inspection"],
+  "findings": [
+    {
+      "id": "SEC-001",
+      "severity": "critical",
+      "confidence": "high",
+      "source": "semgrep",
+      "decision": "fix",
+      "file": "src/components/ActionComposer.tsx",
+      "line": 31,
+      "scenario": "A reviewer types an HTML payload such as <img src=x onerror=alert(1)> into the note field. The composer preview interpolates that string through dangerouslySetInnerHTML, so the browser parses it as live HTML instead of text.",
+      "impact": "Untrusted reviewer-controlled HTML executes in the operator session. That is a stored XSS surface on the access-review screen and can steal session state or alter the approval UI.",
+      "evidence": "Semgrep rule react-dangerous-html-review flags the preview sink. renderToStaticMarkup of the vulnerable composer emits a raw img tag from the note. The source of __html is the live note state, not a constant. Confirmed true positive: dynamic html must render as escaped text.",
+      "fix": "Render the preview with React text children so the note cannot enter an HTML sink, and keep SafeAnnouncement unchanged.",
+      "testPath": "tests/review-regressions.test.ts"
+    },
+    {
+      "id": "SCAN-001",
+      "severity": "info",
+      "confidence": "high",
+      "source": "semgrep",
+      "decision": "dismiss",
+      "file": "src/components/SafeAnnouncement.tsx",
+      "line": 7,
+      "scenario": "The same Semgrep rule matches SafeAnnouncement because it also calls dangerouslySetInnerHTML. The markup string is a module-level constant, not reviewer input.",
+      "impact": "Treating this warning as a merge blocker would force deletion of a static, source-controlled announcement and hide the intended scanner false positive that reviewers must classify.",
+      "evidence": "trustedAnnouncement is a static source-controlled string assigned in-module. No props, fetch, or user state reach __html. Reproduced the warning, then dismissed it because the sink is not attacker-controlled. Leaving the pattern in place documents the false positive."
+    },
+    {
+      "id": "A11Y-001",
+      "severity": "high",
+      "confidence": "high",
+      "source": "manual",
+      "decision": "fix",
+      "file": "src/components/WorkQueue.tsx",
+      "line": 16,
+      "scenario": "Queue rows were changed from native button elements to generic divs with onClick only. Keyboard users cannot tab to a row or activate it with Enter or Space.",
+      "impact": "Operators who rely on the keyboard cannot select a work item, so high-priority access reviews become unreachable without a pointer. This is an accessibility regression on the primary navigation control.",
+      "evidence": "pr/review-target.diff replaces button with div and drops type=button. Semgrep is silent. Static markup of the vulnerable queue contains div.queue-item and no native button. Manual finding: restore keyboard-operable buttons.",
+      "fix": "Restore native button rows with type=button so focus and keyboard activation work without extra handlers.",
+      "testPath": "tests/review-regressions.test.ts"
+    },
+    {
+      "id": "VAL-001",
+      "severity": "high",
+      "confidence": "high",
+      "source": "manual",
+      "decision": "fix",
+      "file": "src/components/ActionComposer.tsx",
+      "line": 48,
+      "scenario": "The save control no longer disables when the note is a short string under eight characters, and the button omits an explicit type. A one-word note can be submitted from the client.",
+      "impact": "Empty or token notes skip the meaningful-note gate on the client, and a missing button type can submit an enclosing form. Review quality and audit trail degrade.",
+      "evidence": "The protected diff removes note.trim().length < 8 from disabled and drops type=button. Vulnerable markup of a short note still renders an enabled Save draft button. Client validation must reject a short note before save.",
+      "fix": "Restore type=button and disable save while saving or while the trimmed note is shorter than eight characters.",
+      "testPath": "tests/review-regressions.test.ts"
+    },
+    {
+      "id": "POL-001",
+      "severity": "critical",
+      "confidence": "high",
+      "source": "manual",
+      "decision": "fix",
+      "file": "src/server/reviewPolicy.ts",
+      "line": 4,
+      "scenario": "assertAllowedTransition returns immediately when the note contains the word approved, skipping the meaningful-note check and the Blocked-or-Escalated-to-Ready guard. The composer also auto-sets Ready for high-priority items whose note includes approved.",
+      "impact": "Blocked or Escalated access reviews can be forced to Ready by approval wording alone, bypassing evidence requirements at the server boundary that the UI must not be trusted to enforce.",
+      "evidence": "Head policy line 4 is if (draft.note.toLowerCase().includes(\"approved\")) return. Existing policy tests expect Blocked and Escalated transitions to Ready to throw even when the note says approved, and they failed on the vulnerable head. Manual finding at the server boundary.",
+      "fix": "Restore the eight-character note requirement and keep the Blocked/Escalated Ready rejection. Remove the client auto-Ready shortcut so status is the operator's selected value.",
+      "testPath": "tests/review-regressions.test.ts"
+    }
+  ]
+}
