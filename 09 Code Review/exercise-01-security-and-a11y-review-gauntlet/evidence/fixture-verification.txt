@@ -1,1 +1,12 @@
 Review fixture verified: review-base..review-head
+bundle: review-target.bundle
+baseRef: review-base
+baseSha: f81c3e56a46338c77cce0d0e81b8ae150db5da19
+headRef: review-head
+headSha: 8292b946c6a756980ecaf6aa1d99adf7105ea597
+comparison: review-base..review-head
+git bundle list-heads:
+8292b946c6a756980ecaf6aa1d99adf7105ea597 refs/heads/main
+8292b946c6a756980ecaf6aa1d99adf7105ea597 refs/heads/review-head
+f81c3e56a46338c77cce0d0e81b8ae150db5da19 refs/tags/review-base
+8292b946c6a756980ecaf6aa1d99adf7105ea597 HEAD
