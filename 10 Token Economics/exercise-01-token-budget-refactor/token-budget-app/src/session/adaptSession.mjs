@@ -13,18 +13,38 @@ function validIsoTimestamp(value) {
   return Number.isFinite(parsed) && new Date(parsed).toISOString() === canonical;
 }
 
-/** Working but deliberately monolithic legacy adapter for the refactor task. */
-export function adaptSession(input) {
-  if (!input || typeof input.userId !== "string" || input.userId.trim() === "") {
+function validNonEmptyString(value) {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function requireUserId(input) {
+  if (!input || !validNonEmptyString(input.userId)) {
     throw new SessionAdapterError("SESSION_USER_REQUIRED", "Session userId is required");
   }
-  if (!validIsoTimestamp(input.expiresAt)) {
+
+  return input.userId;
+}
+
+function requireExpiresAt(value) {
+  if (!validIsoTimestamp(value)) {
     throw new SessionAdapterError("SESSION_EXPIRY_INVALID", "Session expiresAt must be an ISO timestamp");
   }
-  if (!Array.isArray(input.roles) || input.roles.some((role) => typeof role !== "string" || role.trim() === "")) {
+
+  return value;
+}
+
+function normalizeRoles(value) {
+  if (!Array.isArray(value) || value.some((role) => !validNonEmptyString(role))) {
     throw new SessionAdapterError("SESSION_ROLES_INVALID", "Session roles must be an array of non-empty strings");
   }
-  const roles = [];
-  for (const role of input.roles) if (!roles.includes(role)) roles.push(role);
-  return { userId: input.userId, roles, expiresAt: input.expiresAt };
+
+  return [...new Set(value)];
+}
+
+export function adaptSession(input) {
+  const userId = requireUserId(input);
+  const expiresAt = requireExpiresAt(input.expiresAt);
+  const roles = normalizeRoles(input.roles);
+
+  return { userId, roles, expiresAt };
 }
