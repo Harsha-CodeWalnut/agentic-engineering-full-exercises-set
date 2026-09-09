@@ -11,7 +11,7 @@ const additions = new Map([
   ["09 Code Review/exercise-01-security-and-a11y-review-gauntlet", ["scripts/replay-regression-tests.mjs", "scripts/review-component-behavior.test.tsx", "scripts/run-protected-semgrep.mjs", "../../../scripts/comparable-evidence.mjs"]],
   ["09 Code Review/exercise-02-diff-triage-with-fresh-agent", ["scripts/replay-regression-tests.mjs", "scripts/app-cache-behavior.test.tsx", "../../../scripts/comparable-evidence.mjs"]],
   ["09 Code Review/exercise-03-review-regression-lab", ["../docs/skill-contract.md", "../docs/evaluation-contract.md", "eval/verify-catalog.mjs", "skills/regression-review/SKILL.md", "scripts/run-review-session.mjs", "../../../scripts/comparable-evidence.mjs"]],
-  ["10 Token Economics/exercise-01-token-budget-refactor", ["../docs/adapter-refactor-request.md", "src/session/adaptSession.mjs", "scripts/run-adapter-acceptance.mjs", "scripts/replay-context-lanes.mjs", "../../../scripts/comparable-evidence.mjs", "../../../scripts/capture-verification.mjs"]],
+  ["10 Token Economics/exercise-01-token-budget-refactor", ["../docs/adapter-refactor-request.md", "scripts/run-adapter-acceptance.mjs", "scripts/replay-context-lanes.mjs", "../../../scripts/comparable-evidence.mjs", "../../../scripts/capture-verification.mjs"]],
   ["10 Token Economics/exercise-02-risk-based-model-routing-cost-gate", ["../docs/routing-policy-contract.md", "../evals/recorded-runs.json", "src/routing/dispatchTasks.mjs", "scripts/verify-benchmark-pack.mjs", "../../../scripts/comparable-evidence.mjs"]],
   ["10 Token Economics/exercise-03-minimal-diff-scope-budget", ["src/migration/actionButtons.mjs", "scripts/replay-before-scope.mjs", "../../../scripts/comparable-evidence.mjs"]],
   ["11 Agentic Refactoring/exercise-01-characterization-test-refactor", ["../../../scripts/comparable-evidence.mjs", "../../../scripts/capture-verification.mjs"]],
@@ -49,6 +49,10 @@ for (const manifestPath of findManifests(repositoryRoot)) {
     document = JSON.parse(execFileSync("git", ["show", `HEAD:${relativeManifest}`], { cwd: repositoryRoot, encoding: "utf8" }));
   }
   const paths = new Set(Object.keys(document.protectedFiles ?? {}));
+  if (exercise === "10 Token Economics/exercise-01-token-budget-refactor" && isApplicationManifest) {
+    // The README requires learners to refactor this source; protect its acceptance checks instead.
+    paths.delete("src/session/adaptSession.mjs");
+  }
   const sharedFiles = ["scripts/verify-protected-inputs.mjs", "scripts/verify-submission-contract.mjs", "scripts/run-clean-verification.mjs", "scripts/run-vite-build.mjs"];
   for (const shared of sharedFiles) paths.delete(path.relative(root, path.join(repositoryRoot, shared)).split(path.sep).join("/"));
   if (isApplicationManifest) for (const shared of sharedFiles) {
