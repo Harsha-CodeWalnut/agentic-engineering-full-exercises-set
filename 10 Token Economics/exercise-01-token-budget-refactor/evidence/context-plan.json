@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "tags": ["adapter", "session"],
+    "questionTags": []
+  },
+  "openQuestions": [
+    {
+      "question": "Does the refactor require changing validation or public error behavior?",
+      "status": "closed-for-initial-selection",
+      "expansionRule": "Add the errors question tag and select current-error-contract only if implementation exposes an unresolved error-contract question."
+    }
+  ],
+  "maximumBytes": 2000,
+  "mandatoryIds": ["repository-rules"],
+  "expectedSelectedIds": ["repository-rules", "current-adapter-contract"],
+  "selectionBasis": {
+    "mandatoryFirst": true,
+    "requiredAuthority": "current",
+    "relevance": "At least one source tag must match an adapter or session task tag, or a later question tag.",
+    "ordering": "Mandatory current sources first, then descending priority followed by stable context ID.",
+    "plannedBytes": 1327,
+    "remainingBytes": 673
+  }
+}
