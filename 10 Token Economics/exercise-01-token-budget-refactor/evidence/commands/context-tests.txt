@@ -1,0 +1,26 @@
+Command: npm run evidence:verify
+Repository commit: 9f3a0e170711bc67e9888335799b171805475895
+Started at: 2026-09-09T09:21:57.935Z
+Finished at: 2026-09-09T09:21:58.615Z
+Duration ms: 680
+
+STDOUT
+
+> token-budget-app@0.1.0 evidence:verify
+> npm run test:context
+
+
+> token-budget-app@0.1.0 test:context
+> node ./scripts/run-context-tests.mjs && node ./tests/context-selector.test.mjs
+
+PASS protected session adapter contract
+PASS real UTF-8 source costs match the protected catalog
+PASS mandatory, current, relevant, priority, and expansion rules
+PASS deterministic tight-budget and mandatory-overflow behavior
+PASS every source has an auditable selected or skipped reason
+PASS learner deterministic budget, stale, duplicate, question, and mandatory-first selector tests
+
+STDERR
+
+
+exit code: 0

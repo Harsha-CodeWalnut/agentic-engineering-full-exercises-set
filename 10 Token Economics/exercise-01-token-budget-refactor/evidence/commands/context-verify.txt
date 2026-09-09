@@ -1,0 +1,12 @@
+npm run context:verify
+
+Plan SHA: f54eb0bfd7f0fbde5f8fcf76f01654b4095c5756
+Source SHA: 9f3a0e170711bc67e9888335799b171805475895
+Selected bytes: 1327/2000
+Context reduction: 1558 bytes
+PASS pre-change budget plan precedes implementation
+PASS ledger exactly matches deterministic selector output and real source costs
+PASS every context source has a selected or skipped reason
+PASS focused selector history and evidence-only follow-up verified
+
+exit code: 0

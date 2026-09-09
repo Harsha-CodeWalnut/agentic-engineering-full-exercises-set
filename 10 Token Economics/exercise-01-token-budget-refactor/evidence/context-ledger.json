@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "planSha": "f54eb0bfd7f0fbde5f8fcf76f01654b4095c5756",
+  "sourceSha": "9f3a0e170711bc67e9888335799b171805475895",
+  "task": {
+    "tags": [
+      "adapter",
+      "session"
+    ],
+    "questionTags": []
+  },
+  "maximumBytes": 2000,
+  "expanded": false,
+  "result": {
+    "selected": [
+      {
+        "id": "repository-rules",
+        "path": "docs/context-sources/AGENTS.md",
+        "bytes": 489,
+        "tags": [
+          "mandatory"
+        ],
+        "authority": "current",
+        "priority": 1000,
+        "mandatory": true,
+        "reason": "mandatory"
+      },
+      {
+        "id": "current-adapter-contract",
+        "path": "docs/context-sources/current-adapter-contract.md",
+        "bytes": 838,
+        "tags": [
+          "adapter",
+          "session",
+          "api"
+        ],
+        "authority": "current",
+        "priority": 100,
+        "reason": "relevant"
+      }
+    ],
+    "skipped": [
+      {
+        "id": "legacy-migration-notes",
+        "path": "docs/context-sources/legacy-migration-notes.md",
+        "bytes": 412,
+        "tags": [
+          "adapter",
+          "session",
+          "api"
+        ],
+        "authority": "stale",
+        "priority": 200,
+        "reason": "stale"
+      },
+      {
+        "id": "current-error-contract",
+        "path": "docs/context-sources/current-error-contract.md",
+        "bytes": 540,
+        "tags": [
+          "errors",
+          "validation"
+        ],
+        "authority": "current",
+        "priority": 90,
+        "reason": "irrelevant"
+      },
+      {
+        "id": "ui-style-guide",
+        "path": "docs/context-sources/ui-style-guide.md",
+        "bytes": 310,
+        "tags": [
+          "ui",
+          "css",
+          "accessibility"
+        ],
+        "authority": "current",
+        "priority": 80,
+        "reason": "irrelevant"
+      },
+      {
+        "id": "audit-retention",
+        "path": "docs/context-sources/audit-retention.md",
+        "bytes": 296,
+        "tags": [
+          "audit",
+          "retention",
+          "privacy"
+        ],
+        "authority": "current",
+        "priority": 70,
+        "reason": "irrelevant"
+      }
+    ],
+    "totalBytes": 1327,
+    "remainingBytes": 673,
+    "maximumBytes": 2000,
+    "requestedTags": [
+      "adapter",
+      "session"
+    ],
+    "unresolvedTags": []
+  }
+}

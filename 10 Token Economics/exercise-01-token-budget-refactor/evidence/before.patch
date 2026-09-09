@@ -1,0 +1,174 @@
+diff --git a/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/src/session/adaptSession.mjs b/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/src/session/adaptSession.mjs
+index 03957bd339baf42b3e737a12dcd4beb2c5f9f92b..479aa87169ddad7724c2c828b74af6e00fff2121 100644
+--- a/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/src/session/adaptSession.mjs	
++++ b/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/src/session/adaptSession.mjs	
+@@ -6,25 +6,47 @@ export class SessionAdapterError extends Error {
+   }
+ }
+ 
+-function validIsoTimestamp(value) {
++function isNonEmptyString(value) {
++  return typeof value === "string" && value.trim() !== "";
++}
++
++function isValidIsoTimestamp(value) {
+   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value)) return false;
+   const parsed = Date.parse(value);
+   const canonical = value.includes(".") ? value : value.replace("Z", ".000Z");
+   return Number.isFinite(parsed) && new Date(parsed).toISOString() === canonical;
+ }
+ 
+-/** Working but deliberately monolithic legacy adapter for the refactor task. */
+-export function adaptSession(input) {
+-  if (!input || typeof input.userId !== "string" || input.userId.trim() === "") {
++function requireUserId(input) {
++  const userId = input?.userId;
++  if (!isNonEmptyString(userId)) {
+     throw new SessionAdapterError("SESSION_USER_REQUIRED", "Session userId is required");
+   }
+-  if (!validIsoTimestamp(input.expiresAt)) {
++  return userId;
++}
++
++function requireExpiresAt(input) {
++  const expiresAt = input?.expiresAt;
++  if (!isValidIsoTimestamp(expiresAt)) {
+     throw new SessionAdapterError("SESSION_EXPIRY_INVALID", "Session expiresAt must be an ISO timestamp");
+   }
+-  if (!Array.isArray(input.roles) || input.roles.some((role) => typeof role !== "string" || role.trim() === "")) {
++  return expiresAt;
++}
++
++function normalizeRoles(input) {
++  const roles = input?.roles;
++  if (!Array.isArray(roles) || roles.some((role) => !isNonEmptyString(role))) {
+     throw new SessionAdapterError("SESSION_ROLES_INVALID", "Session roles must be an array of non-empty strings");
+   }
+-  const roles = [];
+-  for (const role of input.roles) if (!roles.includes(role)) roles.push(role);
+-  return { userId: input.userId, roles, expiresAt: input.expiresAt };
++  const normalizedRoles = [];
++  for (const role of roles) if (!normalizedRoles.includes(role)) normalizedRoles.push(role);
++  return normalizedRoles;
++}
++
++export function adaptSession(input) {
++  const userId = requireUserId(input);
++  const expiresAt = requireExpiresAt(input);
++  const roles = normalizeRoles(input);
++
++  return { userId, roles, expiresAt };
+ }
+diff --git a/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/tests/session-adapter.test.mjs b/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/tests/session-adapter.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..5a02afc99d57ac22e9de77b65d7f5090aecfbd25
+--- /dev/null
++++ b/10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/tests/session-adapter.test.mjs	
+@@ -0,0 +1,107 @@
++import assert from "node:assert/strict";
++import test from "node:test";
++
++import { adaptSession, SessionAdapterError } from "../src/session/adaptSession.mjs";
++
++function assertSessionError(input, code, message) {
++  assert.throws(
++    () => adaptSession(input),
++    (error) =>
++      error instanceof SessionAdapterError &&
++      error.name === "SessionAdapterError" &&
++      error.code === code &&
++      error.message === message,
++  );
++}
++
++test("returns only public fields and preserves serialized session values", () => {
++  const result = adaptSession({
++    userId: " user-17 ",
++    roles: ["reviewer", "agent", "reviewer"],
++    expiresAt: "2026-08-14T10:30:00.000Z",
++    ignored: "value",
++  });
++
++  assert.deepEqual(result, {
++    userId: " user-17 ",
++    roles: ["reviewer", "agent"],
++    expiresAt: "2026-08-14T10:30:00.000Z",
++  });
++  assert.equal(result instanceof Promise, false);
++});
++
++test("accepts an empty roles array and an ISO timestamp without milliseconds", () => {
++  assert.deepEqual(
++    adaptSession({
++      userId: "user-18",
++      roles: [],
++      expiresAt: "2026-08-14T10:30:00Z",
++    }),
++    {
++      userId: "user-18",
++      roles: [],
++      expiresAt: "2026-08-14T10:30:00Z",
++    },
++  );
++});
++
++test("rejects a missing or blank userId with the public identity error", () => {
++  const expectedCode = "SESSION_USER_REQUIRED";
++  const expectedMessage = "Session userId is required";
++
++  assertSessionError(
++    { roles: [], expiresAt: "2026-08-14T10:30:00Z" },
++    expectedCode,
++    expectedMessage,
++  );
++  assertSessionError(
++    { userId: "   ", roles: [], expiresAt: "2026-08-14T10:30:00Z" },
++    expectedCode,
++    expectedMessage,
++  );
++});
++
++test("rejects malformed and impossible expiry timestamps with the public expiry error", () => {
++  const expectedCode = "SESSION_EXPIRY_INVALID";
++  const expectedMessage = "Session expiresAt must be an ISO timestamp";
++
++  assertSessionError(
++    { userId: "user-19", roles: [], expiresAt: "tomorrow" },
++    expectedCode,
++    expectedMessage,
++  );
++  assertSessionError(
++    { userId: "user-19", roles: [], expiresAt: "2026-02-30T10:30:00Z" },
++    expectedCode,
++    expectedMessage,
++  );
++});
++
++test("rejects non-array roles and empty role strings with the public roles error", () => {
++  const expectedCode = "SESSION_ROLES_INVALID";
++  const expectedMessage = "Session roles must be an array of non-empty strings";
++
++  assertSessionError(
++    { userId: "user-20", roles: "admin", expiresAt: "2026-08-14T10:30:00Z" },
++    expectedCode,
++    expectedMessage,
++  );
++  assertSessionError(
++    { userId: "user-20", roles: ["admin", "   "], expiresAt: "2026-08-14T10:30:00Z" },
++    expectedCode,
++    expectedMessage,
++  );
++});
++
++test("validates identity, then expiry, then roles", () => {
++  assertSessionError(
++    { roles: "admin", expiresAt: "bad" },
++    "SESSION_USER_REQUIRED",
++    "Session userId is required",
++  );
++  assertSessionError(
++    { userId: "user-21", roles: "admin", expiresAt: "bad" },
++    "SESSION_EXPIRY_INVALID",
++    "Session expiresAt must be an ISO timestamp",
++  );
++});
