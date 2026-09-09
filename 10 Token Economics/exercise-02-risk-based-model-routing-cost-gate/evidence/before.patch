@@ -1,0 +1,35 @@
+diff --git a/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/src/routing/routeTask.mjs b/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/src/routing/routeTask.mjs
+index 08e61a514fead2da503cf81867eac979afc16187..28a7ddb68ea11ab5e44cd6158b7cf29e85fe2bdc 100644
+--- a/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/src/routing/routeTask.mjs	
++++ b/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/src/routing/routeTask.mjs	
+@@ -1,4 +1,6 @@
+ /** Seeded cost policy: every task is sent to the most expensive tier. */
+-export function routeTask(_task) {
++export function routeTask(task) {
++  // Baseline policy: route every task to the most expensive reasoning lane.
++  void task;
+   return "reasoning";
+ }
+diff --git a/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/tests/route-task.test.mjs b/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/tests/route-task.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..b08aa02952c6e33b5d739f1aa5462cbd441cc17e
+--- /dev/null
++++ b/10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/tests/route-task.test.mjs	
+@@ -0,0 +1,17 @@
++import assert from "node:assert/strict";
++import test from "node:test";
++
++import { routeTask } from "../src/routing/routeTask.mjs";
++
++test("baseline sends every representative task to the reasoning lane", () => {
++  const tasks = [
++    { risk: "low", ambiguity: "low", scope: "one-file" },
++    { risk: "medium", ambiguity: "low", scope: "three-files" },
++    { risk: "high", ambiguity: "low", scope: "cross-boundary" },
++    { risk: "unknown", ambiguity: "high", scope: "unknown" }
++  ];
++
++  for (const task of tasks) {
++    assert.equal(routeTask(task), "reasoning");
++  }
++});

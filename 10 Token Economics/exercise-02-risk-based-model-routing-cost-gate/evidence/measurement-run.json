@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "packId": "routing-measurements-v1",
+  "packSha256": "a854cf95252f93d1338ed1223ab6d9ae926c4d812a6951b18f5856c4a62ebe9e",
+  "runsPerLane": 3,
+  "scorerVersion": 1,
+  "sourceSha": "4dc431858ae24bea05e63e7e5d8f49201c64f4c6",
+  "sourceKind": "deterministic-benchmark-fixture",
+  "provenance": "Derived offline from the protected recorded-run pack; no live provider or API key was used.",
+  "measurementCondition": "Every eligible case-and-tier lane is represented by three response-bound observations."
+}

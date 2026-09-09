@@ -1,0 +1,69 @@
+Exercise 02 clean verification evidence
+
+Executed from model-routing-app:
+npm run verify:exercise
+
+Exit status: 0
+
+Output:
+
+> model-routing-app@0.1.0 verify:exercise
+> node ../../../scripts/run-clean-verification.mjs
+
+> model-routing-app@0.1.0 verify:exercise:core
+> npm run agent:check && npm run verify:implementation && npm run verify:submission
+
+> model-routing-app@0.1.0 test:integrity
+Verified 32 protected challenge inputs.
+
+> model-routing-app@0.1.0 lint
+lint-check passed
+
+> model-routing-app@0.1.0 test
+offline routing cost verifier self-test passed
+agent-check passed for Risk-Based Model Routing Cost Gate
+
+> model-routing-app@0.1.0 format
+format-check passed
+
+> model-routing-app@0.1.0 typecheck
+TypeScript exited successfully with no diagnostics.
+
+> model-routing-app@0.1.0 build
+33 modules transformed.
+Production Vite build completed successfully.
+
+> model-routing-app@0.1.0 verify:implementation
+> npm run test:routing
+
+PASS docs-typo -> fast
+PASS bounded-test-fix -> balanced
+PASS authorization-boundary -> reasoning
+PASS unknown-billing-policy -> clarify
+PASS format-generated-fixture -> fast
+PASS public-api-migration -> reasoning
+PASS incident-query-fix -> balanced
+PASS missing-risk-assessment -> clarify
+PASS held-out missing, invalid, precedence, risk, ambiguity, and scope permutations
+PASS application dispatch consumer uses the field-based routing decision
+PASS learner tests: 4 passed, 0 failed, 0 skipped
+
+> model-routing-app@0.1.0 verify:submission
+PASS before and after runs use matching conditions and valid Git patches
+PASS both patches match their recorded implementation commits
+PASS protected manifests and inputs match the starting commit
+
+> model-routing-app@0.1.0 test:submission
+PASS protected routes: 8 passed, 0 failed
+PASS held-out permutations and application dispatch consumer
+PASS learner tests: 4 passed, 0 failed, 0 skipped
+
+> model-routing-app@0.1.0 routing:verify
+Source SHA: 4dc431858ae24bea05e63e7e5d8f49201c64f4c6
+PASS 36 protected offline measurements and response hashes verified
+PASS selected-route quality, safety, latency, and variance recomputed
+PASS single-retry escalation costs reconcile to protected tokens and pricing
+PASS policy savings beat the all-reasoning baseline threshold
+PASS focused router source and evidence-only history verified without an API key
+Verified Risk-Based Model Routing Cost Gate: 12 files and 0 directories.
+PASS verify:exercise left tracked files, the Git index, and untracked or ignored paths unchanged

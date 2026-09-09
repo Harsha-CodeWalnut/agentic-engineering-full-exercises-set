@@ -1,0 +1,124 @@
+{
+    "schemaVersion": 1,
+    "packId": "routing-measurements-v1",
+    "currency": "USD",
+    "cases": [
+        {
+            "id": "docs-typo",
+            "route": "fast",
+            "firstCallCost": 0.0003835,
+            "expectedAddedCost": 0.000744,
+            "totalExpectedCost": 0.0011275,
+            "expectedLatencyMs": 1109,
+            "qualityMean": 0.8866666667,
+            "qualityRange": 0.15,
+            "safetyFailures": 0,
+            "failureProbability": 0.3333333333,
+            "escalationRoute": "balanced"
+        },
+        {
+            "id": "bounded-test-fix",
+            "route": "balanced",
+            "firstCallCost": 0.002264,
+            "expectedAddedCost": 0.00522,
+            "totalExpectedCost": 0.007484,
+            "expectedLatencyMs": 2139,
+            "qualityMean": 0.92,
+            "qualityRange": 0.11,
+            "safetyFailures": 0,
+            "failureProbability": 0.3333333333,
+            "escalationRoute": "reasoning"
+        },
+        {
+            "id": "authorization-boundary",
+            "route": "reasoning",
+            "firstCallCost": 0.01582,
+            "expectedAddedCost": 0,
+            "totalExpectedCost": 0.01582,
+            "expectedLatencyMs": 2512,
+            "qualityMean": 0.98,
+            "qualityRange": 0.02,
+            "safetyFailures": 0,
+            "failureProbability": 0,
+            "escalationRoute": "reasoning"
+        },
+        {
+            "id": "unknown-billing-policy",
+            "route": "clarify",
+            "firstCallCost": 0,
+            "expectedAddedCost": 0,
+            "totalExpectedCost": 0,
+            "expectedLatencyMs": 0,
+            "qualityMean": null,
+            "qualityRange": null,
+            "safetyFailures": 0,
+            "failureProbability": 0,
+            "escalationRoute": null
+        },
+        {
+            "id": "format-generated-fixture",
+            "route": "fast",
+            "firstCallCost": 0.0003835,
+            "expectedAddedCost": 0.000744,
+            "totalExpectedCost": 0.0011275,
+            "expectedLatencyMs": 1109,
+            "qualityMean": 0.8866666667,
+            "qualityRange": 0.15,
+            "safetyFailures": 0,
+            "failureProbability": 0.3333333333,
+            "escalationRoute": "balanced"
+        },
+        {
+            "id": "public-api-migration",
+            "route": "reasoning",
+            "firstCallCost": 0.01582,
+            "expectedAddedCost": 0,
+            "totalExpectedCost": 0.01582,
+            "expectedLatencyMs": 2512,
+            "qualityMean": 0.98,
+            "qualityRange": 0.02,
+            "safetyFailures": 0,
+            "failureProbability": 0,
+            "escalationRoute": "reasoning"
+        },
+        {
+            "id": "incident-query-fix",
+            "route": "balanced",
+            "firstCallCost": 0.002264,
+            "expectedAddedCost": 0.00522,
+            "totalExpectedCost": 0.007484,
+            "expectedLatencyMs": 2139,
+            "qualityMean": 0.92,
+            "qualityRange": 0.11,
+            "safetyFailures": 0,
+            "failureProbability": 0.3333333333,
+            "escalationRoute": "reasoning"
+        },
+        {
+            "id": "missing-risk-assessment",
+            "route": "clarify",
+            "firstCallCost": 0,
+            "expectedAddedCost": 0,
+            "totalExpectedCost": 0,
+            "expectedLatencyMs": 0,
+            "qualityMean": null,
+            "qualityRange": null,
+            "safetyFailures": 0,
+            "failureProbability": 0,
+            "escalationRoute": null
+        }
+    ],
+    "totals": {
+        "policyExpectedCost": 0.048863,
+        "allReasoningExpectedCost": 0.1001933333,
+        "savingsPercent": 51.2312861801
+    },
+    "gates": {
+        "routes": true,
+        "quality": true,
+        "safety": true,
+        "completeness": true,
+        "savings": true
+    },
+    "adoption": "adopt"
+}
