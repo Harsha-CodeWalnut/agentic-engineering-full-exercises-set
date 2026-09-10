@@ -1,0 +1,50 @@
+{
+  "name": "Session Handover from Claude to Codex",
+  "root": "..",
+  "evidenceMode": "handover",
+  "requiredFiles": [
+    {
+      "path": "evidence/handover.md"
+    },
+    {
+      "path": "evidence/handover-audit.md"
+    },
+    {
+      "path": "evidence/before.md"
+    },
+    {
+      "path": "evidence/after.md"
+    },
+    {
+      "path": "evidence/comparison.md"
+    },
+    {
+      "path": "evidence/source-audit.json"
+    },
+    {
+      "path": "evidence/manifest.json"
+    },
+    {
+      "path": "evidence/continuation.txt"
+    },
+    {
+      "path": "evidence/after.patch"
+    },
+    {
+      "path": "evidence/commands/verify.txt",
+      "includeAll": [
+        "Command: npm run evidence:verify",
+        "Repository commit:",
+        "Started at:",
+        "Finished at:",
+        "exit code: 0"
+      ]
+    },
+    {
+      "path": "evidence/skill-use.md"
+    },
+    {
+      "path": "evidence/skill-session.txt"
+    }
+  ]
+}

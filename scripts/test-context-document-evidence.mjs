@@ -1,0 +1,91 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { checkAudit, checkOutputs, checkSkillEvidence, evidencePaths, seal, verifySnapshot, verifyTranscript, hash } from "./context-document-evidence.mjs";
+import { verifyContinuationSource } from "../03 Context Engineering/exercise-01-session-handover-from-claude-to-codex/bugfix-context-app/scripts/challenge-validation.mjs";
+
+const temporary=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),"context-evidence-test-")));
+const exercise=path.join(temporary,"exercise");
+const app=path.join(exercise,"app");
+function write(relative,text) { const absolute=path.join(exercise,relative);fs.mkdirSync(path.dirname(absolute),{recursive:true});fs.writeFileSync(absolute,text); }
+function git(args) { return execFileSync("git",args,{cwd:temporary,stdio:["ignore","pipe","pipe"]}).toString().trim(); }
+const contract={outputs:[{path:"docs/result.md",headings:["Finding"]}],topics:["meaning"],sourceRoots:["app/src/"],requiredSkills:[{name:"example-skill",source:"https://github.com/example/skills"}],extraEvidence:["evidence/skill-use.md","evidence/skill-session.txt"]};
+const audit={claims:[{id:"one",topic:"meaning",status:"supported",reason:"The exact source text establishes this observation.",artifact:{path:"docs/result.md",line:3,excerpt:"A sample has one label."},sources:[{path:"app/src/sample.txt",line:1,excerpt:"A sample has one label."}]}]};
+try {
+ fs.mkdirSync(app,{recursive:true});
+ git(["init"]);git(["config","user.name","Evidence test"]);git(["config","user.email","test@example.invalid"]);git(["config","core.autocrlf","false"]);
+ write("bugfix-context-app/src/example.txt", "Original continuation source.\n");
+ git(["add","."]);git(["commit","-m","synthetic continuation source"]);
+ const continuationSha=git(["rev-parse","HEAD"]);
+ verifyContinuationSource(exercise,continuationSha);
+ write("bugfix-context-app/src/example.txt", "Source changed after the continuation.\n");
+ assert.throws(()=>verifyContinuationSource(exercise,continuationSha),/source must match/);
+ write("bugfix-context-app/src/example.txt", "Original continuation source.\n");
+ write("app/src/sample.txt","A sample has one label.\n");
+ write("docs/result.md","## Finding\n\nA sample has one label.\n");
+ write("evidence/source-audit.json",JSON.stringify(audit));
+ for(const name of ["before","after"]) write("evidence/"+name+".md","## Conditions\nSynthetic test\n## Findings\nOne label\n## Proof\nSource inspected\n");
+ write("evidence/comparison.md","## Changes\nNone\n## Verified\nOne label\n## Remaining questions\nNone\n");
+ const skillUse="## example-skill\nSource: https://github.com/example/skills\nRevision: "+"a".repeat(40)+"\nInvocation: Use example-skill to document the sample.\nProof: evidence/skill-session.txt:L1-L2\n";
+ write("evidence/skill-use.md",skillUse);
+ write("evidence/skill-session.txt","Synthetic test request: use example-skill to inspect the sample and document its label.\nSynthetic test result: the sample has one source-supported label.\n");
+ checkSkillEvidence(exercise,contract);
+ for (const [oldValue,newValue] of [["## example-skill","## wrong-skill"],["example/skills","example/skills-fake"],["Revision: "+"a".repeat(40),"Revision: short"],["Invocation: Use example-skill to document the sample.","Invocation: "],["L1-L2","L1-L99"],["L1-L2","L0-L2"]]) {
+   write("evidence/skill-use.md",skillUse.replace(oldValue,newValue));
+   assert.throws(()=>checkSkillEvidence(exercise,contract));
+ }
+ write("evidence/skill-use.md",skillUse+skillUse);
+ assert.throws(()=>checkSkillEvidence(exercise,contract),/exactly one/);
+ write("evidence/skill-use.md",skillUse.replace("Revision: "+"a".repeat(40),"SHA-256: "+"b".repeat(64)).replaceAll("\n","\r\n"));
+ checkSkillEvidence(exercise,contract);
+ write("evidence/skill-use.md",skillUse);
+ write("app/evidence-contract.json",JSON.stringify(contract));
+ write("app/package.json",JSON.stringify({private:true,type:"module",scripts:{"evidence:verify":"node runner.mjs content"}}));
+ write("app/runner.mjs",`import { runEvidence } from ${JSON.stringify(new URL("./context-document-evidence.mjs",import.meta.url).href)}; await runEvidence({appRoot:process.cwd()});\n`);
+ await checkOutputs(exercise,contract);
+ git(["add","."]);git(["commit","-m","synthetic example"]);
+ seal(exercise,app,contract);
+ const manifest=JSON.parse(fs.readFileSync(path.join(exercise,"evidence/manifest.json")));
+ assert.equal(evidencePaths(contract).length,7);
+ verifySnapshot(exercise,manifest,contract);
+ // Exercise the real commit -> seal -> capture -> evidence commit -> verify sequence.
+ execFileSync(process.execPath,[fileURLToPath(new URL("./capture-verification.mjs",import.meta.url)),"--output","../evidence/commands/verify.txt","--","npm","run","evidence:verify"],{cwd:app,stdio:"pipe"});
+ verifyTranscript(exercise,manifest.sourceSha);
+ git(["add","."]);git(["commit","-m","synthetic sealed evidence"]);
+ execFileSync(process.execPath,["runner.mjs"],{cwd:app,stdio:"pipe"});
+ assert.equal(git(["status","--porcelain","--untracked-files=all"]),"","verification must leave the synthetic repository clean");
+ write("docs/result.md","## Finding\n\nAn unsupported invented label.\n");
+ assert.throws(()=>checkAudit(exercise,contract),/stale citation/);
+ assert.throws(()=>verifySnapshot(exercise,manifest,contract),/changed since seal/);
+ write("docs/result.md","## Finding\n\nA sample has one label.\n");
+ write("app/src/sample.txt","The source changed after the documentation was sealed.\n");
+ assert.throws(()=>verifySnapshot(exercise,manifest,contract),/source changed/);
+ write("app/src/sample.txt","A sample has one label.\n");
+ audit.claims[0].sources[0].path="../outside.txt";
+ write("evidence/source-audit.json",JSON.stringify(audit));
+ assert.throws(()=>checkAudit(exercise,contract),/not an authoritative source/);
+ audit.claims[0].sources[0].path="app/src/sample.txt";
+ write("evidence/source-audit.json",JSON.stringify(audit));
+ const selfSourced=structuredClone(audit);
+ selfSourced.claims[0].sources[0]={path:"docs/result.md",line:3,excerpt:"A sample has one label."};
+ write("evidence/source-audit.json",JSON.stringify(selfSourced));
+ assert.throws(()=>checkAudit(exercise,{...contract,sourceRoots:["app/src/","docs/"]}),/own source evidence/);
+ write("evidence/source-audit.json",JSON.stringify(audit));
+ const transcript="Command: npm run evidence:verify\nRepository commit: "+manifest.sourceSha+"\nStarted at: 2026-09-01T12:00:00Z\nFinished at: 2026-09-01T12:00:01Z\nSTDOUT\nSynthetic fixture only\nexit code: 0\n";
+ write("evidence/commands/verify.txt",transcript);verifyTranscript(exercise,manifest.sourceSha);
+ write("evidence/commands/verify.txt",transcript.replace("exit code: 0","exit code: 1"));
+ assert.throws(()=>verifyTranscript(exercise,manifest.sourceSha),/did not succeed/);
+ write("evidence/commands/verify.txt",transcript.replace(manifest.sourceSha,"0".repeat(40)));
+ assert.throws(()=>verifyTranscript(exercise,manifest.sourceSha),/sealed source commit/);
+ const diagramContract={...contract,outputs:[{path:"docs/result.md"},{path:"diagrams/example.mmd",type:"mermaid",diagramType:"sequence"}]};
+ write("diagrams/example.mmd","sequenceDiagram\nA->>B: sample message\n");
+ await assert.rejects(checkOutputs(exercise,diagramContract,async()=>({diagramType:"flowchart-v2"})),/wrong diagram type/);
+ await assert.rejects(checkOutputs(exercise,diagramContract,async()=>({diagramType:"sequence"})),/uncited diagram/);
+ assert.equal(hash("same\r\ntext"),hash("same\ntext"));
+ fs.unlinkSync(path.join(exercise,"evidence/after.md"));
+ assert.throws(()=>verifySnapshot(exercise,manifest,contract),/missing evidence\/after/);
+ console.log("PASS evidence: skill records and transcript ranges, complete capture/commit workflow, clean verification, valid snapshot, missing file, changed artifact, source drift, escaped/self citation, failed/stale capture, diagram type and uncited edge");
+} finally { fs.rmSync(temporary,{recursive:true,force:true}); }

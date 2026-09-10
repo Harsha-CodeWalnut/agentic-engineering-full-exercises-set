@@ -1,33 +1,104 @@
 import type { LabContract } from "./types";
 
 export const labContract = {
-  title: "Graphify Billing Knowledge Graph",
-  competency: "03. Context Engineering",
-  skillPattern: "graphify",
-  domain: "Cross-cutting recognized-revenue calculation",
-  mission: "Use a queryable knowledge graph to rescue a billing incident spanning calculation, mapping, consumers, contracts, and ownership.",
-  outcome: "A graph-first agent finds the shared safe edit path, rejects stale context, and fixes both consumers without changing gross volume.",
-  entities: ["billing event", "recognized revenue", "gross volume", "tenant", "billing account", "dashboard", "scheduled snapshot", "owner team"],
-  seededDefects: ["credits are counted as revenue", "refunds increase revenue", "results are grouped by tenant", "historical sources point to the wrong formula and owner"],
-  verificationGates: ["eight protected behavior checks", "real NetworkX graph artifacts", "six answered graph questions", "source-verified uncertain edges", "fair search-versus-graph comparison"],
-  agentWorkflow: ["capture a normal-search first attempt", "build the complete exercise graph", "query before reading source", "source-verify uncertain edges", "capture a graph-first attempt", "compare results"],
-  workingDeliverables: ["recognized-revenue fix", "Graphify JSON, HTML, and report", "query and audit evidence", "before-and-after patches and reports"],
-  masterySignals: ["queries reveal both consumers and shared calculation", "edge confidence is respected", "current and stale sources are separated", "ownership is correct", "gross volume remains unchanged"],
-  backlog: [
-    { id: "03-01", title: "Calculate net recognized revenue", owner: "Billing Platform", skill: "graphify", risk: "critical", done: false },
-    { id: "03-02", title: "Map tenant events to billing accounts", owner: "Billing Platform", skill: "graphify", risk: "high", done: false },
-    { id: "03-03", title: "Verify stale and inferred graph edges", owner: "agent candidate", skill: "graphify", risk: "high", done: false },
+  "title": "Create Queryable Repo Context for Agents",
+  "competency": "03. Context Engineering",
+  "skillPattern": "graphify",
+  "domain": "Cross-cutting recognized-revenue calculation",
+  "mission": "Your repository is too large for an AI agent or a new team member to understand through repeated file searches. Your mission is to create a queryable repository graph using Graphify.  The graph must help an AI agent and a human user find components, dependencies, business rules, data flow, ownership, and the source of important decisions without loading the entire repository into every session.",
+  "outcome": "The challenge is complete when the graph represents the repository accurately, important answers are traceable to source files, and both agents and users can query it to reduce repeated repository discovery.",
+  "entities": [
+    "billing event",
+    "recognized revenue",
+    "gross volume",
+    "tenant",
+    "billing account",
+    "dashboard",
+    "scheduled snapshot",
+    "owner team"
   ],
-  evidence: [
-    { gate: "eight protected behavior checks", status: "missing", proof: "run npm run test:billing" },
-    { gate: "real graph artifacts", status: "partial", proof: "starter has only a stale historical extract" },
-    { gate: "six answered graph questions", status: "missing", proof: "participant query evidence required" },
-    { gate: "source-verified uncertain edges", status: "missing", proof: "participant graph audit required" },
-    { gate: "fair comparison", status: "missing", proof: "participant before-and-after evidence required" },
+  "seededDefects": ["Outdated supporting descriptions","Important relationships scattered across source files","Unverified assumptions in initial understanding"],
+  "verificationGates": [
+    "Working source behaviour and protected inputs.",
+    "Artifact and source citation checks.",
+    "Committed evidence snapshot and command capture."
   ],
-  decisions: [
-    { question: "What is recognized revenue?", decision: "Use the approved metric contract and verify its code edges.", status: "decided" },
-    { question: "What groups dashboard totals?", decision: "Billing account, through the tenant mapping.", status: "decided" },
-    { question: "Did graph-first context improve the change?", decision: "Measure from the two first attempts.", status: "open" },
+  "agentWorkflow": [
+    "Record the starting observations and sources.",
+    "Produce the outputs in evidence-contract.json.",
+    "Verify source claims and capture the completed result."
   ],
+  "workingDeliverables": [
+    "graphify-out/graph.json",
+    "graphify-out/GRAPH_REPORT.md",
+    "docs/query-guide.md",
+    "evidence/answers.md",
+    "evidence/before.md",
+    "evidence/after.md",
+    "evidence/comparison.md",
+    "evidence/source-audit.json",
+    "evidence/manifest.json",
+    "evidence/commands/graphify.txt",
+    "evidence/commands/verify.txt"
+  ],
+  "masterySignals": [
+    "Accurate source-supported understanding.",
+    "Explicit unresolved questions.",
+    "A result another person or agent can use."
+  ],
+  "backlog": [
+    {
+      "id": "3.3-1",
+      "title": "Verify architecture",
+      "owner": "participant",
+      "skill": "graphify",
+      "risk": "high",
+      "done": false
+    },
+    {
+      "id": "3.3-2",
+      "title": "Verify dependencies",
+      "owner": "participant",
+      "skill": "graphify",
+      "risk": "high",
+      "done": false
+    },
+    {
+      "id": "3.3-3",
+      "title": "Verify data-flow",
+      "owner": "participant",
+      "skill": "graphify",
+      "risk": "high",
+      "done": false
+    }
+  ],
+  "evidence": [
+    {
+      "gate": "graphify-out/graph.json",
+      "status": "missing",
+      "proof": "Participant output and source audit required"
+    },
+    {
+      "gate": "graphify-out/GRAPH_REPORT.md",
+      "status": "missing",
+      "proof": "Participant output and source audit required"
+    },
+    {
+      "gate": "docs/query-guide.md",
+      "status": "missing",
+      "proof": "Participant output and source audit required"
+    },
+    {
+      "gate": "evidence/answers.md",
+      "status": "missing",
+      "proof": "Participant output and source audit required"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "Which source claims remain uncertain?",
+      "decision": "Record and verify evidence before concluding.",
+      "status": "open"
+    }
+  ]
 } satisfies LabContract;

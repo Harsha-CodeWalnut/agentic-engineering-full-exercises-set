@@ -1,0 +1,56 @@
+{
+  "name": "Extract a Domain Model from the Entire Repository",
+  "mode": "observation",
+  "outputs": [
+    {
+      "path": "CONTEXT.md"
+    },
+    {
+      "path": "docs/domain-model.md",
+      "headings": [
+        "Product purpose",
+        "People and responsibilities",
+        "Business relationships",
+        "Business workflows",
+        "Rules and exceptions",
+        "Unanswered questions"
+      ]
+    },
+    {
+      "path": "diagrams/business-domain.mmd",
+      "type": "mermaid",
+      "diagramType": "flowchart-v2"
+    },
+    {
+      "path": "evidence/business-answers.md",
+      "headings": [
+        "Before",
+        "After"
+      ]
+    }
+  ],
+  "topics": [
+    "purpose",
+    "roles",
+    "terms",
+    "relationships",
+    "workflows",
+    "rules",
+    "exceptions",
+    "unresolved"
+  ],
+  "sourceRoots": [
+    "product-rules-app/src/",
+    "product-rules-app/docs/",
+    "product-rules-app/incidents/",
+    "product-rules-app/scripts/run-",
+    "product-rules-app/package.json",
+    "product-rules-app/vite.config.ts",
+    "docs/",
+    "business/"
+  ],
+  "extraEvidence": [
+    "evidence/skill-use.md",
+    "evidence/business-session.txt"
+  ]
+}

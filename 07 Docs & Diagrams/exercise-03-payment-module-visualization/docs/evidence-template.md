@@ -1,42 +1,56 @@
-# Payment Visualization Evidence
+# Evidence instructions and template
 
-## traceability.json
+All paths are relative to this exercise. Follow [setup.md](./setup.md) for the exact commit and capture order.
 
-```json
-{
-  "schema_version": 1,
-  "source_sha": "40-character Git SHA",
-  "relationships": [
-    {
-      "id": "VIS-01",
-      "source_path": "payment-workflow-app/src/App.tsx",
-      "source_line": 1,
-      "source_excerpt": "exact source line containing VIS: VIS-01",
-      "diagram_paths": ["diagrams/payment-architecture.mmd", "diagrams/payment-sequence.mmd"]
-    }
-  ]
-}
-```
+## Before and after
 
-Add `VIS-01` through `VIS-16`. Use the exact source marker line at `source_sha` and the diagram paths in the diagram contract.
+Create `evidence/before.md` and `evidence/after.md`, each with these sections:
 
-## brief-contradictions.md
+- `## Conditions`: source commit, date, input files, task or questions, agent/tool and model (record unavailable if not exposed), time spent, and any hints or corrections.
+- `## Findings`: concrete observations or answers, supported decisions, failures, and remaining uncertainty.
+- `## Proof`: exact source references, links to raw session/query output, and actual command results.
 
-Record `BRIEF-01` through `BRIEF-04` in brief order. For each claim, include the short claim, `Result: supported` or `Result: rejected`, an exact source or test reference, and the diagram decision.
+Before records your initial understanding before creating the final artifact. After records the verified result. These are documented observations, not a claim that two different tools caused an improvement.
 
-## diagram-manifest.json
+In `evidence/comparison.md`, use `## Changes`, `## Verified`, and `## Remaining questions`. Compare specific findings; successful initial answers do not need to become wrong to pass. Report equal results honestly.
 
-Record `source_sha`; the path, Mermaid type, and SHA-256 of all four diagrams; SHA-256 values for `traceability.json` and `brief-contradictions.md`; and the exact command, exit code, output path, and output SHA-256 for:
+No before.patch or after.patch is required: this challenge produces knowledge artifacts, not a mandatory code change.
 
-- `npm run payment:trace > ../evidence/commands/payment-trace.txt`
-- `npm run diagrams:parse > ../evidence/commands/diagram-parse.txt`
+## Outputs
 
-## verification.md
+- `diagrams/payment-architecture.mmd`.
+- `diagrams/payment-sequence.mmd`.
+- `diagrams/payment-flow.mmd`.
+- `diagrams/payment-data.mmd`.
+- `evidence/contradictions.md`: Supported; Rejected; Unresolved.
 
-Record the source SHA, feature-test result, Mermaid parser result, semantic diagram result, traceability result, contradiction result, remaining uncertainty, and final conclusion.
 
-## Required Before and After Files
+## Skill evidence
 
-- `evidence/before.md` and `evidence/after.md` record matching session conditions, defect results, unsupported relationships, parser results, and changed files.
-- `evidence/before.patch` and `evidence/after.patch` are genuine Git diffs for the brief-led and source-led attempts.
-- `evidence/comparison.md` compares defect coverage, relationship accuracy, contradictions, and verification.
+Submit `evidence/skill-use.md` and `evidence/skill-session.txt`. The latter is the actual preparation or generation transcript, redacted for secrets, not a rewritten summary.
+
+Use one `## <skill-name>` section per skill in `skill-use.md`. Under each section, record plain fields:
+
+- `Source: <upstream repository URL from setup.md>`.
+- `Revision: <full 40-character SHA>` or `SHA-256: <64-character installed SKILL.md hash>`.
+- `Invocation: <actual command or request>`.
+- `Proof: evidence/skill-session.txt:L<first>-L<last>` pointing to the invocation and result.
+
+Use the exact skill name from setup.md. Record how its output was checked or corrected. Verification checks the required skill, record fields and transcript line range, not whether an agent truly loaded the skill. Reviewers inspect the raw transcript. Do not manufacture unavailable model details or successful results.
+
+## Source audit
+
+Create `evidence/source-audit.json` with a `claims` array. Each claim needs:
+
+- `id`: a unique identifier you choose.
+- `topic`: one of `architecture`, `authorization`, `capture`, `webhooks`, `duplicates`, `failure`, `data-relationships`. Cover every topic.
+- `status`: `supported`, `contradicted`, or `unresolved`.
+- `reason`: why the cited evidence supports the statement or leaves it unresolved.
+- `artifact`: `{ "path": "<submitted output>", "line": <one-based line>, "excerpt": "<exact text at that line>" }`.
+- `sources`: one or more objects with the same path, line, and excerpt fields, referencing supplied source material.
+
+Paths start at the exercise folder. Excerpts must match complete lines, including indentation. Use multiple lines when needed. Cite each important statement and every diagram relationship; put one relationship per diagram line. Code and tests can prove current behaviour; old notes may establish a contradiction, not the current rule. Reviewers assess whether the source really supports the claim.
+
+## Recorded verification
+
+`npm run evidence:seal` creates `evidence/manifest.json` after your outputs and evidence are committed. The capture command creates `evidence/commands/verify.txt` with the actual command, source commit, timestamps, output, and exit code. Final verification rejects missing files, changed artifacts, stale citations, and unsuccessful captures.

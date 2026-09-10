@@ -1,31 +1,20 @@
-# Payment Diagram Contract
+# Four payment views
 
-Create these Mermaid files:
+Submit exactly these four Mermaid files:
 
-- `payment-architecture.mmd` starts with `flowchart LR`. Use `CheckoutUI`, `Orchestrator`, `GatewayAdapter`, `LedgerRecord`, `ReceiptRecord`, and `WebhookHandler`. Show only implemented dependencies.
-- `webhook-reconciliation-state.mmd` starts with `stateDiagram-v2`. Show signature check, reference check, duplicate check, rejected, ledger-recorded, already-handled, and handled outcomes. Do not add retry.
-- `payment-sequence.mmd` starts with `sequenceDiagram`. Use `Shopper`, `CheckoutUI`, `Orchestrator`, `GatewayAdapter`, `Ledger`, `ReceiptNotifier`, and `WebhookHandler`. Show approved and declined checkout, then first and duplicate webhook delivery.
-- `payment-data.mmd` starts with `erDiagram`. Use only `CUSTOMER`, `CHECKOUT_ORDER`, `ORDER_ITEM`, `PAYMENT_METHOD`, `PAYMENT_INTENT`, `GATEWAY_TRANSACTION`, `LEDGER_ENTRY`, `WEBHOOK_EVENT`, and `RECEIPT`.
+Use Design Doc Mermaid for these checked views. Optional Draw.io or Excalidraw copies follow [setup.md](./setup.md); they are supplemental, not substitutes for these four files. No automatic native-format conversion or validation is implied.
 
-In the architecture diagram, write dependencies as simple `Alias --> Alias` lines. In the state diagram, use these aliases exactly: `received`, `signature_check`, `reference_check`, `duplicate_check`, `rejected`, `ledger_recorded`, `already_handled`, and `handled`.
-
-Add `%% EDGE: VIS-<number>` immediately before every required relationship represented in a diagram.
-
-| IDs | Relationship | Required diagrams |
+| File | Diagram type | Question it answers |
 | --- | --- | --- |
-| VIS-01 | Checkout UI calls the orchestrator | architecture, sequence |
-| VIS-02 | Orchestrator authorizes through the gateway adapter | architecture, sequence |
-| VIS-03 | Orchestrator captures through the gateway adapter | architecture, sequence |
-| VIS-04 | Orchestrator creates ledger records | architecture, sequence |
-| VIS-05 | Orchestrator creates receipt status | architecture, sequence |
-| VIS-06 | Gateway adapter creates a webhook event | architecture, sequence |
-| VIS-07 | Webhook handler writes one ledger record | architecture, state, sequence |
-| VIS-08 | Invalid signature is rejected | state, sequence |
-| VIS-09 | Unknown gateway reference is rejected | state, sequence |
-| VIS-10 | Duplicate event returns already-handled | state, sequence |
-| VIS-11 | A recorded event is marked handled | state, sequence |
-| VIS-12 | Payment intent references its order | data |
-| VIS-13 | Gateway transaction references its intent | data |
-| VIS-14 | Ledger entry references its intent | data |
-| VIS-15 | Webhook event references a gateway transaction | data |
-| VIS-16 | Receipt references its order | data |
+| `diagrams/payment-architecture.mmd` | `flowchart LR` | Which components and external systems interact? |
+| `diagrams/payment-sequence.mmd` | `sequenceDiagram` | In what order do checkout, payment and webhook interactions happen? |
+| `diagrams/payment-flow.mmd` | `flowchart TD` | Which decisions accept, reject or ignore a webhook, and what happens next? |
+| `diagrams/payment-data.mmd` | `erDiagram` | How do the module's records relate to each other? |
+
+Use source entity names for the data view and these aliases for semantic checks:
+
+- Architecture: CheckoutUI, Orchestrator, GatewayAdapter, LedgerRecord, ReceiptRecord, WebhookHandler.
+- Sequence: Shopper, CheckoutUI, Orchestrator, GatewayAdapter, Ledger, ReceiptNotifier, WebhookHandler. Use alternatives Authorization approved / Authorization declined and First delivery / Duplicate delivery.
+- Flow: received, signature_check, reference_check, duplicate_check, rejected, already_handled, ledger_recorded, handled. Put labelled decisions on separate `from -->|condition| to` lines; define node shapes on separate lines.
+
+Find the relationships and their ordering from the code. Cite every diagram relationship in `evidence/source-audit.json`. All four views must agree with the same source snapshot. The reconciler is already functional; a webhook repair is not part of this challenge. The supplied old incident and feature brief contain historical claims to audit.

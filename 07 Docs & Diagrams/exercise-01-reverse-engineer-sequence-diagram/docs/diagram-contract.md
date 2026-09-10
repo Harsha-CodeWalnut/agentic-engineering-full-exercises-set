@@ -1,13 +1,13 @@
-# Diagram Contract
+# Sequence diagram contract
 
-Use these state aliases exactly:
+Submit one Mermaid `sequenceDiagram` at `diagrams/access-sequence.mmd`.
 
-`draft`, `submitted`, `manager_approved`, `security_review`, `data_owner_review`, `provisioning`, `provisioned`, `failed_provisioning`, `rollback_requested`, and `rolled_back`.
+Generate it with Design Doc Mermaid and preserve the skill invocation and raw session evidence described in [setup.md](./setup.md). Submit plain Mermaid text, not an image or XML/JSON renamed to `.mmd`. A rendered preview helps review but does not replace the source file.
 
-The state diagram starts with `stateDiagram-v2`. Label conditional transitions with `high risk`, `normal risk`, `healthy`, or `unhealthy`. Do not add an automatic retry edge from `failed_provisioning` to `provisioning`.
+Use these participant aliases for automated checks: Employee, Application, Manager, PolicyEngine, Security, DataOwner, IdentityProvider and IdentityAdmin. Choose readable display names and interaction labels from your investigation.
 
-Both sequence diagrams start with `sequenceDiagram`. Use these participant aliases where applicable: `Employee`, `Application`, `Manager`, `PolicyEngine`, `Security`, `DataOwner`, `IdentityProvider`, and `IdentityAdmin`.
+Use `alt High risk` / `else Normal risk` and `alt Provisioning successful` / `else Provisioning failed` to distinguish the required paths. Show who acknowledges completion of rollback. These are the scenario boundaries, not an ordered list of the solution's interactions.
 
-The approval sequence uses an `alt High risk` and `else Normal risk` block. The failure sequence shows the provisioning failure, rollback request, identity-admin removal, and rollback completion.
+Trace each relationship in `evidence/source-audit.json` using actual source lines and exact diagram excerpts. No state diagram or separate failure diagram is required. Record contradictions, including differences between displayed UI progress and the workflow engine, without changing the source.
 
-Add `%% EDGE: <ID>` comments for every edge listed in the evidence template. The verifier uses the IDs to connect diagrams, traceability, and source.
+Reviewers check ordering, branch placement and unsupported interactions as well as the parser result. An automated source citation confirms the cited text exists, not that the learner interpreted it correctly.

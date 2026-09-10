@@ -1,0 +1,36 @@
+{
+  "title": "Generate AGENTS.md for a Brownfield Repository",
+  "competency": "03. Context Engineering",
+  "mission": "Direct fresh agents to focused repository guidance and prove it on a workspace summary change.",
+  "domain": "Customer workspace support",
+  "entities": [
+    "case",
+    "workspace",
+    "membership"
+  ],
+  "seededDefects": [
+    "Unimplemented summary",
+    "Internal legacy export near customer services",
+    "Missing agent guidance"
+  ],
+  "verificationGates": [
+    "Existing access behaviour",
+    "Protected summary acceptance",
+    "Matched runs and guidance history"
+  ],
+  "agentWorkflow": [
+    "Capture an unguided first attempt",
+    "Commit focused guidance",
+    "Capture and verify the fresh guided attempt"
+  ],
+  "workingDeliverables": [
+    "AGENTS.md",
+    ".agent/ supporting files",
+    "Matched reports, patches and transcripts"
+  ],
+  "masterySignals": [
+    "Task-specific context loading",
+    "Scoped access",
+    "Reusable guidance"
+  ]
+}

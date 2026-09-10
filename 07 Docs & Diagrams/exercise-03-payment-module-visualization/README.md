@@ -1,4 +1,4 @@
-# Exercise 03 : payment module visualization
+# Exercise 03 : Payment Module Visualization
 
 ## Your Mission
 
@@ -14,17 +14,21 @@ The duration for this challenge is 75 min or less.
 
 ## How To Go About It
 
-1. Identify the components, external systems, data stores, actors, entities, states, and business decisions.
+1. Record your initial understanding in `evidence/before.md`, then identify the components, external systems, data stores, actors, entities, states, and business decisions.
 2. Trace checkout, authorization, webhook handling, duplicate events, failures, ledger updates, and receipt creation.
-3. Create an Architecture diagram showing system boundaries and dependencies.
+3. Use the [Design Doc Mermaid skill](https://www.skills.sh/spillwavesolutions/design-doc-mermaid/design-doc-mermaid) for all four views. Create an architecture diagram showing system boundaries and dependencies.
 4. Create a sequence diagram showing the main interaction and important alternatives.
 5. Create a flow chart showing decisions, states, failures, and recovery paths.
 6. Create an ER diagram showing entities, identifiers, ownership, and relationships.
 7. Map important diagram elements to their source files.
 
+Record the source-verified result in `evidence/after.md` and compare it in `evidence/comparison.md`. Use the [diagram requirements](./docs/diagram-contract.md). Document source defects or uncertainty; source changes are not required.
+
 ## Evidence
 
-Submit all four diagrams, source traceability, validation output, recorded contradictions, and a focused pull request.
+Submit `diagrams/payment-architecture.mmd`, `diagrams/payment-sequence.mmd`, `diagrams/payment-flow.mmd`, `diagrams/payment-data.mmd`, `evidence/contradictions.md` and `evidence/before.md`, `evidence/after.md`, `evidence/comparison.md`. Include the skill-use record, generation transcript, source audit, sealed artifact record, and captured verification output required by the [evidence instructions and template](./docs/evidence-template.md).
+
+Follow the [setup and verification instructions](./docs/setup.md) and [submission standard](../../docs/SUBMISSION_STANDARD.md). Run `npm run verify:exercise` from `payment-workflow-app/` before raising a focused PR from your fork.
 
 ## Completion Criteria
 

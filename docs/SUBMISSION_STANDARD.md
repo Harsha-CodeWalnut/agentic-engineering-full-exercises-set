@@ -28,6 +28,14 @@ Trusted CI should also set `CHALLENGE_TRUSTED_REF` to the pull request base SHA 
 
 ## Final Verification
 
+Context and documentation exercises may use a different comparison. Follow their local evidence template:
+
+- **Documentation:** `before.md` records the initial understanding, `after.md` records the checked findings, and `comparison.md` explains corrections. No code patches or matched model runs are required unless explicitly requested.
+- **Claude-to-Codex handover:** compare the supplied session snapshot with the fresh Codex continuation. These are different agents, not a same-model experiment. Submit the continuation transcript and implementation patch specified in the exercise.
+- **Brownfield onboarding:** use the matched implementation runs and patches described above. The only intended difference is the onboarding guidance available to the second run.
+
+For exercises providing `evidence:seal`, commit the requested outputs and reports first. Seal those committed files, capture verification at that same commit, then commit the generated manifest and command capture. The manifest never hashes itself. Source citations must refer to real source lines; a reviewer also checks whether those sources support the conclusions.
+
 When the exercise provides `npm run evidence:capture`, use the exact command in its README to generate the command transcript and exit code. Do not type or edit a successful exit code manually.
 
 Run the exercise's final verification command before opening the pull request. The command must not rewrite tracked files, stage changes, or create, remove, or rewrite untracked and ignored paths. Builds run in a temporary output directory. The shared verification guard compares repository state before and after the exercise checks and fails if verification changes it.

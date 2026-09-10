@@ -8,18 +8,24 @@
     "build": "node ../../../scripts/run-vite-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false",
-    "test": "node ./scripts/agent-check.mjs",
+    "test": "npm run test:rules",
     "test:rules": "node ./scripts/run-product-rule-tests.mjs",
+    "test:domain-validator": "node --test ./scripts/test-challenge-validation.mjs",
     "test:domain": "node ./scripts/verify-domain-submission.mjs",
-    "test:submission": "npm run test:domain",
+    "test:submission": "npm run verify:submission",
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run test:domain-validator && npm run format && npm run typecheck && npm run build",
     "verify:implementation": "npm run test:rules",
-    "verify:submission": "npm run test:domain",
+    "verify:submission": "node ./scripts/verify-domain-submission.mjs",
     "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
-    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs"
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs",
+    "evidence:seal": "node ./scripts/verify-domain-submission.mjs seal",
+    "evidence:capture": "node ../../../scripts/capture-verification.mjs",
+    "evidence:verify": "npm run agent:check && npm run verify:implementation && node ./scripts/verify-domain-submission.mjs content",
+    "diagrams:parse": "node ./scripts/parse-diagrams.mjs",
+    "diagrams:verify": "npm run verify:submission"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -30,6 +36,8 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.4",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "mermaid": "^11.16.1",
+    "jsdom": "^29.0.1"
   }
 }

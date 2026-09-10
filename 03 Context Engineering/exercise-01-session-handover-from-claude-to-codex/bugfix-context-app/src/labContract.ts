@@ -12,45 +12,52 @@ export interface LabContract {
   masterySignals: string[];
 }
 
-export const labContract: LabContract = {
-  title: "Handoff Skill Incident Rescue",
-  competency: "03. Context Engineering - Session compaction and verified handoff",
-  domain: "Customer escalation SLA incident recovery across fresh agent sessions",
-  mission: "Distil an unreliable prior agent session into a verified handoff that enables a fresh agent to complete the incident fix.",
-  outcome: "A fresh agent implements the current SLA rule without inheriting stale thresholds, ownership changes, or false completion claims.",
-  entities: [
+export const labContract = {
+  "title": "Session Handover from Claude to Codex",
+  "competency": "03. Context Engineering",
+  "skillPattern": "handoff",
+  "domain": "Customer escalation SLA incident recovery across fresh agent sessions",
+  "mission": "You have worked in Claude for a while and the session contains important decisions, unfinished work, failed attempts, and useful repository context. Your mission is to continue the same work in Codex without losing the correct context or repeating completed work.  Create a compact, verified handover that separates current facts from stale assumptions and gives Codex everything needed to continue safely.",
+  "outcome": "The challenge is complete when Codex can continue from the handover alone, does not repeat completed work, does not follow stale information, and completes or correctly reports the remaining work with evidence.",
+  "entities": [
     "incident request",
     "authoritative SLA policy",
     "generated session handoff",
-    "regression evidence",
+    "regression evidence"
   ],
-  seededDefects: [
+  "seededDefects": [
     "the partial implementation uses a superseded 24-hour threshold",
     "automatic escalation incorrectly replaces the existing owner",
-    "the previous progress note claims completion despite failing behavior tests",
+    "the previous progress note claims completion despite failing behavior tests"
   ],
-  verificationGates: [
-    "current SLA boundary regression tests",
-    "manual escalation and ownership preservation tests",
-    "saved workflow state and queue total tests",
-    "handoff content and before-after evidence checks",
+  "verificationGates": [
+    "Working source behaviour and protected inputs.",
+    "Artifact and source citation checks.",
+    "Committed evidence snapshot and command capture."
   ],
-  agentWorkflow: [
-    "Run the incident once with raw session context and capture the first result.",
-    "Verify conflicting claims against current policies, code, and executable checks.",
-    "Generate a compact handoff with the Handoff skill for a fresh implementation session.",
-    "Complete the fix from the handoff and compare the verified result with the baseline.",
+  "agentWorkflow": [
+    "Record the starting observations and sources.",
+    "Use the Handoff skill to prepare the verified transfer; record the skill invocation and receiving session separately.",
+    "Produce the outputs in evidence-contract.json.",
+    "Verify source claims and capture the completed result."
   ],
-  workingDeliverables: [
-    "Automatic escalation implementation and regression coverage.",
-    "Before and after implementation patches from first attempts.",
-    "Unedited generated handoff and a source-backed handoff audit.",
-    "Reproducible incident, handoff, and repository verification output.",
+  "workingDeliverables": [
+    "evidence/handover.md",
+    "evidence/handover-audit.md",
+    "evidence/before.md",
+    "evidence/after.md",
+    "evidence/comparison.md",
+    "evidence/source-audit.json",
+    "evidence/manifest.json",
+    "evidence/continuation.txt",
+    "evidence/after.patch",
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt",
+    "evidence/commands/verify.txt"
   ],
-  masterySignals: [
-    "Distinguish current authoritative requirements from plausible but outdated context.",
-    "Carry verified decisions and remaining work across a fresh context boundary.",
-    "Exclude irrelevant logs and unsupported completion claims from the handoff.",
-    "Use executable evidence to prove the fresh agent completed the correct behavior.",
-  ],
+  "masterySignals": [
+    "Accurate source-supported understanding.",
+    "Explicit unresolved questions.",
+    "A result another person or agent can use."
+  ]
 };

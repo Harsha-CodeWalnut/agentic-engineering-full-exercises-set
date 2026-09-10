@@ -1,10 +1,10 @@
 {
-  "title": "Source-Verified Code Graph Rescue",
+  "title": "Generate a Design Document from Code",
   "competency": "07. Docs & Diagrams",
-  "skillPattern": "source-to-graph-to-diagram",
+  "skillPattern": "acquire-codebase-knowledge",
   "domain": "Notification routing across provider availability, SMS consent, immediate delivery, and durable queue fallback.",
-  "mission": "Generate a code graph, repair an unsafe notification fallback, and produce diagrams whose relationships trace to source.",
-  "outcome": "The implementation, graph, diagrams, tests, and evidence agree at one Git source SHA.",
+  "mission": "Your team has a working application but no reliable design document. Your mission is to inspect the code and generate a design document that explains the system as it exists today. The document must explain the architecture, responsibilities, dependencies, data flow, important decisions, operational behaviour, and safe change boundaries.",
+  "outcome": "The challenge is complete when the design document matches the current code, clearly explains how the system works and where changes belong, and its important claims can be verified from the repository.",
   "entities": [
     "ChannelRouter",
     "ProviderStatus",
@@ -13,36 +13,37 @@
     "DurableQueue"
   ],
   "seededDefects": [
-    "SMS availability bypasses explicit customer consent.",
-    "The stale snapshot assigns consent checks to provider availability.",
-    "The stale snapshot invents a route from immediate delivery to the durable queue."
+    "Outdated supporting descriptions",
+    "Important relationships scattered across source files",
+    "Unverified assumptions in initial understanding"
   ],
   "verificationGates": [
-    "The generated graph exactly matches source call relationships.",
-    "Final graph regeneration writes to a scratch path and leaves the committed artifact unchanged.",
-    "Both Mermaid diagrams parse and contain only supported edges.",
-    "Protected routing tests prove every required fallback.",
-    "Traceability and hashes bind all evidence to one source SHA.",
-    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+    "Working source behaviour and protected inputs.",
+    "Artifact and source citation checks.",
+    "Committed evidence snapshot and command capture."
   ],
   "agentWorkflow": [
-    "Generate and query the graph before editing the router.",
-    "Fix consent and fallback behavior without changing protected inputs.",
-    "Map graph edges to diagrams and exact source lines.",
-    "Regenerate and verify all artifacts from the source commit.",
-    "Capture comparable before and after results using the conditions defined in the exercise README."
+    "Record the starting observations and sources.",
+    "Use Acquire Codebase Knowledge for source-backed discovery and consolidate the findings into one design document.",
+    "Produce the outputs in evidence-contract.json.",
+    "Verify source claims and capture the completed result."
   ],
   "workingDeliverables": [
-    "Corrected notification router.",
-    "Generated code graph and two Mermaid diagrams.",
-    "Source-bound traceability and command evidence.",
-    "evidence/before.md and evidence/before.patch",
-    "evidence/after.md and evidence/after.patch",
-    "evidence/comparison.md"
+    "docs/design-document.md",
+    "evidence/stale-claims.md",
+    "evidence/before.md",
+    "evidence/after.md",
+    "evidence/comparison.md",
+    "evidence/source-audit.json",
+    "evidence/manifest.json",
+    "evidence/commands/verify.txt",
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt",
+    "evidence/codebase-scan.txt"
   ],
   "masterySignals": [
-    "Generated structure is separated from inferred behavior.",
-    "Diagrams contain no unsupported relationship.",
-    "The fix is proven by protected tests and reproducible evidence."
+    "Accurate source-supported understanding.",
+    "Explicit unresolved questions.",
+    "A result another person or agent can use."
   ]
 }

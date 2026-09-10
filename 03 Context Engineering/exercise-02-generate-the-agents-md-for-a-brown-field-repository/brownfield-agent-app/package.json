@@ -1,0 +1,19 @@
+{
+  "name": "brownfield-agent-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/run-java.mjs demo",
+    "test": "node scripts/run-java.mjs test",
+    "test:acceptance": "node scripts/run-java.mjs acceptance",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "agent:check": "npm run test:integrity && npm test",
+    "verify:implementation": "npm run test:acceptance",
+    "verify:submission": "node ./scripts/verify-guidance.mjs",
+    "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs",
+    "evidence:capture": "node ../../../scripts/capture-verification.mjs",
+    "evidence:verify": "npm run agent:check && npm run verify:implementation"
+  }
+}

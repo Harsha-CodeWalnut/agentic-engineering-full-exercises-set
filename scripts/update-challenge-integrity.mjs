@@ -55,6 +55,31 @@ for (const manifestPath of findManifests(repositoryRoot)) {
     paths.add(path.relative(root, path.join(repositoryRoot, shared)).split(path.sep).join("/"));
   }
   if (isApplicationManifest) for (const relative of additions.get(exercise) ?? []) paths.add(relative);
+  if (isApplicationManifest && (fs.existsSync(path.join(root, "evidence-contract.json")) || root.includes("brownfield-agent-app"))) {
+    paths.add("evidence-contract.json");
+    paths.add("submission-contract.json");
+    paths.add("lab-contract.json");
+    paths.add("package.json");
+    paths.add("package-lock.json");
+    paths.add("../../../scripts/context-document-evidence.mjs");
+    paths.add("../../../scripts/capture-verification.mjs");
+    paths.add("../../../scripts/verify-exercise-contracts.mjs");
+    const collect = (directory) => {
+      if (!fs.existsSync(directory)) return;
+      for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+        const absolute = path.join(directory, entry.name);
+        if (entry.isDirectory()) collect(absolute);
+        else if (entry.name !== "challenge-integrity.json") paths.add(path.relative(root, absolute).split(path.sep).join("/"));
+      }
+    };
+    collect(path.join(root, "scripts"));
+    collect(path.join(root, "docs"));
+    collect(path.join(root, "..", "business"));
+    collect(path.join(root, "..", "docs"));
+    // Documentation exercises inspect a fixed source. Implementation exercises keep their task surface editable.
+    if (!root.includes("bugfix-context-app") && !root.includes("brownfield-agent-app")) collect(path.join(root, "src"));
+    for (const generated of ["../docs/design-document.md", "../docs/domain-model.md", "../docs/query-guide.md"]) paths.delete(generated);
+  }
   const protectedFiles = {};
   for (const relative of [...paths].sort()) {
     const absolute = path.resolve(root, relative);

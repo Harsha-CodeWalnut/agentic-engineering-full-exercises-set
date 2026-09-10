@@ -1,77 +1,56 @@
-# Domain Modeling Evidence
+# Evidence instructions and template
 
-Record only the first attempt from each implementation session. Do not retry, correct, or rewrite either result. Use exact commits, commands, exit codes, counts, paths, and source citations.
+All paths are relative to this exercise. Follow [setup.md](./setup.md) for the exact commit and capture order.
 
-## `evidence/before.md`
+## Before and after
 
-### Run
+Create `evidence/before.md` and `evidence/after.md`, each with these sections:
 
-- Starting commit:
-- Implementation commit:
-- Agent:
-- Model:
-- Tools:
-- Permissions:
-- Time limit:
-- Attempt: 1
-- Human hints: 0
-- Prompt: Add AI-history export to the workspace settings page. Only an authorized administrator on an eligible workspace may export. Preserve the existing security and data-residency restrictions.
-- Context source: Supplied repository
-- Domain Modeling skill: Disabled
-- Patch: `evidence/before.patch`
+- `## Conditions`: source commit, date, input files, task or questions, agent/tool and model (record unavailable if not exposed), time spent, and any hints or corrections.
+- `## Findings`: concrete observations or answers, supported decisions, failures, and remaining uncertainty.
+- `## Proof`: exact source references, links to raw session/query output, and actual command results.
 
-### Results
+Before records your initial understanding before creating the final artifact. After records the verified result. These are documented observations, not a claim that two different tools caused an improvement.
 
-| Proof | Result |
-|---|---|
-| `npm run test:rules` | Pass or fail; exit code: N |
-| Domain terms kept distinct | Number |
-| Current rules followed | Number |
-| Legacy assumptions followed | Number |
-| Authorization cases failed | Number |
-| Files changed | Number |
-| Lines added and removed | `+N / -N` |
+In `evidence/comparison.md`, use `## Changes`, `## Verified`, and `## Remaining questions`. Compare specific findings; successful initial answers do not need to become wrong to pass. Report equal results honestly.
 
-### Important Problems
+No before.patch or after.patch is required: this challenge produces knowledge artifacts, not a mandatory code change.
 
-List no more than three. Give the implementation file and line, confused term or rule, and authoritative source.
+## Outputs
 
-## `evidence/after.md`
+- `CONTEXT.md`.
+- `docs/domain-model.md`: Product purpose; People and responsibilities; Business relationships; Business workflows; Rules and exceptions; Unanswered questions.
+- `diagrams/business-domain.mmd`.
+- `evidence/business-answers.md`: Before; After.
+- `evidence/skill-use.md`.
+- `evidence/business-session.txt`.
 
-Use the same Run fields, with `Context source: CONTEXT.md` and `Domain Modeling skill: Enabled`.
+Keep `CONTEXT.md` within 700 words. The business session transcript must show the fresh agent's answers to all supplied questions using only your completed business documents. No technical sections belong in those documents; source citations remain in the separate audit.
 
-### Results
+## Skill-use record
 
-| Proof | Result |
-|---|---|
-| `npm run test:rules` | Pass or fail; exit code: N |
-| `npm run test:domain` | Pass or fail; exit code: N |
-| `npm run agent:check` | Pass or fail; exit code: N |
-| Domain terms kept distinct | Number |
-| Current rules followed | Number |
-| Legacy assumptions followed | Number |
-| Authorization cases failed | Number |
-| Files changed | Number |
-| Lines added and removed | `+N / -N` |
+In `evidence/skill-use.md`, use two sections: `## domain-analysis` and `## domain-modeling`. Under **each** section, record:
 
-## `evidence/domain-audit.md`
+- `Source:` the upstream skill URL. Use `tech-leads-club/agent-skills` for Domain Analysis and `mattpocock/skills` or the AI Hero guide for Domain Modeling.
+- `Revision: <full 40-character SHA>` or `SHA-256: <64-character skill file hash>` for that installed skill.
+- `Invocation:` the actual request or command used to invoke that skill.
+- `Proof:` the transcript path and line numbers showing its invocation and result.
 
-### Current Rules Retained
+Record what Domain Analysis revealed about business areas and what Domain Modeling clarified about their terms. Exclude architecture recommendations from the submitted business documents. A source link or matching filename alone is not proof of using a skill. The verifier checks the record's structure; reviewers check the referenced session evidence.
 
-| Rule | Authoritative source and line | Domain term or ADR decision |
-|---|---|---|
+## Source audit
 
-### Legacy or Unsupported Assumptions Excluded
+Create `evidence/source-audit.json` with a `claims` array. Each claim needs:
 
-| Assumption | Source | Current evidence that rejects it |
-|---|---|---|
+- `id`: a unique identifier you choose.
+- `topic`: one of `purpose`, `roles`, `terms`, `relationships`, `workflows`, `rules`, `exceptions`, `unresolved`. Cover every topic.
+- `status`: `supported`, `contradicted`, or `unresolved`.
+- `reason`: why the cited evidence supports the statement or leaves it unresolved.
+- `artifact`: `{ "path": "<submitted output>", "line": <one-based line>, "excerpt": "<exact text at that line>" }`.
+- `sources`: one or more objects with the same path, line, and excerpt fields, referencing supplied source material.
 
-### Context Boundary
+Paths start at the exercise folder. Excerpts must match complete lines, including indentation. Use multiple lines when needed. Cite each important statement and every diagram relationship; put one relationship per diagram line. Code and tests can prove current behaviour; old notes may establish a contradiction, not the current rule. Reviewers assess whether the source really supports the claim.
 
-List exactly what the final agent received and confirm it did not receive the previous implementation or extra explanation.
+## Recorded verification
 
-## `evidence/comparison.md`
-
-Confirm fair run conditions, then compare vocabulary, source selection, authorization cases, test results, context size, and changed files. State whether the domain model improved the result and support the conclusion with both patches.
-
-Use genuine Git diffs for `evidence/before.patch` and `evidence/after.patch`. Record the matching patch path in each run file and keep `evidence/comparison.md` in the final branch.
+`npm run evidence:seal` creates `evidence/manifest.json` after your outputs and evidence are committed. The capture command creates `evidence/commands/verify.txt` with the actual command, source commit, timestamps, output, and exit code. Final verification rejects missing files, changed artifacts, stale citations, and unsuccessful captures.

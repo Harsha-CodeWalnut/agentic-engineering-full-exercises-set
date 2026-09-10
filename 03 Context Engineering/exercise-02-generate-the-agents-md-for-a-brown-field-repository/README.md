@@ -1,32 +1,32 @@
-# Exercise 02 : Generate the agents.md for a brown field repository
+# Exercise 02 : Generate AGENTS.md for a Brownfield Repository
 
 ## Your Mission
 
-Your team uses a brownfield repository with limited documentation, mixed coding patterns, and important conventions hidden in the code. Fresh agents make broad or inconsistent changes because they cannot quickly identify the correct architecture, coding rules, Java practices, tests, and development workflow.
+Your team has a brownfield Java repository where customer features sit beside older internal tools. Fresh agents copy the wrong patterns or load every document because they cannot find the guidance relevant to their change.
 
-Your mission is to create a concise `AGENTS.md` that gives an agent a safe starting point and redirects it to focused supporting documents for deeper guidance.
+Your mission is to create a concise `AGENTS.md` that directs an agent to the right architecture, coding-quality, Java, testing, and workflow guidance when needed.
 
 The duration for this challenge is 45 min or less.
 
 ## Project
 
-[brownfield-agent-app](./brownfield-agent-app) is the base repository for this exercise. Inspect it before deciding which existing patterns are correct and which should not be repeated.
+[brownfield-agent-app](./brownfield-agent-app) contains working case access, a legacy export, and an unfinished workspace summary. Complete the [same change request](./docs/change-request.md) in both agent attempts.
 
 ## How To Go About It
 
-1. Ask a fresh agent to plan a small change without agent guidance and record its unsafe assumptions or poor pattern choices.
-2. Inspect the architecture, build workflow, tests, code quality rules, Java conventions, and common failure points.
-3. Create a concise `brownfield-agent-app/AGENTS.md` containing only safe-start rules and links to deeper guidance.
-4. Create the supporting documents the repository needs, such as `.agent/architecture.md`, `.agent/coding-quality-practices.md`, `.agent/java-practices.md`, `.agent/testing.md`, and `.agent/development-workflow.md`.
-5. Start another fresh agent session with the guidance and give it the same task under the same conditions.
-6. Compare the results and identify which instructions improved the second result.
+1. Create two branches from the same starting commit. On the first, let a fresh agent attempt the change without onboarding. Commit its result and save the before evidence.
+2. Inspect the repository and that result. On the second branch, create `brownfield-agent-app/AGENTS.md` and the supporting documents you choose under `.agent/`. Keep the entry file short and link to deeper guidance by task.
+3. Commit only the guidance, then let a fresh agent attempt the same change using the same model, tools, permissions, time limit, zero hints and zero retries.
+4. Keep its first result, copy the before evidence into the second branch, and compare which guidance was used. Follow the [commit and evidence instructions](./docs/evidence-template.md).
 
-Choose the final supporting files from what the repository actually needs. Do not copy generic guidance or place every detail in `AGENTS.md`.
+The guidance must apply to other repository tasks and must not contain the summary implementation.
 
 ## Evidence
 
-Submit `AGENTS.md`, the supporting documents, before and after session evidence, a comparison, verification output, and a focused pull request.
+Submit `AGENTS.md`, your supporting documents, `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, `evidence/after.patch`, `evidence/comparison.md`, session transcripts and captured checks. Follow the [evidence instructions and template](./docs/evidence-template.md) and [submission standard](../../docs/SUBMISSION_STANDARD.md).
+
+Run `npm run verify:exercise` from `brownfield-agent-app/`. Raise the final PR only from the second branch; keep the first branch until review is complete.
 
 ## Completion Criteria
 
-The challenge is complete when a fresh agent can use `AGENTS.md` to find the right guidance, make a focused change that follows the repository's intended practices, and verify the result without human correction.
+A fresh agent finds the relevant guidance, implements the summary with correct workspace access and time handling, preserves existing behaviour, and passes the checks without human correction. Both attempts must be recorded honestly; an already-correct first attempt is valid.

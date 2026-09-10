@@ -1,9 +1,9 @@
 {
-  "title": "Implementation-Backed Workflow Reconstruction",
-  "competency": "07. Docs & Diagrams - Source-verified technical communication",
-  "mission": "Reconstruct the implemented access-provisioning workflow and prove every important diagram edge from exact source evidence.",
+  "title": "Reverse Engineer a Sequence Diagram",
+  "competency": "07. Docs & Diagrams",
+  "mission": "Your team needs to understand an important workflow, but the existing documentation is incomplete and outdated. Your mission is to reverse engineer the workflow from the code and create a new sequence diagram that accurately shows how it works.",
   "domain": "Access provisioning with normal approval, high-risk security review, provisioning failure, rollback ownership, and a conflicting progress display.",
-  "outcome": "A document-led attempt is compared with three source-backed Mermaid diagrams whose states, actors, transitions, contradictions, and hashes are independently verifiable.",
+  "outcome": "The challenge is complete when the sequence diagram parses, represents the implemented workflow without invented steps, includes important failure paths, and every important interaction is supported by source evidence.",
   "entities": [
     "Access request",
     "Manager approval",
@@ -12,32 +12,37 @@
     "Rollback"
   ],
   "seededDefects": [
-    "The legacy description omits the high-risk security route.",
-    "The legacy description invents an automatic provisioning retry.",
-    "Rollback ownership is undocumented.",
-    "The UI marks security review complete on a path that never entered it."
+    "Outdated supporting descriptions",
+    "Important relationships scattered across source files",
+    "Unverified assumptions in initial understanding"
   ],
   "verificationGates": [
-    "Every Mermaid file parses.",
-    "Required states, actors, routes, and conditions match protected source traces.",
-    "Every required edge maps to an exact valid source line.",
-    "A post-source workflow change is rejected before stale diagrams can pass.",
-    "Evidence hashes match the declared source SHA and diagram files.",
-    "npm run verify:exercise checks implementation quality and submission evidence."
+    "Working source behaviour and protected inputs.",
+    "Artifact and source citation checks.",
+    "Committed evidence snapshot and command capture."
   ],
   "agentWorkflow": [
-    "Capture a legacy-document-led first attempt.",
-    "Trace the workflow implementation and identify contradictory claims.",
-    "Create state, approval, and failure diagrams from source.",
-    "Map important edges to exact lines and compare both attempts.",
-    "Capture comparable before and after results using the conditions defined in the exercise README."
+    "Record the starting observations and sources.",
+    "Use Design Doc Mermaid to generate the source-traced sequence diagram and record the skill invocation.",
+    "Produce the outputs in evidence-contract.json.",
+    "Verify source claims and capture the completed result."
   ],
   "workingDeliverables": [
-    "diagrams/access-state.mmd",
-    "diagrams/access-approval-sequence.mmd",
-    "diagrams/access-failure-sequence.mmd",
-    "evidence/before.md and evidence/before.patch",
-    "evidence/after.md and evidence/after.patch",
-    "evidence/comparison.md"
-  ]
+    "diagrams/access-sequence.mmd",
+    "evidence/contradictions.md",
+    "evidence/before.md",
+    "evidence/after.md",
+    "evidence/comparison.md",
+    "evidence/source-audit.json",
+    "evidence/manifest.json",
+    "evidence/commands/verify.txt",
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt"
+  ],
+  "masterySignals": [
+    "Accurate source-supported understanding.",
+    "Explicit unresolved questions.",
+    "A result another person or agent can use."
+  ],
+  "skillPattern": "design-doc-mermaid"
 }

@@ -1,0 +1,46 @@
+{
+  "name": "Reverse Engineer a Sequence Diagram",
+  "mode": "observation",
+  "outputs": [
+    {
+      "path": "diagrams/access-sequence.mmd",
+      "type": "mermaid",
+      "diagramType": "sequence"
+    },
+    {
+      "path": "evidence/contradictions.md",
+      "headings": [
+        "Old documentation",
+        "Observed behaviour",
+        "Unresolved questions"
+      ]
+    }
+  ],
+  "topics": [
+    "normal-path",
+    "high-risk-path",
+    "failure-path",
+    "rollback",
+    "contradictions"
+  ],
+  "sourceRoots": [
+    "workflow-reconstruction-app/src/",
+    "workflow-reconstruction-app/docs/",
+    "workflow-reconstruction-app/incidents/",
+    "workflow-reconstruction-app/scripts/run-",
+    "workflow-reconstruction-app/package.json",
+    "workflow-reconstruction-app/vite.config.ts",
+    "docs/",
+    "business/"
+  ],
+  "extraEvidence": [
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt"
+  ],
+  "requiredSkills": [
+    {
+      "name": "design-doc-mermaid",
+      "source": "https://github.com/SpillwaveSolutions/design-doc-mermaid"
+    }
+  ]
+}

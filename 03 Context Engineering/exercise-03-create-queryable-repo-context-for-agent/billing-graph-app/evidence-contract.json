@@ -1,0 +1,54 @@
+{
+  "name": "Create Queryable Repo Context for Agents",
+  "mode": "observation",
+  "outputs": [
+    {
+      "path": "graphify-out/graph.json",
+      "type": "json"
+    },
+    {
+      "path": "graphify-out/GRAPH_REPORT.md"
+    },
+    {
+      "path": "docs/query-guide.md",
+      "headings": [
+        "Setup",
+        "Agent use",
+        "Human use",
+        "Refresh"
+      ]
+    },
+    {
+      "path": "evidence/answers.md",
+      "headings": [
+        "Architecture",
+        "Dependencies",
+        "Data flow",
+        "Business rules",
+        "Ownership",
+        "Change impact"
+      ]
+    }
+  ],
+  "topics": [
+    "architecture",
+    "dependencies",
+    "data-flow",
+    "business-rules",
+    "ownership",
+    "change-impact"
+  ],
+  "sourceRoots": [
+    "billing-graph-app/src/",
+    "billing-graph-app/docs/",
+    "billing-graph-app/incidents/",
+    "billing-graph-app/scripts/run-",
+    "billing-graph-app/package.json",
+    "billing-graph-app/vite.config.ts",
+    "docs/",
+    "business/"
+  ],
+  "extraEvidence": [
+    "evidence/commands/graphify.txt"
+  ]
+}

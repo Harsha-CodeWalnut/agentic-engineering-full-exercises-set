@@ -1,0 +1,41 @@
+{
+  "name": "Generate AGENTS.md for a Brownfield Repository",
+  "root": "..",
+  "evidenceMode": "matched",
+  "requiredFiles": [
+    {
+      "path": "brownfield-agent-app/AGENTS.md"
+    },
+    {
+      "path": "evidence/before.md"
+    },
+    {
+      "path": "evidence/before.patch"
+    },
+    {
+      "path": "evidence/after.md"
+    },
+    {
+      "path": "evidence/after.patch"
+    },
+    {
+      "path": "evidence/comparison.md"
+    },
+    {
+      "path": "evidence/before-session.txt"
+    },
+    {
+      "path": "evidence/after-session.txt"
+    },
+    {
+      "path": "evidence/commands/verify.txt",
+      "includeAll": [
+        "Command: npm run evidence:verify",
+        "Repository commit:",
+        "Started at:",
+        "Finished at:",
+        "exit code: 0"
+      ]
+    }
+  ]
+}

@@ -1,99 +1,56 @@
-# Handoff Incident Evidence
+# Evidence instructions and template
 
-Record only the first attempt from each implementation session. Do not retry, correct, or rewrite either result. Use exact commits, commands, exit codes, counts, paths, and source citations.
+All paths are relative to this exercise. Follow [setup.md](./setup.md) for the exact commit and capture order.
 
-## `evidence/before.md`
+## Before and after
 
-### Run
+Create `evidence/before.md` and `evidence/after.md`, each with these sections:
 
-- Starting commit:
-- Implementation commit:
-- Agent:
-- Model:
-- Tools:
-- Permissions:
-- Time limit:
-- Attempt: 1
-- Human hints: 0
-- Prompt: Complete the automatic escalation fix for at-risk cases. Use the current SLA rules, preserve existing ownership and manual escalation behaviour, and keep the queue totals and saved workflow state consistent.
-- Context source: Raw session history
-- Handoff skill: Disabled
-- Patch: `evidence/before.patch`
+- `## Conditions`: source commit, date, input files, task or questions, agent/tool and model (record unavailable if not exposed), time spent, and any hints or corrections.
+- `## Findings`: concrete observations or answers, supported decisions, failures, and remaining uncertainty.
+- `## Proof`: exact source references, links to raw session/query output, and actual command results.
 
-### Results
+Before describes the supplied simulated Claude session and unfinished source. After describes the real fresh Codex continuation. This is a transfer between different agents, not a matched-model experiment. Do not invent the simulated session's model, token usage, or runtime.
 
-| Proof | Result |
-|---|---|
-| `npm run test:incident` | Pass or fail; exit code: N |
-| Current requirements followed | Number |
-| Stale claims followed | Number |
-| Protected behaviors broken | Number |
-| Context supplied | Word or token count |
-| Files changed | Number |
-| Lines added and removed | `+N / -N` |
+In `evidence/comparison.md`, use `## Changes`, `## Verified`, and `## Remaining questions`. Compare specific findings; successful initial answers do not need to become wrong to pass. Report equal results honestly.
 
-### Important Problems
+Also submit `evidence/continuation.txt` containing the fresh Codex session transcript and `evidence/after.patch` generated with `git diff --binary --full-index <starting-commit> <implementation-commit>`. Record `Starting commit: <full SHA>` in before.md and `Implementation commit: <full SHA>` in after.md. Commit the implementation first, then generate the patch before committing the evidence.
 
-List no more than three. Give the implementation file and line, incorrect claim, and authoritative source that contradicts it.
+## Outputs
 
-## `evidence/after.md`
+- `evidence/handover.md`: Request; Current state; Remaining work; Verification; Suggested skills.
+- `evidence/handover-audit.md`: Retained facts; Rejected claims; Missing information.
+- `evidence/continuation.txt`.
+- `evidence/after.patch`.
 
-### Run
+Keep the handover within 1,200 words. Record the final implementation SHA, and do not change application source after that implementation commit; subsequent commits contain only the requested documentation and evidence.
 
-- Starting commit:
-- Implementation commit:
-- Agent:
-- Model:
-- Tools:
-- Permissions:
-- Time limit:
-- Attempt: 1
-- Human hints: 0
-- Prompt: Complete the automatic escalation fix for at-risk cases. Use the current SLA rules, preserve existing ownership and manual escalation behaviour, and keep the queue totals and saved workflow state consistent.
-- Context source: `evidence/handoff.md`
-- Handoff skill: Enabled
-- Patch: `evidence/after.patch`
+## Skill evidence
 
-### Results
+Submit `evidence/skill-use.md` and `evidence/skill-session.txt`. The latter is the actual preparation or generation transcript, redacted for secrets, not a rewritten summary.
 
-| Proof | Result |
-|---|---|
-| `npm run test:incident` | Pass or fail; exit code: N |
-| `npm run test:handoff` | Pass or fail; exit code: N |
-| `npm run agent:check` | Pass or fail; exit code: N |
-| Current requirements followed | Number |
-| Stale claims followed | Number |
-| Protected behaviors broken | Number |
-| Context supplied | Word or token count |
-| Files changed | Number |
-| Lines added and removed | `+N / -N` |
+Use one `## <skill-name>` section per skill in `skill-use.md`. Under each section, record plain fields:
 
-## `evidence/handoff-audit.md`
+- `Source: <upstream repository URL from setup.md>`.
+- `Revision: <full 40-character SHA>` or `SHA-256: <64-character installed SKILL.md hash>`.
+- `Invocation: <actual command or request>`.
+- `Proof: evidence/skill-session.txt:L<first>-L<last>` pointing to the invocation and result.
 
-### Verified Facts Retained
+Use the exact skill name from setup.md. Record how its output was checked or corrected. Verification checks the required skill, record fields and transcript line range, not whether an agent truly loaded the skill. Reviewers inspect the raw transcript. Do not manufacture unavailable model details or successful results.
 
-| Fact | Authoritative source and line | Verification |
-|---|---|---|
+## Source audit
 
-### Outdated or Unsupported Claims Excluded
+Create `evidence/source-audit.json` with a `claims` array. Each claim needs:
 
-| Claim | Source | Contradicting evidence |
-|---|---|---|
+- `id`: a unique identifier you choose.
+- `topic`: one of `request`, `completed-work`, `stale-claims`, `remaining-work`, `verification`. Cover every topic.
+- `status`: `supported`, `contradicted`, or `unresolved`.
+- `reason`: why the cited evidence supports the statement or leaves it unresolved.
+- `artifact`: `{ "path": "<submitted output>", "line": <one-based line>, "excerpt": "<exact text at that line>" }`.
+- `sources`: one or more objects with the same path, line, and excerpt fields, referencing supplied source material.
 
-### Handoff Boundary
+Paths start at the exercise folder. Excerpts must match complete lines, including indentation. Use multiple lines when needed. Cite each important statement and every diagram relationship; put one relationship per diagram line. Code and tests can prove current behaviour; old notes may establish a contradiction, not the current rule. Reviewers assess whether the source really supports the claim.
 
-Confirm exactly what the final agent received and that the raw session history was not provided.
+## Recorded verification
 
-## `evidence/comparison.md`
-
-### Fair Comparison
-
-Confirm the same starting commit, incident request, agent, model, tools, permissions, time limit, human hints, and first-attempt condition.
-
-### Results
-
-Compare requirement selection, stale claims followed, protected behavior, test results, files changed, and context size.
-
-### Conclusion
-
-State whether the verified handoff improved the implementation. Support the answer with exact results and both patches.
+`npm run evidence:seal` creates `evidence/manifest.json` after your outputs and evidence are committed. The capture command creates `evidence/commands/verify.txt` with the actual command, source commit, timestamps, output, and exit code. Final verification rejects missing files, changed artifacts, stale citations, and unsuccessful captures.

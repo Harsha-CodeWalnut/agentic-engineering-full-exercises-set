@@ -1,0 +1,57 @@
+{
+  "name": "Generate a Design Document from Code",
+  "mode": "observation",
+  "outputs": [
+    {
+      "path": "docs/design-document.md",
+      "headings": [
+        "Purpose",
+        "Architecture",
+        "Responsibilities",
+        "Dependencies",
+        "Data flow",
+        "Failure and fallback",
+        "Decisions and constraints",
+        "Risks and verification"
+      ]
+    },
+    {
+      "path": "evidence/stale-claims.md",
+      "headings": [
+        "Supported",
+        "Rejected",
+        "Unresolved"
+      ]
+    }
+  ],
+  "topics": [
+    "architecture",
+    "responsibilities",
+    "dependencies",
+    "data-flow",
+    "failure-path",
+    "constraints",
+    "verification"
+  ],
+  "sourceRoots": [
+    "notification-mesh-app/src/",
+    "notification-mesh-app/docs/",
+    "notification-mesh-app/incidents/",
+    "notification-mesh-app/scripts/run-",
+    "notification-mesh-app/package.json",
+    "notification-mesh-app/vite.config.ts",
+    "docs/",
+    "business/"
+  ],
+  "extraEvidence": [
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt",
+    "evidence/codebase-scan.txt"
+  ],
+  "requiredSkills": [
+    {
+      "name": "acquire-codebase-knowledge",
+      "source": "https://github.com/github/awesome-copilot"
+    }
+  ]
+}

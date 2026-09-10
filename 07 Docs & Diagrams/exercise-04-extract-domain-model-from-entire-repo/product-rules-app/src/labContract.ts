@@ -4,16 +4,50 @@ export interface LabContract {
   agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
 }
 
-export const labContract: LabContract = {
-  title: "Domain Modeling Skill Product Rules Rescue",
-  competency: "03. Context Engineering",
-  domain: "Workspace AI-history export authorization",
-  mission: "Stop a cross-workspace authorization bug caused by overloaded account language.",
-  outcome: "A fresh agent uses compact, source-backed domain context to implement the correct export boundary.",
-  entities: ["billing customer", "user", "workspace", "workspace membership", "membership role", "data residency"],
-  seededDefects: ["billing ownership incorrectly grants product access", "Growth is incorrectly eligible", "membership user, scope, and status are ignored", "data residency is ignored"],
-  verificationGates: ["eight protected behavior checks", "source-backed context check", "decision and audit checks", "fair before-and-after evidence"],
-  agentWorkflow: ["capture an unskilled first attempt", "separate current rules from legacy language", "build the domain model with the skill", "run a fresh context-only attempt", "compare behavior and verify"],
-  workingDeliverables: ["CONTEXT.md", "decision record", "domain audit", "policy and regression tests", "before-and-after patches and reports"],
-  masterySignals: ["terms have one scoped meaning", "rule sources are ranked", "billing and workspace authorization are separate", "all boundaries are executable"],
+export const labContract = {
+  "title": "Extract a Domain Model from the Entire Repository",
+  "competency": "07. Docs & Diagrams",
+  "skillPattern": "domain-analysis + domain-modeling",
+  "domain": "Workspace AI-history export authorization",
+  "mission": "You are working in a business domain where important knowledge is scattered across code, tests, policies, examples, and documents. Different files use the same business terms differently, so an AI agent or a new team member can make a technically valid change that breaks business rules.  Your mission is to extract the business domain model from the entire repository and create clear domain documentation for both AI agents and people.",
+  "outcome": "The challenge is complete when the document represents business meaning across the repository, distinguishes similar terms, records important rules and exceptions, and gives an AI agent enough business context without inventing domain rules.",
+  "entities": [
+    "billing customer",
+    "user",
+    "workspace",
+    "workspace membership",
+    "membership role",
+    "data residency"
+  ],
+  "seededDefects": ["Outdated supporting descriptions","Important relationships scattered across source files","Unverified assumptions in initial understanding"],
+  "verificationGates": [
+    "Working source behaviour and protected inputs.",
+    "Artifact and source citation checks.",
+    "Committed evidence snapshot and command capture."
+  ],
+  "agentWorkflow": [
+    "Record the starting observations and sources.",
+    "Use Domain Analysis to discover business areas and Domain Modeling to refine their terms; exclude technical recommendations.",
+    "Produce the outputs in evidence-contract.json and record each skill's source, revision, invocation, and proof.",
+    "Verify source claims and capture the completed result."
+  ],
+  "workingDeliverables": [
+    "CONTEXT.md",
+    "docs/domain-model.md",
+    "diagrams/business-domain.mmd",
+    "evidence/business-answers.md",
+    "evidence/before.md",
+    "evidence/after.md",
+    "evidence/comparison.md",
+    "evidence/source-audit.json",
+    "evidence/manifest.json",
+    "evidence/skill-use.md",
+    "evidence/business-session.txt",
+    "evidence/commands/verify.txt"
+  ],
+  "masterySignals": [
+    "Accurate source-supported understanding.",
+    "Explicit unresolved questions.",
+    "A result another person or agent can use."
+  ]
 };

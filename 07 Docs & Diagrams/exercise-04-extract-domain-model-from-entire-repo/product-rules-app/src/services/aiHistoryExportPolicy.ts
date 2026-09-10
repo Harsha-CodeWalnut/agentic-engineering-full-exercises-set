@@ -24,12 +24,13 @@ export interface ExportAuthorizationContext {
   membership: WorkspaceMembership | null;
 }
 
-/**
- * Seeded previous-agent implementation. It follows the legacy `account owner`
- * rule and treats a role name as sufficient without checking its scope.
- */
+/** Current approved workspace export policy. Billing ownership grants no product access. */
 export function canExportAIHistory(context: ExportAuthorizationContext) {
-  const isLegacyAccountOwner = context.billingCustomer.ownerUserId === context.callerUserId;
-  const hasAdminLabel = context.membership?.role === "admin";
-  return context.workspace.plan !== "Starter" && (isLegacyAccountOwner || hasAdminLabel);
+  const membership = context.membership;
+  return context.workspace.plan === "Enterprise"
+    && context.workspace.dataResidency === "standard"
+    && membership?.userId === context.callerUserId
+    && membership.workspaceId === context.workspace.id
+    && membership.status === "active"
+    && membership.role === "admin";
 }

@@ -1,0 +1,50 @@
+{
+  "name": "Extract a Domain Model from the Entire Repository",
+  "root": "..",
+  "evidenceMode": "observation",
+  "requiredFiles": [
+    {
+      "path": "CONTEXT.md"
+    },
+    {
+      "path": "docs/domain-model.md"
+    },
+    {
+      "path": "diagrams/business-domain.mmd"
+    },
+    {
+      "path": "evidence/business-answers.md"
+    },
+    {
+      "path": "evidence/before.md"
+    },
+    {
+      "path": "evidence/after.md"
+    },
+    {
+      "path": "evidence/comparison.md"
+    },
+    {
+      "path": "evidence/source-audit.json"
+    },
+    {
+      "path": "evidence/manifest.json"
+    },
+    {
+      "path": "evidence/skill-use.md"
+    },
+    {
+      "path": "evidence/business-session.txt"
+    },
+    {
+      "path": "evidence/commands/verify.txt",
+      "includeAll": [
+        "Command: npm run evidence:verify",
+        "Repository commit:",
+        "Started at:",
+        "Finished at:",
+        "exit code: 0"
+      ]
+    }
+  ]
+}

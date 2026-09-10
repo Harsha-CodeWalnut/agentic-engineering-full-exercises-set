@@ -1,23 +1,9 @@
-# Code Graph and Diagram Contract
+# Design document scope
 
-Generate the graph from `notification-mesh-app/src/notification/**/*.mjs` with the supplied builder. Do not edit the generated JSON by hand.
+The primary output is `docs/design-document.md`, not a generated graph. Explain the current application, its modules, dependencies, data flow, fallback behaviour, constraints, and how to verify a change.
 
-The dependency diagram starts with `flowchart LR` and uses these aliases: `ChannelRouter`, `ProviderStatus`, `ConsentPolicy`, `ImmediateRoute`, and `DurableQueue`. It must show only the four supported component dependencies. Labels may group the provider-status and immediate-route calls.
+Use Acquire Codebase Knowledge for the investigation, with the explicit single-document output override in [setup.md](./setup.md). Its scanner finds leads, not verified design decisions. Consolidate supported findings into the required sections and state unresolved questions plainly. No diagram-generation skill or seven-document submission is required.
 
-The sequence diagram starts with `sequenceDiagram` and uses `Client`, `ChannelRouter`, `ProviderStatus`, `ConsentPolicy`, and `RouteResult`. Show two cases:
+The existing graph commands remain optional investigation tools. Their output does not establish the truth of a design claim. If used, compare it with current code and tests. No graph artifact or routing repair is required for completion.
 
-- Push unavailable, SMS available but not consented, then email selected.
-- Push unavailable, SMS not permitted, email unavailable, then durable queue selected.
-
-In the sequence diagram, add `%% EDGE: DEP-<number>` immediately before the message that represents that exact call. The required mappings are:
-
-| ID | Caller | Callee | Required diagrams |
-| --- | --- | --- | --- |
-| DEP-01 | `selectNotificationRoute` | `pushAvailable` | sequence |
-| DEP-02 | `selectNotificationRoute` | `smsAvailable` | sequence |
-| DEP-03 | `selectNotificationRoute` | `hasSmsConsent` | sequence |
-| DEP-04 | `selectNotificationRoute` | `emailAvailable` | sequence |
-| DEP-05 | `selectNotificationRoute` | `immediateRoute` | sequence |
-| DEP-06 | `selectNotificationRoute` | `durableQueueRoute` | sequence |
-
-The generated graph provides call-level traceability for both diagrams. Source remains the authority for behavior and branch order. `npm run graph:build` creates the committed artifact; final verification uses `npm run graph:build:check` to rebuild it in a temporary path without rewriting the submission.
+Add useful Mermaid diagrams inside the design document only when they explain a relationship more clearly. Link important statements to source evidence and record stale claims separately. The source app already implements the intended consent boundary; inspect rather than change it.

@@ -1,0 +1,53 @@
+{
+  "name": "Session Handover from Claude to Codex",
+  "mode": "handover",
+  "outputs": [
+    {
+      "path": "evidence/handover.md",
+      "headings": [
+        "Request",
+        "Current state",
+        "Remaining work",
+        "Verification",
+        "Suggested skills"
+      ]
+    },
+    {
+      "path": "evidence/handover-audit.md",
+      "headings": [
+        "Retained facts",
+        "Rejected claims",
+        "Missing information"
+      ]
+    }
+  ],
+  "topics": [
+    "request",
+    "completed-work",
+    "stale-claims",
+    "remaining-work",
+    "verification"
+  ],
+  "sourceRoots": [
+    "bugfix-context-app/src/",
+    "bugfix-context-app/docs/",
+    "bugfix-context-app/incidents/",
+    "bugfix-context-app/scripts/run-",
+    "bugfix-context-app/package.json",
+    "bugfix-context-app/vite.config.ts",
+    "docs/",
+    "business/"
+  ],
+  "extraEvidence": [
+    "evidence/continuation.txt",
+    "evidence/after.patch",
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt"
+  ],
+  "requiredSkills": [
+    {
+      "name": "handoff",
+      "source": "https://github.com/mattpocock/skills"
+    }
+  ]
+}

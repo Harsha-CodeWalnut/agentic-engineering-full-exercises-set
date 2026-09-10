@@ -1,0 +1,63 @@
+{
+  "name": "Payment Module Visualization",
+  "mode": "observation",
+  "outputs": [
+    {
+      "path": "diagrams/payment-architecture.mmd",
+      "type": "mermaid",
+      "diagramType": "flowchart-v2"
+    },
+    {
+      "path": "diagrams/payment-sequence.mmd",
+      "type": "mermaid",
+      "diagramType": "sequence"
+    },
+    {
+      "path": "diagrams/payment-flow.mmd",
+      "type": "mermaid",
+      "diagramType": "flowchart-v2"
+    },
+    {
+      "path": "diagrams/payment-data.mmd",
+      "type": "mermaid",
+      "diagramType": "er"
+    },
+    {
+      "path": "evidence/contradictions.md",
+      "headings": [
+        "Supported",
+        "Rejected",
+        "Unresolved"
+      ]
+    }
+  ],
+  "topics": [
+    "architecture",
+    "authorization",
+    "capture",
+    "webhooks",
+    "duplicates",
+    "failure",
+    "data-relationships"
+  ],
+  "sourceRoots": [
+    "payment-workflow-app/src/",
+    "payment-workflow-app/docs/",
+    "payment-workflow-app/incidents/",
+    "payment-workflow-app/scripts/run-",
+    "payment-workflow-app/package.json",
+    "payment-workflow-app/vite.config.ts",
+    "docs/",
+    "business/"
+  ],
+  "extraEvidence": [
+    "evidence/skill-use.md",
+    "evidence/skill-session.txt"
+  ],
+  "requiredSkills": [
+    {
+      "name": "design-doc-mermaid",
+      "source": "https://github.com/SpillwaveSolutions/design-doc-mermaid"
+    }
+  ]
+}

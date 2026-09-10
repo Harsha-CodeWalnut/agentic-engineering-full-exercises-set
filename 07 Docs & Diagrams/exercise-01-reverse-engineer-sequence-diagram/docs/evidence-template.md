@@ -1,48 +1,53 @@
-# Workflow Reconstruction Evidence
+# Evidence instructions and template
 
-## traceability.json
+All paths are relative to this exercise. Follow [setup.md](./setup.md) for the exact commit and capture order.
 
-```json
-{
-  "schema_version": 1,
-  "source_sha": "40-character Git SHA",
-  "edges": [
-    {
-      "id": "WF-01",
-      "from": "draft",
-      "to": "submitted",
-      "condition": "request status is draft",
-      "actor": "Employee",
-      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
-      "source_line": 1,
-      "source_excerpt": "exact source line containing EDGE: WF-01",
-      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
-    }
-  ]
-}
-```
+## Before and after
 
-Add `WF-01` through `WF-10`. Source lines must exist at `source_sha`, contain the matching edge marker, and agree with the declared transition and actor.
+Create `evidence/before.md` and `evidence/after.md`, each with these sections:
 
-## diagram-manifest.json
+- `## Conditions`: source commit, date, input files, task or questions, agent/tool and model (record unavailable if not exposed), time spent, and any hints or corrections.
+- `## Findings`: concrete observations or answers, supported decisions, failures, and remaining uncertainty.
+- `## Proof`: exact source references, links to raw session/query output, and actual command results.
 
-Record `source_sha`; each diagram's path, type, and SHA-256; `traceability.json` and `contradictions.md` SHA-256; and the exact command, exit code, path, and SHA-256 for both captured command outputs.
+Before records your initial understanding before creating the final artifact. After records the verified result. These are documented observations, not a claim that two different tools caused an improvement.
 
-Use:
+In `evidence/comparison.md`, use `## Changes`, `## Verified`, and `## Remaining questions`. Compare specific findings; successful initial answers do not need to become wrong to pass. Report equal results honestly.
 
-- `npm run workflow:trace > ../evidence/commands/workflow-trace.txt`
-- `npm run diagrams:parse > ../evidence/commands/diagram-parse.txt`
+No before.patch or after.patch is required: this challenge produces knowledge artifacts, not a mandatory code change.
 
-## contradictions.md
+## Outputs
 
-Record `LEG-01` through `LEG-04` and `CODE-01`. For each, quote only the short disputed claim, cite the conflicting source path and line, state which behavior the diagrams show, and explain why.
+- `diagrams/access-sequence.mmd`.
+- `evidence/contradictions.md`: Old documentation; Observed behaviour; Unresolved questions.
 
-## verification.md
 
-Record the source SHA, Mermaid parser result for all three files, semantic verifier result, scenario trace result, unsupported-edge check, contradiction count, remaining ambiguity, and final conclusion.
+## Skill evidence
 
-## Required Before and After Files
+Submit `evidence/skill-use.md` and `evidence/skill-session.txt`. The latter is the actual preparation or generation transcript, redacted for secrets, not a rewritten summary.
 
-- `evidence/before.md` and `evidence/after.md` record matching session conditions, unsupported edge counts, missing paths, parser results, and changed files.
-- `evidence/before.patch` and `evidence/after.patch` are genuine Git diffs for the document-led and source-led diagram attempts.
-- `evidence/comparison.md` compares edge accuracy, actor coverage, contradictions, and verification.
+Use one `## <skill-name>` section per skill in `skill-use.md`. Under each section, record plain fields:
+
+- `Source: <upstream repository URL from setup.md>`.
+- `Revision: <full 40-character SHA>` or `SHA-256: <64-character installed SKILL.md hash>`.
+- `Invocation: <actual command or request>`.
+- `Proof: evidence/skill-session.txt:L<first>-L<last>` pointing to the invocation and result.
+
+Use the exact skill name from setup.md. Record how its output was checked or corrected. Verification checks the required skill, record fields and transcript line range, not whether an agent truly loaded the skill. Reviewers inspect the raw transcript. Do not manufacture unavailable model details or successful results.
+
+## Source audit
+
+Create `evidence/source-audit.json` with a `claims` array. Each claim needs:
+
+- `id`: a unique identifier you choose.
+- `topic`: one of `normal-path`, `high-risk-path`, `failure-path`, `rollback`, `contradictions`. Cover every topic.
+- `status`: `supported`, `contradicted`, or `unresolved`.
+- `reason`: why the cited evidence supports the statement or leaves it unresolved.
+- `artifact`: `{ "path": "<submitted output>", "line": <one-based line>, "excerpt": "<exact text at that line>" }`.
+- `sources`: one or more objects with the same path, line, and excerpt fields, referencing supplied source material.
+
+Paths start at the exercise folder. Excerpts must match complete lines, including indentation. Use multiple lines when needed. Cite each important statement and every diagram relationship; put one relationship per diagram line. Code and tests can prove current behaviour; old notes may establish a contradiction, not the current rule. Reviewers assess whether the source really supports the claim.
+
+## Recorded verification
+
+`npm run evidence:seal` creates `evidence/manifest.json` after your outputs and evidence are committed. The capture command creates `evidence/commands/verify.txt` with the actual command, source commit, timestamps, output, and exit code. Final verification rejects missing files, changed artifacts, stale citations, and unsuccessful captures.

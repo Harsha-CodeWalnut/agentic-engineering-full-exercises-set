@@ -1,9 +1,9 @@
-# Raw Previous Agent Session
+# Saved Claude session (simulated training fixture)
 
 Session date: 2026-08-08
 Task: Continue the automatic escalation incident fix
 
-This file is the uncompressed record supplied to the baseline implementation agent. Statements inside it have different evidence quality and may conflict.
+This is a constructed Claude session for training, not a recording of a real model run. No real model identity, token count or runtime is claimed. Its unfinished implementation is already present in the starter. Statements have different evidence quality and may conflict. Use it to prepare the handover; do not give it to the receiving Codex session.
 
 ## Request received
 

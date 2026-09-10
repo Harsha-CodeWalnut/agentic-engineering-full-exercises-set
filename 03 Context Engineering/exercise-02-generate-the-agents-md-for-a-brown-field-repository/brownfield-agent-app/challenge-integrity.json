@@ -1,0 +1,23 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../../../scripts/capture-verification.mjs": "857bf77e3359e1e1fe077512e4278045ad90c8b2b4ac1065df23bf1afdfc60e4",
+    "../../../scripts/comparable-evidence.mjs": "c17afd57721834139072a847e03b4fbce467d8e1db9252c5748212966fbca1d0",
+    "../../../scripts/context-document-evidence.mjs": "50cc485c0ec0649c283e3cbb91f868a609c6af2bc0aed3cbb552d6b9f4ef3133",
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-exercise-contracts.mjs": "f682a84cd9b8807f40bc33022b2a6bfc90e1bcbf9b8fbdfd8d48610c38684749",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
+    "../../../scripts/verify-submission-contract.mjs": "5c34aab86313eeb825b19c6ceabc8afbaf65cce3d1cde325bdea7a9739e23ca4",
+    "../docs/change-request.md": "1a288bd21528ebf0d314b1a9dbf0276d0e18a15eeb86d72aaf7cb0db43ae6827",
+    "../docs/evidence-template.md": "3ed06dcdc4e0471370d0c4633de952db5418c622d625399e444e04728a28a910",
+    "docs/maintenance-notes.md": "f6fba64df6b3dd9d44e3458b4ac6e04f3e22a0fe275150029b8a29650feb3fae",
+    "lab-contract.json": "e11fa5cbbbda0bc049a61015f82f51760543daa1173826c30024291c24c9c902",
+    "package-lock.json": "fc2bcf57475e1f806b2808a609c391a2336a785db90e9e9377f0c9305eda9640",
+    "package.json": "3b6158db3c74d7a760c89a922b0a9ccea2c97b5727c01d35f5d05d04b4d9c4bb",
+    "scripts/run-java.mjs": "f6b9c509469f543b3459e75f863525c781296cfee0a6b06c2eeec9d34fde73e9",
+    "scripts/verify-guidance.mjs": "2c7ec6551367d9daa4c419dcf10296acd36bc7bca829ef559bdb375d2eaa64d9",
+    "src/test/java/com/codewalnut/support/ContractChecks.java": "5687d0b51eada29c6a994c567a0a0b5691327a98d84398dff959b3cc7c104cc7",
+    "submission-contract.json": "8d4afffd894d7cd81a5c4eece8d2cbe3803d17264b1ca363ff1a8683557d51f6"
+  }
+}

@@ -1,10 +1,10 @@
 {
-  "title": "Graphify Billing Knowledge Graph",
+  "title": "Create Queryable Repo Context for Agents",
   "competency": "03. Context Engineering",
   "skillPattern": "graphify",
   "domain": "Cross-cutting recognized-revenue calculation",
-  "mission": "Use a queryable knowledge graph to rescue a billing incident spanning calculation, mapping, consumers, contracts, and ownership.",
-  "outcome": "A graph-first agent finds the shared safe edit path, rejects stale context, and fixes both consumers without changing gross volume.",
+  "mission": "Your repository is too large for an AI agent or a new team member to understand through repeated file searches. Your mission is to create a queryable repository graph using Graphify. The graph must help an AI agent and a human user find components, dependencies, business rules, data flow, ownership, and the source of important decisions without loading the entire repository into every session.",
+  "outcome": "The challenge is complete when the graph represents the repository accurately, important answers are traceable to source files, and both agents and users can query it to reduce repeated repository discovery.",
   "entities": [
     "billing event",
     "recognized revenue",
@@ -16,42 +16,36 @@
     "owner team"
   ],
   "seededDefects": [
-    "credits are counted as revenue",
-    "refunds increase revenue",
-    "results are grouped by tenant",
-    "historical sources point to the wrong formula and owner"
+    "Outdated supporting descriptions",
+    "Important relationships scattered across source files",
+    "Unverified assumptions in initial understanding"
   ],
   "verificationGates": [
-    "eight protected behavior checks",
-    "real NetworkX graph artifacts",
-    "six answered graph questions",
-    "source-verified uncertain edges",
-    "fair search-versus-graph comparison",
-    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+    "Working source behaviour and protected inputs.",
+    "Artifact and source citation checks.",
+    "Committed evidence snapshot and command capture."
   ],
   "agentWorkflow": [
-    "capture a normal-search first attempt",
-    "build the complete exercise graph",
-    "query before reading source",
-    "source-verify uncertain edges",
-    "capture a graph-first attempt",
-    "compare results",
-    "Capture comparable before and after results using the conditions defined in the exercise README."
+    "Record the starting observations and sources.",
+    "Produce the outputs in evidence-contract.json.",
+    "Verify source claims and capture the completed result."
   ],
   "workingDeliverables": [
-    "recognized-revenue fix",
-    "Graphify JSON, HTML, and report",
-    "query and audit evidence",
-    "before-and-after patches and reports",
-    "evidence/before.md and evidence/before.patch",
-    "evidence/after.md and evidence/after.patch",
-    "evidence/comparison.md"
+    "graphify-out/graph.json",
+    "graphify-out/GRAPH_REPORT.md",
+    "docs/query-guide.md",
+    "evidence/answers.md",
+    "evidence/before.md",
+    "evidence/after.md",
+    "evidence/comparison.md",
+    "evidence/source-audit.json",
+    "evidence/manifest.json",
+    "evidence/commands/graphify.txt",
+    "evidence/commands/verify.txt"
   ],
   "masterySignals": [
-    "queries reveal both consumers and shared calculation",
-    "edge confidence is respected",
-    "current and stale sources are separated",
-    "ownership is correct",
-    "gross volume remains unchanged"
+    "Accurate source-supported understanding.",
+    "Explicit unresolved questions.",
+    "A result another person or agent can use."
   ]
 }

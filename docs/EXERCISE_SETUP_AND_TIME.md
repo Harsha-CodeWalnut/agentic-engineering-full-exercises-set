@@ -17,18 +17,20 @@ Unless the local README says otherwise, prepare:
 
 Run the starter smoke or integrity command before timing the challenge. Use the exercise's `npm run verify:exercise` only after completing the work.
 
+On Windows, use a short checkout path such as `C:\work\exercises`. If Git reports a filename-length error, run `git config core.longpaths true` inside this checkout. This is particularly relevant to the nested Java source paths.
+
 ## Additional Prerequisites
 
 | Exercise type | Prepare before timing |
 |---|---|
 | Browser and accessibility | Playwright Chromium and any named browser or MCP integration. Use the local setup check when supplied. |
 | Semgrep review | Python 3 and Semgrep installed with `python -m pip install semgrep`; confirm with `semgrep --version`. |
-| Java or full-stack provider | A supported JDK. Use the committed Maven wrapper rather than a separate Maven installation. |
+| Java or full-stack provider | A supported JDK. Use the committed Maven wrapper where supplied. The brownfield onboarding starter uses JDK 21 directly through npm scripts; it does not need Maven. |
 | Multi-agent worktrees | Git worktree support and enough disk space for parallel working directories. |
 | Diagram or knowledge-graph tools | The named service and its authentication when the tool is the competency being tested. |
 | Model evaluation and benchmarking | Access to one fixed model/runtime, permission to record run metadata, and enough quota for every first-attempt run. |
 
-A named tool is mandatory when the exercise compares behavior with and without that tool or skill. When the README asks only for an outcome and does not name a comparison variable, an equivalent tool is acceptable.
+A tool or skill is mandatory when the README explicitly requires it, including comparisons with and without it. Alternatives marked optional are not required. If no tool or skill is specified, choose one that meets the exercise's output and evidence requirements.
 
 ## Required Agent Sessions
 
@@ -36,11 +38,18 @@ Prepare the full session count before starting a multi-agent exercise. These are
 
 | Exercise | Minimum fresh sessions |
 |---|---:|
+| 3.1 Session Handover from Claude to Codex | 1 preparation session using Handoff, then 1 fresh Codex continuation; the prior Claude session is a supplied training snapshot |
+| 3.2 Generate AGENTS.md for a Brownfield Repository | 2 implementation sessions under identical conditions, without and with onboarding |
+| 7.4 Extract a Domain Model from the Entire Repository | A discovery session plus 1 fresh agent session that answers business questions using only the submitted business documents |
 | 6.1 Parallel Worktree Conflict Rescue | 3 implementation sessions, one per lane |
 | 6.2 Specialist Review Merge Gate | 8 review-only sessions: 4 baseline reviews and 4 fresh rechecks |
 | 9.3 Code Review Skill Hardening | 6 review sessions: 3 without the skill and 3 fresh sessions with the skill |
 
 The integration owner checks and combines the outputs. Do not reuse one session across required lanes, specialists, or rechecks.
+
+For 3.3, prepare Graphify using the exercise's setup guide before timing the challenge. For 7.4, prepare Domain Analysis from Tech Leads Club and Domain Modeling from Matt Pocock using the exercise's setup guide. Record each skill's revision and use. Apply only business-domain analysis: the glossary and domain document must not contain architecture or implementation recommendations. Diagram exercises use Mermaid parsing locally and do not require a hosted diagram account.
+
+For 3.1, install Matt Pocock's Handoff skill before the timer. For 7.1 and 7.3, install Design Doc Mermaid; Draw.io and Excalidraw are optional visual copies in 7.3, not replacements for checked Mermaid files. For 7.2, install Acquire Codebase Knowledge and its Python 3.8+ dependency. Its investigation produces one consolidated design document for this challenge, not seven final reports. Each setup guide explains installation, output differences, and the required skill-use evidence.
 
 ## Repeated Model Runs
 

@@ -6,7 +6,7 @@ const root = path.resolve(import.meta.dirname, "..");
 function findFiles(directory, relative = "") {
   const results = [];
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    if (entry.name === "node_modules" || entry.name === "target" || entry.name === ".git") continue;
+    if (["node_modules", "target", ".git", "reports"].includes(entry.name)) continue;
     const nextRelative = path.join(relative, entry.name);
     const absolute = path.join(directory, entry.name);
     if (entry.isDirectory()) results.push(...findFiles(absolute, nextRelative));
@@ -21,43 +21,20 @@ const readmes = files.filter(
 );
 assert.equal(readmes.length, 35, `Expected 35 exercise READMEs, found ${readmes.length}`);
 const challengeHeadings = ["Your Mission", "Project", "How To Go About It", "Evidence", "Completion Criteria"];
-const challengeReadmes = new Set([
-  path.normalize("01 Toolchain Setup/exercise-01-agent-onboarding-kit/README.md"),
-  path.normalize("01 Toolchain Setup/exercise-02-agent-guardrails/README.md"),
-  path.normalize("02 Spec Framing/exercise-01-spec-driven-feature-development/README.md"),
-  path.normalize("02 Spec Framing/exercise-02-superpowers-skill-driven-development/README.md"),
-  path.normalize("04 Test Automation/exercise-01-playwright-mcp-checkout-rescue/README.md"),
-  path.normalize("04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/README.md"),
-  path.normalize("04 Test Automation/exercise-03-verification-skill-workflow-gate/README.md"),
-  path.normalize("05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/README.md"),
-  path.normalize("05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/README.md"),
-  path.normalize("05 Skill Packaging/exercise-03-skill-benchmark-package-gate/README.md"),
-  path.normalize("06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/README.md"),
-  path.normalize("06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/README.md"),
-  path.normalize("06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/README.md"),
-  path.normalize("08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/README.md"),
-  path.normalize("08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/README.md"),
-  path.normalize("08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/README.md"),
-  path.normalize("09 Code Review/exercise-01-security-and-a11y-review-gauntlet/README.md"),
-  path.normalize("09 Code Review/exercise-02-diff-triage-with-fresh-agent/README.md"),
-  path.normalize("09 Code Review/exercise-03-review-regression-lab/README.md"),
-  path.normalize("10 Token Economics/exercise-01-token-budget-refactor/README.md"),
-  path.normalize("10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/README.md"),
-  path.normalize("10 Token Economics/exercise-03-minimal-diff-scope-budget/README.md"),
-  path.normalize("11 Agentic Refactoring/exercise-01-characterization-test-refactor/README.md"),
-  path.normalize("11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/README.md"),
-  path.normalize("11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/README.md"),
-  path.normalize("12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/README.md"),
-  path.normalize("12 Agentic Retrospective/exercise-02-rule-hardening-from-repeated-mistakes/README.md"),
-  path.normalize("12 Agentic Retrospective/exercise-03-trace-backed-workflow-optimizer/README.md"),
-]);
+const challengeReadmes = new Set(readmes);
 for (const relative of challengeReadmes) {
   const source = readFileSync(path.join(root, relative), "utf8");
   const headings = challengeHeadings;
   for (const heading of headings) assert.ok(source.includes(`## ${heading}`), `${relative} is missing ${heading}`);
   assert.ok(!source.includes("## Evaluation"), `${relative} still contains an evaluation rubric`);
   assert.ok(source.includes("docs/SUBMISSION_STANDARD.md"), `${relative} does not link to the submission standard`);
-  for (const artifact of ["evidence/before.md", "evidence/before.patch", "evidence/after.md", "evidence/after.patch", "evidence/comparison.md"]) {
+  const exerciseDirectory = path.dirname(relative);
+  const contractPath = files.find((file) => path.dirname(path.dirname(file)) === exerciseDirectory && path.basename(file) === "evidence-contract.json");
+  const evidenceMode = contractPath ? JSON.parse(readFileSync(path.join(root, contractPath), "utf8")).mode : "matched";
+  const artifacts = evidenceMode === "matched"
+    ? ["evidence/before.md", "evidence/before.patch", "evidence/after.md", "evidence/after.patch", "evidence/comparison.md"]
+    : ["evidence/before.md", "evidence/after.md", "evidence/comparison.md"];
+  for (const artifact of artifacts) {
     assert.ok(source.includes(artifact), `${relative} does not require ${artifact}`);
   }
   assert.ok(
@@ -68,7 +45,7 @@ for (const relative of challengeReadmes) {
   const evidenceTemplate = path.join(path.dirname(relative), "docs", "evidence-template.md");
   assert.ok(files.includes(evidenceTemplate), `${relative} is missing docs/evidence-template.md`);
   const evidenceSource = readFileSync(path.join(root, evidenceTemplate), "utf8");
-  for (const artifact of ["before.md", "before.patch", "after.md", "after.patch", "comparison.md"]) {
+  for (const artifact of artifacts.map((item) => path.basename(item))) {
     assert.ok(evidenceSource.includes(artifact), `${evidenceTemplate} does not explain ${artifact}`);
   }
 }
@@ -316,13 +293,13 @@ const requiredArtifacts = [
 for (const relative of requiredArtifacts) assert.ok(existsSync(path.join(root, relative)), `Missing starter artifact: ${relative}`);
 
 const packageFiles = files.filter((relative) => path.basename(relative) === "package.json");
-assert.equal(packageFiles.length, 35, `Expected 35 package.json files, found ${packageFiles.length}`);
+assert.equal(packageFiles.length, 36, `Expected 36 package.json files, found ${packageFiles.length}`);
 for (const relative of packageFiles) {
   const lockfile = path.join(path.dirname(relative), "package-lock.json");
   assert.ok(files.includes(lockfile), `${relative} is missing its committed package-lock.json`);
 }
 const exercisePackages = packageFiles.filter((relative) => relative !== "package.json");
-assert.equal(exercisePackages.length, 34, `Expected 34 exercise packages, found ${exercisePackages.length}`);
+assert.equal(exercisePackages.length, 35, `Expected 35 exercise packages, found ${exercisePackages.length}`);
 for (const relative of exercisePackages) {
   const project = path.dirname(relative);
   for (const artifact of ["lab-contract.json", "challenge-integrity.json"]) {
@@ -345,9 +322,31 @@ for (const relative of exercisePackages) {
   if (existsSync(submissionContractPath)) {
     const submissionContract = JSON.parse(readFileSync(submissionContractPath, "utf8"));
     const requiredPaths = new Set((submissionContract.requiredFiles ?? []).map((item) => item.path));
-    const requiresComparableEvidence = ["evidence/before.md", "evidence/after.md", "evidence/comparison.md"].every((required) => requiredPaths.has(required));
+    const submissionScripts = manifest.scripts["verify:submission"] + "\n" + files.filter((file) => file.startsWith(path.join(project, "scripts") + path.sep) && file.endsWith(".mjs")).map((file) => readFileSync(path.join(root, file), "utf8")).join("\n");
+    const requiresComparableEvidence = !["observation", "handover"].includes(submissionContract.evidenceMode) && ["evidence/before.md", "evidence/after.md", "evidence/comparison.md"].every((required) => requiredPaths.has(required));
     if (requiresComparableEvidence) {
-      assert.ok(manifest.scripts["verify:submission"].includes("comparable-evidence.mjs"), `${relative} requires matched before and after evidence but does not call the shared verifier`);
+      assert.ok(submissionScripts.includes("comparable-evidence.mjs"), `${relative} requires matched before and after evidence but does not call the shared verifier`);
+    }
+    if (["observation", "handover"].includes(submissionContract.evidenceMode)) {
+      assert.ok(submissionScripts.includes("context-document-evidence.mjs"), `${relative} must verify its observation evidence`);
+      const evidenceContract = JSON.parse(readFileSync(path.join(root, project, "evidence-contract.json"), "utf8"));
+      if (evidenceContract.requiredSkills?.length) {
+        const exerciseRoot = path.dirname(path.join(root, project));
+        const readme = readFileSync(path.join(exerciseRoot, "README.md"), "utf8");
+        const setup = readFileSync(path.join(exerciseRoot, "docs/setup.md"), "utf8");
+        const evidence = readFileSync(path.join(exerciseRoot, "docs/evidence-template.md"), "utf8");
+        for (const file of ["evidence/skill-use.md", "evidence/skill-session.txt"]) {
+          assert.ok(evidenceContract.extraEvidence?.includes(file), `${relative} must seal ${file}`);
+          assert.ok(evidence.includes(file), `${relative} must explain ${file}`);
+        }
+        for (const skill of evidenceContract.requiredSkills) {
+          assert.ok(readme.includes(skill.name) && setup.includes(skill.name), `${relative} must name and explain ${skill.name}`);
+          assert.ok(setup.includes(skill.source.replace("https://github.com/", "")), `${relative} must link the skill source`);
+        }
+      }
+      for (const artifact of [...evidenceContract.outputs.map((item) => item.path), "evidence/source-audit.json", "evidence/manifest.json", ...(evidenceContract.extraEvidence ?? [])]) {
+        assert.ok(requiredPaths.has(artifact), `${relative} does not require ${artifact}`);
+      }
     }
     const requiresCapturedExitCode = (submissionContract.requiredFiles ?? []).some((item) =>
       item.path?.startsWith("evidence/commands/") && item.includeAll?.includes("exit code: 0"),

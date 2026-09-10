@@ -2,6 +2,7 @@ import { DecisionLog } from "./components/DecisionLog";
 import { EvidenceLedger } from "./components/EvidenceLedger";
 import { SkillPatternBoard } from "./components/SkillPatternBoard";
 import { labContract } from "./labContract";
+import { loadRevenueDashboard } from "./dashboard/loadRevenueDashboard";
 import { evidenceStatus, readinessScore, riskSummary } from "./skillWorkflow";
 import "./styles.css";
 
@@ -9,6 +10,14 @@ export default function App() {
   const score = readinessScore(labContract);
   const risks = riskSummary(labContract.backlog);
   const evidence = evidenceStatus(labContract.evidence);
+  const dashboard = loadRevenueDashboard([
+    { tenantId: "workspace-east", kind: "charge", grossAmount: 1200, credits: 100 },
+    { tenantId: "workspace-west", kind: "charge", grossAmount: 800, credits: 0 },
+    { tenantId: "workspace-east", kind: "refund", grossAmount: 200, credits: 0 },
+  ], [
+    { tenantId: "workspace-east", billingAccountId: "customer-orbit" },
+    { tenantId: "workspace-west", billingAccountId: "customer-orbit" },
+  ]);
 
   return (
     <main className="app-shell">
@@ -23,6 +32,16 @@ export default function App() {
           <strong>{score}%</strong>
           <small>{score >= 75 ? "ready for review" : "needs implementation evidence"}</small>
         </div>
+      </section>
+
+      <section className="metrics" aria-label="Billing dashboard">
+        {Object.entries(dashboard.metrics.recognizedRevenueByAccount).map(([account, amount]) => (
+          <article key={account}>
+            <span>{account}</span>
+            <strong>{amount.toFixed(2)}</strong>
+            <small>Recognized revenue; gross volume {dashboard.metrics.grossVolumeByAccount[account].toFixed(2)}</small>
+          </article>
+        ))}
       </section>
 
       <section className="metrics">

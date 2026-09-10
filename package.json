@@ -6,7 +6,8 @@
     "test:verification-guard": "node ./scripts/test-clean-verification-guard.mjs",
     "test:comparable-evidence": "node ./scripts/test-comparable-evidence.mjs",
     "test:capture-verification": "node ./scripts/test-capture-verification.mjs",
-    "verify:contracts": "npm run test:verification-guard && npm run test:comparable-evidence && npm run test:capture-verification && node ./scripts/verify-exercise-contracts.mjs"
+    "test:context-evidence": "node ./scripts/test-context-document-evidence.mjs",
+    "verify:contracts": "npm run test:verification-guard && npm run test:comparable-evidence && npm run test:capture-verification && npm run test:context-evidence && node ./scripts/verify-exercise-contracts.mjs"
   },
   "engines": {
     "node": ">=22.12.0 <25"

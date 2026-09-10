@@ -1,52 +1,54 @@
-# Code Graph Evidence
+# Evidence instructions and template
 
-## traceability.json
+All paths are relative to this exercise. Follow [setup.md](./setup.md) for the exact commit and capture order.
 
-```json
-{
-  "schema_version": 1,
-  "source_sha": "40-character Git SHA",
-  "edges": [
-    {
-      "id": "DEP-01",
-      "graph_edge_id": "generated call-edge ID",
-      "caller": "selectNotificationRoute",
-      "callee": "pushAvailable",
-      "source_path": "src/notification/routeNotification.mjs",
-      "source_lines": [1],
-      "source_excerpts": ["exact source line"],
-      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
-    }
-  ]
-}
-```
+## Before and after
 
-Add `DEP-01` through `DEP-06`. Copy edge IDs and locations from the generated graph; do not estimate them.
+Create `evidence/before.md` and `evidence/after.md`, each with these sections:
 
-## stale-claims.md
+- `## Conditions`: source commit, date, input files, task or questions, agent/tool and model (record unavailable if not exposed), time spent, and any hints or corrections.
+- `## Findings`: concrete observations or answers, supported decisions, failures, and remaining uncertainty.
+- `## Proof`: exact source references, links to raw session/query output, and actual command results.
 
-Record `STALE-01` through `STALE-06` in snapshot order. For each claim, state `Result: supported` or `Result: rejected`, cite the generated edge or exact source location, and explain the decision.
+Before records your initial understanding before creating the final artifact. After records the verified result. These are documented observations, not a claim that two different tools caused an improvement.
 
-## graph-manifest.json
+In `evidence/comparison.md`, use `## Changes`, `## Verified`, and `## Remaining questions`. Compare specific findings; successful initial answers do not need to become wrong to pass. Report equal results honestly.
 
-Record `source_sha`; the path and SHA-256 of the graph, both diagrams, `traceability.json`, and `stale-claims.md`; and the exact command, exit code, output path, and output SHA-256 for:
+No before.patch or after.patch is required: this challenge produces knowledge artifacts, not a mandatory code change.
 
-- `npm run graph:build`
-- `npm run graph:query -- --symbol selectNotificationRoute`
-- `npm run graph:path -- --from selectNotificationRoute --to durableQueueRoute`
+## Outputs
 
-Capture them with:
+- `docs/design-document.md`: Purpose; Architecture; Responsibilities; Dependencies; Data flow; Failure and fallback; Decisions and constraints; Risks and verification.
+- `evidence/stale-claims.md`: Supported; Rejected; Unresolved.
+- `evidence/codebase-scan.txt`: the unedited scan output from the documentation skill.
 
-- `npm run graph:build > ../evidence/commands/graph-build.txt`
-- `npm run graph:query -- --symbol selectNotificationRoute > ../evidence/commands/graph-query.txt`
-- `npm run graph:path -- --from selectNotificationRoute --to durableQueueRoute > ../evidence/commands/graph-path.txt`
 
-## verification.md
+## Skill evidence
 
-Record the source SHA, graph regeneration result, Mermaid parser result, semantic edge result, routing test result, stale-claim result, remaining uncertainty, and final conclusion.
+Submit `evidence/skill-use.md` and `evidence/skill-session.txt`. The latter is the actual preparation or generation transcript, redacted for secrets, not a rewritten summary.
 
-## Required Before and After Files
+Use one `## <skill-name>` section per skill in `skill-use.md`. Under each section, record plain fields:
 
-- `evidence/before.md` and `evidence/after.md` record matching session conditions, graph source, unsupported edges, routing results, and changed files.
-- `evidence/before.patch` and `evidence/after.patch` are genuine Git diffs for the stale-snapshot and generated-graph attempts.
-- `evidence/comparison.md` compares graph accuracy, routing behavior, diagram traceability, and verification.
+- `Source: <upstream repository URL from setup.md>`.
+- `Revision: <full 40-character SHA>` or `SHA-256: <64-character installed SKILL.md hash>`.
+- `Invocation: <actual command or request>`.
+- `Proof: evidence/skill-session.txt:L<first>-L<last>` pointing to the invocation and result.
+
+Use the exact skill name from setup.md. Record how its output was checked or corrected. Verification checks the required skill, record fields and transcript line range, not whether an agent truly loaded the skill. Reviewers inspect the raw transcript. Do not manufacture unavailable model details or successful results.
+
+## Source audit
+
+Create `evidence/source-audit.json` with a `claims` array. Each claim needs:
+
+- `id`: a unique identifier you choose.
+- `topic`: one of `architecture`, `responsibilities`, `dependencies`, `data-flow`, `failure-path`, `constraints`, `verification`. Cover every topic.
+- `status`: `supported`, `contradicted`, or `unresolved`.
+- `reason`: why the cited evidence supports the statement or leaves it unresolved.
+- `artifact`: `{ "path": "<submitted output>", "line": <one-based line>, "excerpt": "<exact text at that line>" }`.
+- `sources`: one or more objects with the same path, line, and excerpt fields, referencing supplied source material.
+
+Paths start at the exercise folder. Excerpts must match complete lines, including indentation. Use multiple lines when needed. Cite each important statement and every diagram relationship; put one relationship per diagram line. Code and tests can prove current behaviour; old notes may establish a contradiction, not the current rule. Reviewers assess whether the source really supports the claim.
+
+## Recorded verification
+
+`npm run evidence:seal` creates `evidence/manifest.json` after your outputs and evidence are committed. The capture command creates `evidence/commands/verify.txt` with the actual command, source commit, timestamps, output, and exit code. Final verification rejects missing files, changed artifacts, stale citations, and unsuccessful captures.

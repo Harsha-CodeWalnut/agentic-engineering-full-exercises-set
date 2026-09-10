@@ -1,12 +1,12 @@
-# Billing Incident Questions
+# Repository questions
 
-Answer these questions before both implementation runs.
+Use these questions before indexing and again with the graph. Record the exact query or traversal, output, source check and unresolved parts.
 
-1. `GQ-01`: Which function owns the recognized-revenue formula, and where is a tenant resolved to a billing account?
-2. `GQ-02`: What path connects the dashboard to the recognized-revenue calculation?
-3. `GQ-03`: What path connects the scheduled snapshot to the same calculation?
-4. `GQ-04`: Which source defines credits, refunds, grouping, and missing-mapping behaviour? Which source is stale?
-5. `GQ-05`: Which team owns the calculation, and which team only consumes its output?
-6. `GQ-06`: Which unrelated metric must remain unchanged?
+1. Architecture: which entry points produce recognized-revenue summaries?
+2. Dependencies: which shared calculation and account mapping do those entry points depend on?
+3. Data flow: trace an event from tenant to billing-account dashboard total and scheduled snapshot.
+4. Business rules: how do refunds and credits affect recognized revenue, and how does gross volume differ?
+5. Ownership: who owns the current metric decision and who owns its consumers? How do older notes differ?
+6. Change impact: which consumers and tests need checking if the recognized-revenue rule changes?
 
-For the graph-first run, record the exact `graphify query`, `graphify path`, or `graphify explain` command used for every answer. Record the relevant output and confidence. Verify important `INFERRED` or `AMBIGUOUS` edges in source before using them.
+Demonstrate one fresh agent using the graph and one human-run CLI query. Report empty, inferred or unsupported graph results honestly and verify them against original source files.
