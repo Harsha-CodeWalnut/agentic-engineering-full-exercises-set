@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "maximumFiles": 2,
+  "maximumChangedLines": 30,
+  "allowedSourceFiles": [
+    "minimal-diff-app/src/migration/exportButton.mjs",
+    "minimal-diff-app/tests/export-button.test.mjs"
+  ],
+  "excludedPaths": [
+    "src/components",
+    "src/styles.css",
+    "package.json",
+    "src/migration/actionButtons.mjs",
+    "package-lock.json"
+  ],
+  "requestedBehavior": "Map export to ds-secondary; preserve checkout, delete, unknown and other legacy actions.",
+  "baselineCommand": "node scripts/run-migration-tests.mjs",
+  "verificationCommands": [
+    "npm run test:migration",
+    "npm run verify:exercise"
+  ],
+  "rationale": "The shared helper can distinguish export without changing consumer call sites, shared components, styles, dependencies, or unrelated legacy actions. Count additions plus deletions from the source commit, excluding evidence."
+}
