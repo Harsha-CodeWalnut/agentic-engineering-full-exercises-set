@@ -1,0 +1,8 @@
+{
+  "files": 2,
+  "additions": 12,
+  "deletions": 1,
+  "changedLines": 13,
+  "sourceSha": "af031818ec949f423b8d80db3ca923bf1f9e1fb0",
+  "measurement": "git diff --numstat from the common starting commit; reproduced by the protected before-patch replay"
+}

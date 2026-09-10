@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "planSha": "671b096079d82492df95beba1d34b33ff1de212e",
+  "sourceSha": "6f1ad644aab99813c2c5d53884d9a06b76299646",
+  "planned": {
+    "files": 2,
+    "changedLines": 30
+  },
+  "actual": {
+    "files": 2,
+    "additions": 12,
+    "deletions": 1,
+    "changedLines": 13
+  },
+  "paths": [
+    {
+      "file": "minimal-diff-app/src/migration/exportButton.mjs",
+      "additions": 2,
+      "deletions": 1
+    },
+    {
+      "file": "minimal-diff-app/tests/export-button.test.mjs",
+      "additions": 10,
+      "deletions": 0
+    }
+  ],
+  "verificationCommands": [
+    "npm run test:migration",
+    "npm run test:scope",
+    "npm run verify:exercise"
+  ],
+  "measurement": "Git diff --numstat planSha sourceSha. Evidence and plan files are excluded from source scope. The implementation is the direct child of the plan commit.",
+  "lineJustification": "Not required: 13 changed lines is below the 20-line justification threshold. One export branch and a focused legacy regression test are sufficient."
+}

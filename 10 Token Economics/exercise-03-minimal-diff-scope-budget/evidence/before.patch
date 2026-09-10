@@ -1,0 +1,28 @@
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs
+index aa82d112694bcafc234023a6d51dd94e8094354a..a26f350f60835e3d55a72e0f8d798c88b2a50b6d 100644
+--- a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
+@@ -1,5 +1,6 @@
+-/** Seeded implementation: export has not yet crossed the design-system boundary. */
++/** Only export uses the design-system variant; other actions retain legacy variants. */
+ export function buttonVariantFor(action) {
++  if (action === "export") return "ds-secondary";
+   if (action === "delete") return "legacy-danger";
+   return "legacy-primary";
+ }
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..88d95e41225af72298d4803c6b95f6426e38a2f5
+--- /dev/null
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs	
+@@ -0,0 +1,10 @@
++import assert from "node:assert/strict";
++import { buttonVariantFor } from "../src/migration/exportButton.mjs";
++
++assert.equal(buttonVariantFor("export"), "ds-secondary", "export uses the design-system secondary variant");
++assert.equal(buttonVariantFor("checkout"), "legacy-primary", "checkout keeps its legacy variant");
++assert.equal(buttonVariantFor("delete"), "legacy-danger", "delete keeps its destructive variant");
++for (const action of ["archive", "save", "unknown", "", "Export"]) {
++  assert.equal(buttonVariantFor(action), "legacy-primary", `${action || "empty action"} keeps the legacy fallback`);
++}
++console.log("PASS export-only migration and unchanged legacy variants");

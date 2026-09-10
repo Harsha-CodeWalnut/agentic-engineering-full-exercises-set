@@ -1,0 +1,5 @@
+# Verification evidence
+
+The original export behavior failed the protected migration assertion and the new learner assertion before implementation. After the source change, the coordinator ran npm run test:migration with exit code: 0. Export now maps to ds-secondary; checkout remains legacy-primary; delete remains legacy-danger; unknown, empty and other legacy actions retain the fallback. The protected checks also cover the real action consumers.
+
+The source commit records exactly two files, 12 additions and one deletion. It is the direct child of the immutable scope-plan commit. No source repair was made after either fresh agent finished. The final npm run verify:exercise result is captured in commands/verify-exercise.txt; commands/scope-verify.txt records the dedicated scope history check. A pass requires protected inputs, lint, format, tests, TypeScript, build, before-patch replay, exact numstat, and evidence-only later history. No SonarQube or live token-cost measurement is claimed.

@@ -1,0 +1,93 @@
+
+> minimal-diff-app@0.1.0 verify:exercise
+> node ../../../scripts/run-clean-verification.mjs
+
+
+> minimal-diff-app@0.1.0 verify:exercise:core
+> npm run agent:check && npm run verify:implementation && npm run verify:submission
+
+
+> minimal-diff-app@0.1.0 agent:check
+> npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build
+
+
+> minimal-diff-app@0.1.0 test:integrity
+> node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json
+
+Verified 25 protected challenge inputs.
+
+> minimal-diff-app@0.1.0 lint
+> node ./scripts/lint-check.mjs
+
+lint-check passed
+
+> minimal-diff-app@0.1.0 test
+> node ./scripts/test-scope-verifier.mjs && node ./scripts/agent-check.mjs
+
+scope verifier self-test passed
+agent-check passed for Minimal-Diff Scope Budget
+
+> minimal-diff-app@0.1.0 format
+> node ./scripts/format-check.mjs
+
+format-check passed
+
+> minimal-diff-app@0.1.0 typecheck
+> node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false
+
+
+> minimal-diff-app@0.1.0 build
+> node ../../../scripts/run-vite-build.mjs
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 36 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../var/folders/bk/yk8n9vyx0m3d82g9mtdxrplm0000gn/T/exercise-vite-build-Kllmst/dist/index.html                   0.41 kB │ gzip:  0.28 kB
+../../../../../../var/folders/bk/yk8n9vyx0m3d82g9mtdxrplm0000gn/T/exercise-vite-build-Kllmst/dist/assets/index-B8S07xzC.css    2.83 kB │ gzip:  1.11 kB
+../../../../../../var/folders/bk/yk8n9vyx0m3d82g9mtdxrplm0000gn/T/exercise-vite-build-Kllmst/dist/assets/index-BYJSu7hk.js   199.57 kB │ gzip: 62.70 kB
+✓ built in 513ms
+
+> minimal-diff-app@0.1.0 verify:implementation
+> npm run test:migration
+
+
+> minimal-diff-app@0.1.0 test:migration
+> node ./scripts/run-migration-tests.mjs && node ./tests/export-button.test.mjs
+
+PASS export migrated to ds-secondary
+PASS real checkout, destructive, and unknown legacy consumers remain unchanged
+PASS only export changes variant; other actions retain legacy behavior
+
+> minimal-diff-app@0.1.0 verify:submission
+> node ../../../scripts/comparable-evidence.mjs .. && npm run test:submission
+
+PASS before and after runs use matching conditions and valid Git patches
+PASS both patches match their recorded implementation commits
+PASS protected manifests and inputs match the starting commit
+
+> minimal-diff-app@0.1.0 test:submission
+> node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json && npm run test:before && npm run test:scope
+
+Verified Minimal-Diff Scope Budget: 14 files and 0 directories.
+
+> minimal-diff-app@0.1.0 test:before
+> node ./scripts/replay-before-scope.mjs
+
+PASS before.patch reproduces 2 files and 13 changed lines
+PASS before.patch satisfies the protected migration behavior
+
+> minimal-diff-app@0.1.0 test:scope
+> node ./scripts/verify-scope-submission.mjs
+
+Plan SHA: 671b096079d82492df95beba1d34b33ff1de212e
+Source SHA: 6f1ad644aab99813c2c5d53884d9a06b76299646
+Actual scope: 2 files, 13 changed lines
+PASS scope budget was committed before implementation
+PASS actual Git numstat matches the final ledger and protected budget
+PASS source commit contains only export helper and learner test
+PASS later history contains evidence only
+PASS verify:exercise left tracked files, the Git index, and untracked or ignored paths unchanged
+
+exit code: 0

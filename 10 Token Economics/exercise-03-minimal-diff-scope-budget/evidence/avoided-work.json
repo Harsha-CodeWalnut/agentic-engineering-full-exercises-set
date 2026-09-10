@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "path": "minimal-diff-app/src/migration/actionButtons.mjs",
+      "status": "unchanged",
+      "temptation": "Migrate every consumer while adjusting the shared variant helper.",
+      "reason": "The existing consumers already call the helper; changing checkout or delete would exceed the export-only request."
+    },
+    {
+      "path": "minimal-diff-app/src/components",
+      "status": "unchanged",
+      "temptation": "Refactor shared rendering components to introduce a new button abstraction.",
+      "reason": "The requested output is a variant mapping; component cleanup adds unrelated review and regression work."
+    },
+    {
+      "path": "minimal-diff-app/src/styles.css",
+      "status": "unchanged",
+      "temptation": "Rename legacy styles or add design-system styling throughout the application.",
+      "reason": "The exercise requires the ds-secondary identifier only; changing shared styles could alter unrelated actions."
+    },
+    {
+      "path": "minimal-diff-app/package.json",
+      "status": "unchanged",
+      "temptation": "Install a design-system dependency or adjust existing verification scripts.",
+      "reason": "No new runtime dependency is necessary for this mapping, and the protected verification commands already cover the behavior."
+    }
+  ]
+}

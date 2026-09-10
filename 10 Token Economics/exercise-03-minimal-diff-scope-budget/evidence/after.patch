@@ -1,0 +1,70 @@
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/evidence/scope-plan.json b/10 Token Economics/exercise-03-minimal-diff-scope-budget/evidence/scope-plan.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..911159b8fec5d2277438d97377a3f8ca4f97a4ba
+--- /dev/null
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/evidence/scope-plan.json	
+@@ -0,0 +1,23 @@
++{
++  "schemaVersion": 1,
++  "maximumFiles": 2,
++  "maximumChangedLines": 30,
++  "allowedSourceFiles": [
++    "minimal-diff-app/src/migration/exportButton.mjs",
++    "minimal-diff-app/tests/export-button.test.mjs"
++  ],
++  "excludedPaths": [
++    "src/components",
++    "src/styles.css",
++    "package.json",
++    "src/migration/actionButtons.mjs",
++    "package-lock.json"
++  ],
++  "requestedBehavior": "Map export to ds-secondary; preserve checkout, delete, unknown and other legacy actions.",
++  "baselineCommand": "node scripts/run-migration-tests.mjs",
++  "verificationCommands": [
++    "npm run test:migration",
++    "npm run verify:exercise"
++  ],
++  "rationale": "The shared helper can distinguish export without changing consumer call sites, shared components, styles, dependencies, or unrelated legacy actions. Count additions plus deletions from the source commit, excluding evidence."
++}
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/evidence/scope-plan.md b/10 Token Economics/exercise-03-minimal-diff-scope-budget/evidence/scope-plan.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..eab1ca25c66dde4b40c5712cdae948a3e497ea88
+--- /dev/null
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/evidence/scope-plan.md	
+@@ -0,0 +1,7 @@
++# Pre-change scope plan
++
++Commit this plan before editing source. The production request is to map only export to ds-secondary and preserve checkout, delete, and unknown legacy behavior. The implementation budget is exactly two allowed source paths and at most 30 added-plus-deleted lines: minimal-diff-app/src/migration/exportButton.mjs and minimal-diff-app/tests/export-button.test.mjs. Target 20 or fewer changed lines; any result above 20 needs a concrete justification in the final ledger.
++
++The excluded paths are src/components, src/styles.css, package.json, package-lock.json, and src/migration/actionButtons.mjs. Shared cleanup is unnecessary because export can be handled inside the existing helper; migrating other actions would change behavior outside the request.
++
++Use node scripts/run-migration-tests.mjs to observe the seeded failure, add a focused learner test first, then implement and run npm run test:migration. The coordinator will run npm run verify:exercise after recording the source commit and evidence. Derive file and line counts from Git, preserve the first attempt, and commit final evidence separately.
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs
+index aa82d112694bcafc234023a6d51dd94e8094354a..1028d98da8dcf3401e4b60ff3888f0bc384467cf 100644
+--- a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
+@@ -1,5 +1,6 @@
+-/** Seeded implementation: export has not yet crossed the design-system boundary. */
++/** Only export has crossed the design-system boundary. */
+ export function buttonVariantFor(action) {
++  if (action === "export") return "ds-secondary";
+   if (action === "delete") return "legacy-danger";
+   return "legacy-primary";
+ }
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fc37c4e9c61158e35d88b151e9c9f4d460bf91e
+--- /dev/null
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs	
+@@ -0,0 +1,10 @@
++import assert from "node:assert/strict";
++import { buttonVariantFor } from "../src/migration/exportButton.mjs";
++
++assert.equal(buttonVariantFor("export"), "ds-secondary", "export uses the design-system secondary variant");
++assert.equal(buttonVariantFor("checkout"), "legacy-primary");
++assert.equal(buttonVariantFor("delete"), "legacy-danger");
++for (const action of ["archive", "save", "unknown", "", "Export", undefined, null]) {
++  assert.equal(buttonVariantFor(action), "legacy-primary", `${String(action)} preserves the legacy fallback`);
++}
++console.log("PASS only export changes variant; other actions retain legacy behavior");
