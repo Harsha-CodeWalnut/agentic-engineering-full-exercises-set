@@ -1,0 +1,25 @@
+# Clean exercise verification
+
+Executed `npm run verify:exercise` at repository commit `abe2cabd1c85a0a43b453731b9078358db328437`.
+
+Key output from the clean verification checkout:
+
+```text
+Verified 50 protected challenge inputs.
+PASS catalog contains two defect cases and one clean control
+PASS starter skill has valid frontmatter and contains no protected case answers
+code review skill scorer self-test passed
+agent-check passed for Code Review Skill Hardening
+lint-check passed
+format-check passed
+PASS six runner-captured review sessions use matching conditions and unique nonces
+PASS every run is bound to its prompt, protected diff, source commit, and transcript
+PASS skill contains no case answers and requires no API key
+Decision: adopt
+PASS before and after runs use matching conditions and valid Git patches
+PASS both patches match their recorded implementation commits
+PASS protected manifests and inputs match the starting commit
+Verified Code Review Skill Hardening: 15 files and 7 directories.
+PASS verify:exercise left tracked files, the Git index, and untracked or ignored paths unchanged
+exit code: 0
+```

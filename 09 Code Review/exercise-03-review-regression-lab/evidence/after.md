@@ -29,6 +29,6 @@
 - Clean-control blockers: 0
 - No-regression gate: pass
 - Generated decision: adopt
-- Verification exit code: pending final clean verification
+- Verification exit code: 0
 
 The skill-assisted lane used the committed skill unchanged. Every finding is preserved exactly as returned by the first model response and bound to its nonce, prompt, diff, transcript, and source commit.

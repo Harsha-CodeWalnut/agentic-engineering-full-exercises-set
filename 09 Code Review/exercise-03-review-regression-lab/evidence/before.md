@@ -27,6 +27,6 @@
 - Security coverage: 100%
 - Precision: 100%
 - Clean-control blockers: 0
-- Verification exit code: pending final clean verification
+- Verification exit code: 0
 
 The implementation commit removes the starter skill, so `before.patch` is a genuine Git diff for the evaluated no-skill baseline rather than a false new-file snapshot.
