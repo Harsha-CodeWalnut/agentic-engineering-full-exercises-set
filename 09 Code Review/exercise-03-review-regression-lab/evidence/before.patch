@@ -1,0 +1,14 @@
+diff --git a/09 Code Review/exercise-03-review-regression-lab/regression-review-app/skills/regression-review/SKILL.md b/09 Code Review/exercise-03-review-regression-lab/regression-review-app/skills/regression-review/SKILL.md
+deleted file mode 100644
+index 2dd0a23886a870e319d69041f71968848a6b9895..0000000000000000000000000000000000000000
+--- a/09 Code Review/exercise-03-review-regression-lab/regression-review-app/skills/regression-review/SKILL.md	
++++ /dev/null
+@@ -1,8 +0,0 @@
+----
+-name: regression-review
+-description: Review a code diff for regressions and provide actionable findings. Use when asked to review a pull request or assess whether a change is safe to merge.
+----
+-
+-# Regression Review
+-
+-Read the request and diff. Report important problems with a file, code location, impact, and suggested fix. Avoid comments about style unless they affect correctness.

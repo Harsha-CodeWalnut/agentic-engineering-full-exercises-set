@@ -1,0 +1,9 @@
+# Evaluation verification
+
+Executed `npm run eval:verify` from the Exercise 9.3 application after assembling the untouched first-response artifacts.
+
+PASS six runner-captured review sessions use matching conditions and unique nonces
+PASS every run is bound to its prompt, protected diff, source commit, and transcript
+PASS skill contains no case answers and requires no API key
+Decision: adopt
+exit code: 0

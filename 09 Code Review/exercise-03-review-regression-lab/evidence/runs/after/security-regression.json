@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 3,
+  "lane": "after",
+  "caseId": "security-regression",
+  "sessionId": "review-session-ef927152-80a0-4c60-9029-719231a53606",
+  "agent": "codex-cli",
+  "model": "gpt-5.6-luna",
+  "tools": "repository-read",
+  "permissions": "sandbox-read-only",
+  "promptSha256": "d6ec2e59a5c75aeb1382c4f64043d5ebea3cf42720f39a8bfb5e897de568342c",
+  "promptPath": "prompts/after/security-regression.md",
+  "startedAt": "2026-09-15T18:17:58.042Z",
+  "durationMs": 17566,
+  "timeLimitMinutes": 10,
+  "sourceSha": "3310130c3bc573963c6b4b17ebc402c216aa0bb7",
+  "diffSha256": "a27c7948209137b5fc0633eaeb0e7305a17f1275ba75518985afeee5465d3fd6",
+  "transcriptPath": "transcripts/after-security-regression.json",
+  "transcriptSha256": "8886c20be3d1f9cb70854eeedeb73f0277dc3504cce961e3c0feab87f35eace6",
+  "skillSha256": "ec18280a5678a8b1306c441403b65226e334995326e97b8f732e250139add6b4",
+  "runNonce": "ef927152-80a0-4c60-9029-719231a53606",
+  "runnerSha256": "8b612cb4ac227704b0b05e4b8179926dc378ce76b817a5d822e11011e62cbaae",
+  "adapterSha256": "8cc5a2230bee6ba25fae08ca15bdee4e9965465ba2e5157483601fd648129b71",
+  "runnerCommand": "node review-skill-adapter.mjs",
+  "runnerExitCode": 0,
+  "mergeDecision": "request-changes",
+  "findings": [
+    {
+      "id": "session-state-regression",
+      "severity": "high",
+      "file": "src/session.ts",
+      "anchor": "  return JSON.parse(window.localStorage.getItem(\"session\")!);",
+      "requirement": "Stored sessions tolerate missing or damaged browser state.",
+      "behavior": "The loader directly parses the stored value, so malformed session data throws a JSON parsing error instead of being tolerated or recovered.",
+      "impact": "A damaged browser session can prevent application initialization or session recovery.",
+      "reproduction": "Set localStorage.session to \"{invalid\" and call loadSession(); JSON.parse throws a SyntaxError.",
+      "recommendation": "Restore defensive parsing with handling for null and malformed values, returning the unauthenticated/default session state as appropriate.",
+      "blocking": true
+    },
+    {
+      "id": "approval-authorization-regression",
+      "severity": "critical",
+      "file": "src/session.ts",
+      "anchor": "  return request.note.toLowerCase().includes(\"approved\");",
+      "requirement": "Approval requires an approver role and complete evidence; note text is not authorization.",
+      "behavior": "Approval is granted solely when the note contains \"approved\", without checking the user's approver role or evidence completeness.",
+      "impact": "Any user can approve an incomplete request by adding approval text to its note, bypassing authorization.",
+      "reproduction": "Call canApprove({roles:[]},{evidenceComplete:false,note:\"approved\"}); it returns true.",
+      "recommendation": "Require user.roles to include \"approver\" and request.evidenceComplete, and do not use note text as an authorization signal.",
+      "blocking": true
+    }
+  ]
+}

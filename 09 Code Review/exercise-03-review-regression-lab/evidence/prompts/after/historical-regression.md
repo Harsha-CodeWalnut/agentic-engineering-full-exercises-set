@@ -1,0 +1,84 @@
+RUN_NONCE: 1fbbb1d8-2944-41c0-90b4-bdc7e845214a
+
+Review this code change against every acceptance rule below. Return one JSON object containing runNonce, sessionId, mergeDecision, and findings. Each finding needs an arbitrary unique id, severity, file, an exact added-line anchor, the acceptance-rule text it evaluates as requirement, behavior, impact, reproduction, recommendation, and blocking. Do not invent a blocker when the diff conforms.
+
+Acceptance rules:
+- Search matches partial queries across every user-visible work-item field.
+- A specific status selection includes only items with that exact status, while All includes every workflow status.
+- Risk scoring preserves due-today urgency and blocked-item weighting.
+- Summary metrics count both blocked and escalated work.
+- The queue shows every matching item unless pagination is explicitly introduced.
+
+Diff:
+diff --git a/src/components/WorkQueue.tsx b/src/components/WorkQueue.tsx
+index 41510ba..b621e62 100644
+--- a/src/components/WorkQueue.tsx
++++ b/src/components/WorkQueue.tsx
+@@ -8,9 +8,11 @@ interface WorkQueueProps {
+ }
+ 
+ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
++  const visibleItems = items.slice(0, 5);
++
+   return (
+     <section className="queue" aria-label="Work queue">
+-      {items.map((item) => {
++      {visibleItems.map((item) => {
+         const risk = calculateRisk(item);
+         return (
+           <button
+diff --git a/src/utils/filters.ts b/src/utils/filters.ts
+index 8ed0c02..9bb7afa 100644
+--- a/src/utils/filters.ts
++++ b/src/utils/filters.ts
+@@ -13,17 +13,19 @@ export const defaultFilters: Filters = {
+ };
+ 
+ export function filterItems(items: WorkItem[], filters: Filters): WorkItem[] {
+-  return items.filter((item) => {
++  return items
++    .filter((item) => {
+     const matchesQuery =
+       filters.query.trim().length === 0 ||
+-      [item.name, item.owner, item.summary, item.note, ...item.tags]
++      [item.name, item.summary, ...item.tags]
+         .join(" ")
+         .toLowerCase()
+-        .includes(filters.query.toLowerCase());
++        .startsWith(filters.query.toLowerCase());
+ 
+     const matchesPriority = filters.priority === "All" || item.priority === filters.priority;
+-    const matchesStatus = filters.status === "All" || item.status === filters.status;
++    const matchesStatus = filters.status === "All" || item.status !== "Blocked";
+ 
+     return matchesQuery && matchesPriority && matchesStatus;
+-  });
++    })
++    .sort((left, right) => left.name.localeCompare(right.name));
+ }
+diff --git a/src/utils/scoring.ts b/src/utils/scoring.ts
+index 0e43a6f..4c152ba 100644
+--- a/src/utils/scoring.ts
++++ b/src/utils/scoring.ts
+@@ -7,9 +7,9 @@ const priorityWeight = {
+ } as const;
+ 
+ export function calculateRisk(item: WorkItem): number {
+-  const urgency = item.dueInDays === 0 ? 24 : Math.max(0, 20 - item.dueInDays);
+-  const statusPenalty = item.status === "Blocked" || item.status === "Escalated" ? 18 : 6;
+-  return Math.min(100, item.score + priorityWeight[item.priority] * 7 + urgency + statusPenalty);
++  const urgency = item.dueInDays < 3 ? 12 : 0;
++  const statusPenalty = item.status === "Escalated" ? 12 : 0;
++  return Math.min(100, item.score + priorityWeight[item.priority] * 4 + urgency + statusPenalty);
+ }
+ 
+ export function riskLabel(score: number): "Watch" | "Needs review" | "Critical" {
+@@ -20,7 +20,7 @@ export function riskLabel(score: number): "Watch" | "Needs review" | "Critical"
+ 
+ export function summarizePortfolio(items: WorkItem[]) {
+   const critical = items.filter((item) => calculateRisk(item) >= 90).length;
+-  const blocked = items.filter((item) => item.status === "Blocked" || item.status === "Escalated").length;
++  const blocked = items.filter((item) => item.status === "Escalated").length;
+   const averageRisk = Math.round(items.reduce((sum, item) => sum + calculateRisk(item), 0) / items.length);
+ 
+   return {
