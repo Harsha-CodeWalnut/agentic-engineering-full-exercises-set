@@ -21,6 +21,9 @@ const additions = new Map([
   ["12 Agentic Retrospective/exercise-02-rule-hardening-from-repeated-mistakes", ["../../../scripts/comparable-evidence.mjs", "../../../scripts/capture-verification.mjs"]],
   ["12 Agentic Retrospective/exercise-03-trace-backed-workflow-optimizer", ["../docs/action-schema.md", "scripts/write-workflow-patches.mjs", "../../../scripts/comparable-evidence.mjs", "../../../scripts/capture-verification.mjs"]],
 ]);
+const removals = new Map([
+  ["09 Code Review/exercise-03-review-regression-lab", ["skills/regression-review/SKILL.md"]],
+]);
 
 function findManifests(directory, results = []) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -55,6 +58,7 @@ for (const manifestPath of findManifests(repositoryRoot)) {
     paths.add(path.relative(root, path.join(repositoryRoot, shared)).split(path.sep).join("/"));
   }
   if (isApplicationManifest) for (const relative of additions.get(exercise) ?? []) paths.add(relative);
+  if (isApplicationManifest) for (const relative of removals.get(exercise) ?? []) paths.delete(relative);
   if (isApplicationManifest && (fs.existsSync(path.join(root, "evidence-contract.json")) || root.includes("brownfield-agent-app"))) {
     paths.add("evidence-contract.json");
     paths.add("submission-contract.json");

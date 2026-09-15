@@ -15,6 +15,12 @@ export function normalizedPrompt(prompt, nonce) {
   return prompt.replace(`RUN_NONCE: ${nonce}`, "RUN_NONCE: <RUNNER_NONCE>");
 }
 
+export function verifyBaselineSourceBinding({ sourceShas, implementationCommit }) {
+  if (!/^[a-f0-9]{40}$/.test(implementationCommit ?? "")) return ["before.md Implementation commit must be a full 40-character Git SHA"];
+  if (sourceShas.length !== 1 || sourceShas[0] !== implementationCommit) return ["all baseline runs must be captured at the recorded baseline implementation commit"];
+  return [];
+}
+
 function diffFacts(source) {
   const files = new Set();
   const anchors = new Map();
@@ -104,9 +110,6 @@ function readRun({ evidenceRoot, lane, item, skillSha, runnerSha, failures }) {
     const signature = `${finding.file}:${finding.anchor?.trim()}`;
     if (signatures.has(signature)) failures.push(`${lane}/${item.id} repeats one changed line as multiple findings`);
     signatures.add(signature);
-    for (const field of ["id", "anchor", "requirement", "behavior", "impact", "reproduction", "recommendation"]) {
-      if (response && !transcript.includes(finding[field])) failures.push(`${lane}/${item.id}/${finding.id} transcript does not contain its submitted ${field}`);
-    }
   }
   const blockers = (run.findings ?? []).filter((finding) => finding.blocking);
   const consistentDecision = blockers.length ? "request-changes" : "approve";

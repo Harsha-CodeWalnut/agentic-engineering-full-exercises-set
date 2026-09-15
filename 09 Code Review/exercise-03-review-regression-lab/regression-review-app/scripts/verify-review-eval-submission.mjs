@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
-import { buildScorecard, verifySkillContents, verifySkillGitBinding } from "./review-eval-verification.mjs";
+import { buildScorecard, verifyBaselineSourceBinding, verifySkillContents, verifySkillGitBinding } from "./review-eval-verification.mjs";
 
 const appRoot = process.cwd();
 const exerciseRoot = path.resolve(appRoot, "..");
@@ -29,8 +29,8 @@ const beforeRuns = cases.map((item) => JSON.parse(fs.readFileSync(path.join(evid
 const afterRuns = cases.map((item) => JSON.parse(fs.readFileSync(path.join(evidenceRoot, "runs", "after", `${item.id}.json`), "utf8")));
 const beforeSourceShas = [...new Set(beforeRuns.map((run) => run.sourceSha))];
 const beforeMarkdown = fs.readFileSync(path.join(evidenceRoot, "before.md"), "utf8");
-const startingCommit = beforeMarkdown.match(/^\s*(?:[-*]\s*)?Starting commit:\s*`?([a-f0-9]{40})`?\s*$/mi)?.[1];
-if (beforeSourceShas.length !== 1 || beforeSourceShas[0] !== startingCommit) failures.push("all baseline runs must be captured at the recorded starting commit");
+const baselineImplementationCommit = beforeMarkdown.match(/^\s*(?:[-*]\s*)?Implementation commit:\s*`?([a-f0-9]{40})`?\s*$/mi)?.[1];
+failures.push(...verifyBaselineSourceBinding({ sourceShas: beforeSourceShas, implementationCommit: baselineImplementationCommit }));
 const sourceShas = [...new Set(afterRuns.map((run) => run.sourceSha))];
 if (sourceShas.length !== 1) failures.push("all skill-assisted runs must use one skill source SHA");
 else failures.push(...verifySkillGitBinding({ repositoryRoot, exerciseRoot, sourceSha: sourceShas[0], skillSha256: built.scorecard.skillSha256 }));

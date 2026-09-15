@@ -16,7 +16,7 @@ The duration for this challenge is 60 min or less.
 
 ## How To Go About It
 
-1. Create two branches from the same starting commit. On the first branch, run one fresh agent session per case without exposing the skill. Use `npm run eval:run` with a small adapter for your agent so the protected runner supplies the exact prompt and captures the uncorrected response.
+1. Create two branches from the same starting commit. On the first branch, remove the starter skill and commit that deletion as the baseline implementation. Run one fresh agent session per case from that commit without exposing the skill. Use `npm run eval:run` with a small adapter for your agent so the protected runner supplies the exact prompt and captures the uncorrected response.
 
 2. Review the baseline misses and false blockers. Improve `regression-review-app/skills/regression-review/SKILL.md`. Add references or scripts only when they make the workflow reusable; do not add case IDs, expected answers, file hints, or exact diff text.
 
@@ -45,7 +45,7 @@ For the required before and after files, follow the [evidence instructions and t
 
 The challenge is complete when:
 
-- Baseline and skill-assisted runs come from the protected runner with matching conditions, unique nonces, and baseline sessions captured at the recorded starting commit.
+- Baseline and skill-assisted runs come from the protected runner with matching conditions, unique nonces, and baseline sessions captured at the recorded baseline implementation commit.
 - Every raw finding is bound to a transcript and protected diff digest.
 - The skill covers every violated acceptance rule in the seeded diffs, keeps precision, and does not create a blocker for the conforming control.
 - The skill contains a reusable review method, not benchmark answers.

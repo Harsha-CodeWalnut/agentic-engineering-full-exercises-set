@@ -18,4 +18,6 @@ Record runner nonces, session IDs, case count, coverage, precision, clean-contro
 
 Confirm `Same conditions`. Compare `Before` and `After` misses, unsupported blockers, metrics, and review usefulness. Link the `Proof` to raw runs, transcripts, and scorecard. End with a clear `Conclusion` to adopt or reject the skill.
 
-Generate `after.patch` with `git diff --binary --full-index <starting-commit> <implementation-commit>`.
+The baseline implementation commit removes the starter skill to represent the no-skill lane. Generate `before.patch` with `git diff --binary --full-index <starting-commit> <baseline-implementation-commit>`.
+
+Generate `after.patch` with `git diff --binary --full-index <starting-commit> <skill-implementation-commit>`.

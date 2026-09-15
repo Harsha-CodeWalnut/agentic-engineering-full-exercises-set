@@ -5,7 +5,7 @@
     "expectation": "regressions",
     "acceptanceRules": [
       "Search matches partial queries across every user-visible work-item field.",
-      "The All status selection includes every workflow status.",
+      "A specific status selection includes only items with that exact status, while All includes every workflow status.",
       "Risk scoring preserves due-today urgency and blocked-item weighting.",
       "Summary metrics count both blocked and escalated work.",
       "The queue shows every matching item unless pagination is explicitly introduced."

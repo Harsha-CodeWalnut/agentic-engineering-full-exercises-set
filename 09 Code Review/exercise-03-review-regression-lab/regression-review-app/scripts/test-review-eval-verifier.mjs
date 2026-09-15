@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { buildReviewPrompt, buildScorecard, normalizedPrompt, sha256, verifySkillContents } from "./review-eval-verification.mjs";
+import { buildReviewPrompt, buildScorecard, normalizedPrompt, sha256, verifyBaselineSourceBinding, verifySkillContents } from "./review-eval-verification.mjs";
 
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "review-skill-score-test-"));
 const previous = process.cwd();
@@ -22,7 +22,10 @@ try {
   const adapterSha = sha256("one adapter implementation");
 
   for (const [caseIndex, item] of cases.entries()) {
-    const anchors = [...item.acceptanceRules.map((_, index) => `changedCall${index + 1}()`), "neutralLine()"];
+    const anchors = [
+      ...item.acceptanceRules.map((_, index) => caseIndex === 0 && index === 0 ? 'setStatus("Escalated")' : `changedCall${index + 1}()`),
+      "neutralLine()",
+    ];
     const diffPath = path.resolve(app, "eval", item.diff);
     const diff = `diff --git a/src/example.ts b/src/example.ts\n--- a/src/example.ts\n+++ b/src/example.ts\n@@ -1 +1,${anchors.length} @@\n${anchors.map((anchor) => `+${anchor}`).join("\n")}\n`;
     fs.writeFileSync(diffPath, diff);
@@ -99,6 +102,8 @@ try {
   assert.equal(rejected.scorecard.decision, "reject");
 
   assert.ok(verifySkillContents(skill, { supportingSources: [cases[0].acceptanceRules[0]], cases }).some((failure) => failure.includes("acceptance rule")));
+  assert.deepEqual(verifyBaselineSourceBinding({ sourceShas: ["b".repeat(40)], implementationCommit: "b".repeat(40) }), []);
+  assert.ok(verifyBaselineSourceBinding({ sourceShas: ["a".repeat(40)], implementationCommit: "b".repeat(40) }).some((failure) => failure.includes("baseline implementation commit")));
   console.log("code review skill scorer self-test passed");
 } finally {
   process.chdir(previous);
