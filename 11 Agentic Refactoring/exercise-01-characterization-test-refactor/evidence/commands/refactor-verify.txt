@@ -1,0 +1,44 @@
+Command: npm run evidence:verify
+Repository commit: 380c203db3c4dc46f4cc849fdf9868a23a0e849d
+Started at: 2026-09-16T15:18:00.534Z
+Finished at: 2026-09-16T15:18:01.377Z
+Duration ms: 843
+
+STDOUT
+
+> rules-refactor-app@0.1.0 evidence:verify
+> npm run test:oracle && npm run refactor:verify
+
+
+> rules-refactor-app@0.1.0 test:oracle
+> node ./scripts/run-characterization-oracle.mjs && node ./src/rules/legacyEligibility.characterization.test.mjs
+
+PASS enterprise boundary with one late payment
+PASS enterprise boundary with two late payments
+PASS enterprise above tenure boundary
+PASS enterprise below tenure boundary
+PASS enterprise accepts negative late payments
+PASS pro exact tenure clean account
+PASS pro above tenure clean account
+PASS pro below tenure boundary
+PASS mature pro with one late payment
+PASS support override wins on new starter
+PASS support override wins on enterprise arrears
+PASS ordinary starter remains unsupported
+PASS 12 protected public-behavior observations
+PASS 12 public renewal eligibility characterizations
+
+> rules-refactor-app@0.1.0 refactor:verify
+> node ./scripts/verify-refactor-submission.mjs
+
+Characterization SHA: 3c8f5a2ead88d80486fe38ac5b44b1fcccb76e2b
+Refactor SHA: de514bd6446e81cf37a3852c4cbc30b42d960a3b
+PASS characterization test and before output preceded production edits
+PASS all twelve before and after public outputs are identical
+PASS refactor commit changes only the legacy rule module
+PASS suspected bugs documented and later history limited to evidence
+
+STDERR
+
+
+exit code: 0
