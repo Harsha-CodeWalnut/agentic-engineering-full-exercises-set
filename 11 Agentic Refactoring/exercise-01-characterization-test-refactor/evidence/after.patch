@@ -1,0 +1,66 @@
+diff --git a/11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app/src/rules/legacyEligibility.mjs b/11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app/src/rules/legacyEligibility.mjs
+index 14914eb4ee0601134335de1156baea32b081bbb4..42ebe95bb0ebbf0e0c8cbade35132beb356d5be9 100644
+--- a/11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app/src/rules/legacyEligibility.mjs	
++++ b/11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app/src/rules/legacyEligibility.mjs	
+@@ -1,25 +1,41 @@
+ export function evaluateRenewalEligibility(account) {
+-  let status = "ineligible";
+-  let discountPercent = 0;
+-  let reason = "plan-not-supported";
+   if (account.supportOverride === true) {
+-    status = "eligible";
+-    reason = "legacy-support-override";
+-  } else if (account.tier === "enterprise") {
+-    if (account.monthsActive >= 12) {
+-      if (account.latePayments < 2) {
+-        status = "eligible";
+-        discountPercent = 15;
+-        reason = "enterprise-tenure";
+-      } else {
+-        status = "manual-review";
+-        reason = "payment-history";
+-      }
++    return {
++      status: "eligible",
++      discountPercent: 0,
++      reason: "legacy-support-override",
++    };
++  }
++
++  const tier = account.tier;
++
++  if (tier === "enterprise" && account.monthsActive >= 12) {
++    if (account.latePayments < 2) {
++      return {
++        status: "eligible",
++        discountPercent: 15,
++        reason: "enterprise-tenure",
++      };
+     }
+-  } else if (account.tier === "pro" && account.monthsActive >= 6 && account.latePayments === 0) {
+-    status = "eligible";
+-    discountPercent = 10;
+-    reason = "pro-tenure";
++
++    return {
++      status: "manual-review",
++      discountPercent: 0,
++      reason: "payment-history",
++    };
++  }
++
++  if (tier === "pro" && account.monthsActive >= 6 && account.latePayments === 0) {
++    return {
++      status: "eligible",
++      discountPercent: 10,
++      reason: "pro-tenure",
++    };
+   }
+-  return { status, discountPercent, reason };
++
++  return {
++    status: "ineligible",
++    discountPercent: 0,
++    reason: "plan-not-supported",
++  };
+ }
