@@ -1,0 +1,9 @@
+# Refactor map
+
+The public behavior still begins in `WorkflowService.decide`. Its first responsibility is repository lookup by workflow id. That lookup remains before policy validation, so a missing item still raises `WorkflowNotFoundException` even when the submitted Ready decision would independently be invalid. This ordering is deliberately observable and is protected by the characterization suite.
+
+After a successful lookup, `WorkflowService` delegates exactly once to the injected `DecisionPolicy`. `DecisionPolicy.validate(WorkflowDecision)` owns the narrow legacy validation rule: Ready requires an evidence note of at least 12 characters. It owns the exact `InvalidWorkflowDecisionException` text and intentionally accepts other status strings, including the documented unknown-status gap. The policy has no repository reference, performs no lookup, calls no save operation, constructs no replacement entity, and returns no value.
+
+Only after validation succeeds does `WorkflowService` perform construction of the replacement `WorkflowItem`. It preserves the looked-up id, customer, and score, while applying status, owner, and evidence note from the decision. Persistence remains the service's final orchestration step: the constructed item is passed to the repository once and the saved value is returned. A validation rejection occurs before construction and persistence, preserving existing state and a zero save count.
+
+The one-argument `WorkflowService(WorkflowRepository)` constructor remains available to existing direct callers and tests. It delegates to the two-argument constructor with a new `DecisionPolicy`. Spring uses the annotated two-argument constructor to inject both collaborators. The implementation communicates the boundary through names and structure, with no implementation comments or Javadocs.
