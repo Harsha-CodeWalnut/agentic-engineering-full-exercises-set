@@ -1,0 +1,67 @@
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..bfcd0a4e938366d75fe409f072310390d1c649c8
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs	
+@@ -0,0 +1,41 @@
++const PAYMENT_DECLINED = "PAYMENT_DECLINED";
++
++function calculateTotalCents(request) {
++  const taxCents = Math.round(request.subtotalCents * request.taxRateBps / 10000);
++  return request.subtotalCents + taxCents;
++}
++
++function approvedResult(request, totalCents) {
++  return {
++    orderId: request.orderId,
++    status: "paid",
++    totalCents,
++    errorCode: null,
++  };
++}
++
++function declinedResult(request, totalCents) {
++  return {
++    orderId: request.orderId,
++    status: "failed",
++    totalCents,
++    errorCode: PAYMENT_DECLINED,
++  };
++}
++
++export function createCardCheckout({ authorize }) {
++  return async function cardCheckout(request) {
++    const amountCents = calculateTotalCents(request);
++    const authorization = await authorize({
++      orderId: request.orderId,
++      amountCents,
++      paymentToken: request.paymentToken,
++    });
++
++    if (authorization.approved) {
++      return approvedResult(request, amountCents);
++    }
++
++    return declinedResult(request, amountCents);
++  };
++}
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs
+index 010f28c5293510316f9704cf6c7e3c866a0fa1fb..073c0eb3544e0aaa5659458ba8a36edddbcf4ef7 100644
+--- a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs	
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs	
+@@ -1,4 +1,13 @@
+-/** Seeded router: all payment types still flow through the legacy implementation. */
+ export async function routeCheckout(request, implementations) {
+-  return implementations.legacy(request);
++  const shouldUseCardSlice = request.paymentType === "card" && implementations.cardSliceEnabled;
++
++  if (!shouldUseCardSlice) {
++    return implementations.legacy(request);
++  }
++
++  try {
++    return await implementations.card(request);
++  } catch {
++    return implementations.legacy(request);
++  }
+ }

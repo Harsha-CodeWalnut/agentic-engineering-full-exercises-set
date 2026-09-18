@@ -1,0 +1,43 @@
+Command: npm run evidence:verify
+Repository commit: 84f0b656c43f6304d14235a3df4e5ed997cd48d2
+Started at: 2026-09-18T06:24:18.571Z
+Finished at: 2026-09-18T06:24:19.585Z
+Duration ms: 1014
+
+STDOUT
+
+> checkout-strangler-app@0.1.0 evidence:verify
+> npm run test:checkout && npm run strangler:verify
+
+
+> checkout-strangler-app@0.1.0 test:checkout
+> node ./scripts/run-checkout-tests.mjs && node ./src/checkout/checkoutRouter.test.mjs
+
+PASS 2 legacy comparisons and 11 protected strangler route checks
+✔ given_enabled_card_slice_when_checkout_is_routed_then_only_new_card_slice_runs (0.8865ms)
+✔ given_non_card_payment_types_when_checkout_is_routed_then_each_remains_on_legacy (0.729375ms)
+✔ given_disabled_card_slice_when_card_checkout_is_routed_then_legacy_runs_once (0.165542ms)
+✔ given_explicit_pre_authorization_failure_when_card_checkout_is_routed_then_legacy_falls_back_once (0.167834ms)
+✔ given_completed_authorization_failure_when_card_checkout_is_routed_then_legacy_never_retries (0.185375ms)
+✔ given_ambiguous_failure_with_valid_result_when_card_checkout_is_routed_then_result_is_preserved_without_retry (0.145ms)
+✔ given_malformed_or_primitive_failure_when_card_checkout_is_routed_then_unknown_result_returns_without_retry (0.201708ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6.418041
+
+> checkout-strangler-app@0.1.0 strangler:verify
+> node ./scripts/verify-strangler-submission.mjs
+
+Characterization SHA: 4cd44d39da03ccda9ddf86abe60e57f4e22bf47a
+Source SHA: 84f0b656c43f6304d14235a3df4e5ed997cd48d2
+PASS route, comparison, rollback, and focused-history evidence
+
+STDERR
+
+
+exit code: 0
