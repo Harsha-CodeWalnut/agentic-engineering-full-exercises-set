@@ -1,0 +1,101 @@
+Command: npm run evidence:verify
+Repository commit: b550927f1c4b50bc0d6a1b37f168aaf203d7bb51
+Started at: 2026-09-18T05:55:45.718Z
+Finished at: 2026-09-18T05:55:52.525Z
+Duration ms: 6807
+
+STDOUT
+
+> legacy-rules-app@0.1.0 evidence:verify
+> npm run test:rules && npm run refactor:verify
+
+
+> legacy-rules-app@0.1.0 test:rules
+> node ./scripts/run-rules-contract.mjs
+
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------< dev.agentic.exercise:legacy-rules-engine-untangle >----------
+[INFO] Building legacy-rules-engine-untangle 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ legacy-rules-engine-untangle ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ legacy-rules-engine-untangle ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 10 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ legacy-rules-engine-untangle ---
+[INFO] skip non existing resourceDirectory /private/var/folders/bk/yk8n9vyx0m3d82g9mtdxrplm0000gn/T/legacy-rules-verification-FTZmHS/legacy-rules-api/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ legacy-rules-engine-untangle ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 4 source files with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ legacy-rules-engine-untangle ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running dev.agentic.exercise.workflow.WorkflowServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.072 s -- in dev.agentic.exercise.workflow.WorkflowServiceTest
+[INFO] Running dev.agentic.exercise.workflow.WorkflowPolicyCharacterizationTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 s -- in dev.agentic.exercise.workflow.WorkflowPolicyCharacterizationTest
+[INFO] Running dev.agentic.exercise.workflow.WorkflowApiContractTest
+11:25:50.414 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [dev.agentic.exercise.workflow.WorkflowApiContractTest]: WorkflowApiContractTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:25:50.525 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration dev.agentic.exercise.AgenticExerciseApplication for test class dev.agentic.exercise.workflow.WorkflowApiContractTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-18T11:25:50.809+05:30  INFO 13163 --- [           main] d.a.e.workflow.WorkflowApiContractTest   : Starting WorkflowApiContractTest using Java 25.0.3 with PID 13163 (started by harsh01 in /private/var/folders/bk/yk8n9vyx0m3d82g9mtdxrplm0000gn/T/legacy-rules-verification-FTZmHS/legacy-rules-api)
+2026-09-18T11:25:50.810+05:30  INFO 13163 --- [           main] d.a.e.workflow.WorkflowApiContractTest   : No active profile set, falling back to 1 default profile: "default"
+2026-09-18T11:25:51.555+05:30  INFO 13163 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-09-18T11:25:51.555+05:30  INFO 13163 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-09-18T11:25:51.556+05:30  INFO 13163 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-09-18T11:25:51.574+05:30  INFO 13163 --- [           main] d.a.e.workflow.WorkflowApiContractTest   : Started WorkflowApiContractTest in 0.956 seconds (process running for 1.746)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.657 s -- in dev.agentic.exercise.workflow.WorkflowApiContractTest
+[INFO] Running dev.agentic.exercise.workflow.WorkflowContractCharacterizationTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.099 s -- in dev.agentic.exercise.workflow.WorkflowContractCharacterizationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.493 s
+[INFO] Finished at: 2026-09-18T11:25:52+05:30
+[INFO] ------------------------------------------------------------------------
+PASS strict React-client success and error response contract
+PASS backend architecture, behavior, HTTP JSON, and client contract
+
+> legacy-rules-app@0.1.0 refactor:verify
+> node ./scripts/verify-rules-submission.mjs
+
+Characterization SHA: ffe9d249ea133272c984f2ca021c208059202228
+Refactor SHA: 87ef36805896671fb12b5fe7577536dc7588fe4b
+PASS identical contract snapshots and test-first focused history
+
+STDERR
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/Users/harsh01/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.8/byte-buddy-agent-1.17.8.jar -XX:+EnableDynamicAgentLoading
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/harsh01/.m2/wrapper/dists/apache-maven-3.9.16-bin/4200fbc6/apache-maven-3.9.16/lib/jansi-2.4.3.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/Users/harsh01/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.8/byte-buddy-agent-1.17.8.jar -XX:+EnableDynamicAgentLoading
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+
+exit code: 0
