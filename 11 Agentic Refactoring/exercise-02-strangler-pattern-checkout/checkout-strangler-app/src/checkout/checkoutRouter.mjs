@@ -1,4 +1,13 @@
-/** Seeded router: all payment types still flow through the legacy implementation. */
 export async function routeCheckout(request, implementations) {
-  return implementations.legacy(request);
+  const shouldUseCardSlice = request.paymentType === "card" && implementations.cardSliceEnabled;
+
+  if (!shouldUseCardSlice) {
+    return implementations.legacy(request);
+  }
+
+  try {
+    return await implementations.card(request);
+  } catch {
+    return implementations.legacy(request);
+  }
 }
